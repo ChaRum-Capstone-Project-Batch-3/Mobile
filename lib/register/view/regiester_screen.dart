@@ -214,8 +214,55 @@ class _RegisterScreenState extends State<RegisterScreen> {
                             height: 24,
                           ),
                           Row(
+                            mainAxisSize: MainAxisSize.max,
                             mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                            children: [],
+                            children: [
+                              GestureDetector(
+                                child: Container(
+                                  padding: EdgeInsets.all(10),
+                                  decoration: BoxDecoration(
+                                      borderRadius:
+                                          BorderRadius.all(Radius.circular(8)),
+                                      border: Border.all(
+                                        color: Color(0xffD8D8D8),
+                                      )),
+                                  child: Icon(
+                                    Icons.facebook,
+                                    size: 20,
+                                  ),
+                                ),
+                              ),
+                              GestureDetector(
+                                child: Container(
+                                  padding: EdgeInsets.all(10),
+                                  decoration: BoxDecoration(
+                                      borderRadius:
+                                          BorderRadius.all(Radius.circular(8)),
+                                      border: Border.all(
+                                        color: Color(0xffD8D8D8),
+                                      )),
+                                  child: Icon(
+                                    Icons.facebook,
+                                    size: 20,
+                                  ),
+                                ),
+                              ),
+                              GestureDetector(
+                                child: Container(
+                                  padding: EdgeInsets.all(10),
+                                  decoration: BoxDecoration(
+                                      borderRadius:
+                                          BorderRadius.all(Radius.circular(8)),
+                                      border: Border.all(
+                                        color: Color(0xffD8D8D8),
+                                      )),
+                                  child: Icon(
+                                    Icons.facebook,
+                                    size: 20,
+                                  ),
+                                ),
+                              ),
+                            ],
                           ),
                         ],
                       ),
