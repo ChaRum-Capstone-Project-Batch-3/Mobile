@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:fgd_flutter/utils/charum_ui.dart';
 
 class RegisterScreen extends StatefulWidget {
   const RegisterScreen({super.key});
@@ -41,23 +42,12 @@ class _RegisterScreenState extends State<RegisterScreen> {
                   SizedBox(
                     height: 60,
                   ),
-                  Text(
-                    "Create new account",
-                    style: TextStyle(
-                      fontWeight: FontWeight.w600,
-                      fontSize: 24,
-                    ),
-                  ),
+                  BoxText.heading3Semi("Create new account"),
                   SizedBox(
                     height: 4,
                   ),
-                  Text(
-                    "Lorem ipsum dolor sit amet consectetur.  \nVolutpat sit fringilla tempor interdum.",
-                    style: TextStyle(
-                      fontWeight: FontWeight.w400,
-                      fontSize: 14,
-                    ),
-                  ),
+                  BoxText.body2(
+                      "Lorem ipsum dolor sit amet consectetur.  \nVolutpat sit fringilla tempor interdum."),
                   SizedBox(
                     height: 54,
                   ),
