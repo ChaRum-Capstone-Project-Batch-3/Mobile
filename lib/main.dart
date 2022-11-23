@@ -1,5 +1,6 @@
 import 'package:fgd_flutter/login_screen.dart';
 import 'package:flutter/material.dart';
+import 'package:fgd_flutter/shared/charum_ui.dart';
 
 void main() {
   runApp(const MyApp());
