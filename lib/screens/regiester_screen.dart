@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:fgd_flutter/utils/charum_ui.dart';
+import 'package:fgd_flutter/shared/charum_ui.dart';
 
 class RegisterScreen extends StatefulWidget {
   const RegisterScreen({super.key});
