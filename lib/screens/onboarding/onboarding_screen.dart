@@ -1,3 +1,4 @@
+import 'package:fgd_flutter/screens/main%20screen/main_screen.dart';
 import 'package:fgd_flutter/shared/charum_ui.dart';
 import 'package:fgd_flutter/shared/styles.dart';
 import 'package:flutter/material.dart';
@@ -48,44 +49,37 @@ class _OnBoardingScreenState extends State<OnBoardingScreen> {
                 itemBuilder: (_, index) {
                   return SingleChildScrollView(
                     child: Container(
-                      margin: EdgeInsets.only(top: 50),
+                      margin: EdgeInsets.only(top: 70),
                       padding: EdgeInsets.only(
-                          top: 50, right: 20, left: 20, bottom: 10),
+                          top: 40, right: 20, left: 20, bottom: 30),
                       child: Column(
                         children: [
                           Stack(
                             alignment: AlignmentDirectional.center,
                             children: [
                               Container(
-                                alignment: Alignment.center,
-                                decoration: const BoxDecoration(
-                                  shape: BoxShape.circle,
-                                  color: Color(0xffedf5f3),
-                                ),
-                                height: 248,
-                                width: 248,
-                              ),
+                                padding: EdgeInsets.only(bottom :30),
+                                 width: 292,
+                  
+                                  child: Image.asset(onBoards[index].bgImage)),
                               Container(
-                                  height: 284,
-                                  width: 284,
+                                  height: 315,
+                                  width: 315,
                                   child: Image.asset(onBoards[index].image)),
                             ],
                           ),
-                          SizedBox(height: 20),
-                          Container(
-                            margin: EdgeInsets.only(left: 50, right: 50),
-                            child: Text(
-                              textAlign: TextAlign.center,
-                              onBoards[index].title,
-                              style: heading4Bold.copyWith(
-                                color: primaryColor,
-                              ),
+                          // SizedBox(height: 20),
+                          Text(
+                            textAlign: TextAlign.center,
+                            onBoards[index].title,
+                            style: heading4Bold.copyWith(
+                              color: Color(0xff136651),
                             ),
                           ),
-                          SizedBox(height: 20),
+                          SizedBox(height: 10),
                           Text(
                             onBoards[index].description,
-                            style: buttonSemi,
+                            style: TextStyle(color: Color(0xff5C5C5C)),
                             textAlign: TextAlign.center,
                           ),
                         ],
@@ -105,69 +99,61 @@ class _OnBoardingScreenState extends State<OnBoardingScreen> {
               ),
             ),
             Container(
-              height: 50,
+              height: 40,
               width: double.infinity,
-              margin: EdgeInsets.only(top: 24, bottom: 24, left: 20, right: 20),
+              margin: EdgeInsets.only(top: 35, bottom: 24, left: 20, right: 20),
               child: currentIndex == onBoards.length - 1
-                  ? MaterialButton(
+                  ? ElevatedButton(
                       onPressed: () async {
+                        Navigator.push(
+                            context,
+                            MaterialPageRoute(
+                                builder: (context) => MainScreen()));
                         _controller.nextPage(
                           duration: Duration(seconds: 1),
                           curve: Curves.easeInOut,
                         );
                       },
-                      color: primaryColor,
-                      textColor: Colors.white,
-                      shape: RoundedRectangleBorder(
-                        borderRadius: BorderRadius.circular(10),
-                      ),
-                      child: Text(
-                        "Get Started",
-                        style: body2Semi.copyWith(
-                          color: Colors.white,
-                        ),
-                      ),
+                      child: Text("Get Started", style: body2Semi),
                     )
                   : Row(
                       children: [
                         Flexible(
                           fit: FlexFit.tight,
-                          child: TextButton(
-                            onPressed: () {
-                              _controller.nextPage(
-                                duration: Duration(seconds: 1),
-                                curve: Curves.easeInOut,
-                              );
-                            },
-                            child: Text(
-                              'Skip',
-                              style: body2Semi.copyWith(
-                                color: primaryColor,
+                          child: Container(
+                            height: 40,
+                            child: TextButton(
+                              onPressed: () {
+                                _controller.nextPage(
+                                  duration: Duration(seconds: 1),
+                                  curve: Curves.easeInOut,
+                                );
+                                Navigator.push(
+                                    context,
+                                    MaterialPageRoute(
+                                        builder: (context) => MainScreen()));
+                              },
+                              child: Text(
+                                'Skip',
+                                style: body2Semi.copyWith(
+                                  color: primaryColor,
+                                ),
                               ),
                             ),
                           ),
                         ),
                         Flexible(
                           fit: FlexFit.tight,
-                          child: MaterialButton(
-                            height: 50,
-                            elevation: 0.0,
-                            onPressed: () {
-                              _controller.nextPage(
-                                duration: Duration(seconds: 1),
-                                curve: Curves.easeInOut,
-                              );
-                            },
-                            color: primaryColor,
-                            textColor: Colors.white,
-                            shape: RoundedRectangleBorder(
-                              borderRadius: BorderRadius.circular(10),
-                            ),
-                            child: Text(
-                              'Next',
-                              style: body2Semi.copyWith(
-                                color: Colors.white,
-                              ),
+                          child: Container(
+                            height: 40,
+                            child: ElevatedButton(
+                              onPressed: () {
+                                _controller.nextPage(
+                                  duration: Duration(seconds: 1),
+                                  curve: Curves.easeInOut,
+                                );
+                              },
+                              child: Text('Next', style: body2Semi),
                             ),
                           ),
                         )
