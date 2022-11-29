@@ -12,7 +12,7 @@ class AccountScreen extends StatefulWidget {
 
 class _AccountScreenState extends State<AccountScreen> {
   bool actionLike = true;
-  
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
