@@ -1,3 +1,4 @@
+import 'package:fgd_flutter/shared/box_text.dart';
 import 'package:flutter/material.dart';
 import 'package:fgd_flutter/shared/charum_ui.dart';
 
