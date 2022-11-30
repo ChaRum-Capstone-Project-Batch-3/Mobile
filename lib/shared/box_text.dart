@@ -1,8 +1,6 @@
-import 'package:fgd/shared/styles.dart';
-
+import 'package:fgd_flutter/shared/app_colors.dart';
+import 'package:fgd_flutter/shared/styles.dart';
 import 'package:flutter/material.dart';
-
-import 'app_colors.dart';
 
 class BoxText extends StatelessWidget {
   final String text;

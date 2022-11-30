@@ -1,5 +1,6 @@
-import 'package:fgd/shared/app_colors.dart';
-import 'package:fgd/shared/styles.dart';
+import 'package:fgd_flutter/screens/follow_account/follow_account_screen.dart';
+import 'package:fgd_flutter/shared/app_colors.dart';
+import 'package:fgd_flutter/shared/styles.dart';
 import 'package:flutter/material.dart';
 
 class BookmarkScreen extends StatefulWidget {
@@ -195,10 +196,10 @@ class _BookmarkScreenState extends State<BookmarkScreen> {
         mainAxisAlignment: MainAxisAlignment.start,
         children: [
           GestureDetector(
-              // onTap: () {
-              //   Navigator.push(context,
-              //       MaterialPageRoute(builder: (_) => FollowAccountScreen()));
-              // },
+              onTap: () {
+                Navigator.push(context,
+                    MaterialPageRoute(builder: (_) => FollowAccountScreen()));
+              },
               child: Text(
                 'Evan Chris',
                 style: TextStyle(fontWeight: FontWeight.bold),

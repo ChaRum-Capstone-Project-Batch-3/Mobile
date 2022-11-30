@@ -1,6 +1,6 @@
-import 'package:fgd/shared/app_colors.dart';
-import 'package:fgd/shared/styles.dart';
-
+import 'package:fgd_flutter/screens/edit_account/edit_account_screen.dart';
+import 'package:fgd_flutter/shared/charum_ui.dart';
+import 'package:fgd_flutter/shared/styles.dart';
 import 'package:flutter/material.dart';
 
 class AccountScreen extends StatefulWidget {
@@ -55,11 +55,11 @@ class _AccountScreenState extends State<AccountScreen> {
               margin: EdgeInsets.only(top: 10, bottom: 10, left: 16, right: 16),
               child: ElevatedButton(
                 onPressed: () {
-                  // Navigator.push(
-                  //     context,
-                  //     MaterialPageRoute(
-                  //       builder: (context) => EditAccountScreen(),
-                  //     ));
+                  Navigator.push(
+                      context,
+                      MaterialPageRoute(
+                        builder: (context) => EditAccountScreen(),
+                      ));
                 },
                 child: Text(
                   'Edit Profile',

@@ -1,8 +1,6 @@
-import 'package:fgd/account/account_page.dart';
-import 'package:fgd/bookmark/bookmark_page.dart';
-import 'package:fgd/Home/home_page.dart';
-import 'package:fgd/space/space_page.dart';
-
+import 'package:fgd_flutter/screens/account/account_screen.dart';
+import 'package:fgd_flutter/screens/bookmark/bookmark_screen.dart';
+import 'package:fgd_flutter/shared/app_colors.dart';
 import 'package:flutter/material.dart';
 
 class MainScreen extends StatefulWidget {
@@ -14,11 +12,11 @@ class MainScreen extends StatefulWidget {
 
 class _MainScreenState extends State<MainScreen> {
   int selectedIndex = 0;
-  static List<Widget> _pages = <Widget>[
-    const HomePage(),
-    SpacePage(),
-    const BookmarkScreen(),
-    const AccountScreen(),
+  final widgetOptions = [
+    const Text('Home Screen'),
+    const Text('Space Screen'),
+    BookmarkScreen(),
+    AccountScreen(),
   ];
 
   void onItemTapped(int index) {
@@ -31,7 +29,7 @@ class _MainScreenState extends State<MainScreen> {
   Widget build(BuildContext context) {
     return Scaffold(
       body: Center(
-        child: _pages.elementAt(selectedIndex),
+        child: widgetOptions.elementAt(selectedIndex),
       ),
       bottomNavigationBar: BottomNavigationBar(
         items: [
@@ -90,7 +88,6 @@ class _MainScreenState extends State<MainScreen> {
         ],
         onTap: onItemTapped,
         currentIndex: selectedIndex,
-        showSelectedLabels: true,
       ),
     );
   }
