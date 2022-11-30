@@ -1,8 +1,9 @@
-import 'package:fgd_flutter/login_screen.dart';
-import 'package:fgd_flutter/screens/regiester_screen.dart';
-import 'package:fgd_flutter/screens/splash_screen.dart';
+import 'package:fgd_flutter/screens/register/regiester_screen.dart';
 import 'package:flutter/material.dart';
 import 'package:fgd_flutter/shared/router.dart';
+
+import '../screens/login/login_screen.dart';
+import '../screens/splash/splash_screen.dart';
 
 class RouteGenerator {
   static Route<dynamic> generateRoute(RouteSettings settings) {

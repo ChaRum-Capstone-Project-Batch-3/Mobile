@@ -3,7 +3,7 @@ import 'dart:async';
 import 'package:fgd_flutter/shared/app_colors.dart';
 import 'package:fgd_flutter/shared/styles.dart';
 import 'package:flutter/material.dart';
-import 'package:fgd_flutter/screens/onboarding_screen.dart';
+import 'package:fgd_flutter/screens/onboarding/onboarding_screen.dart';
 
 class SplashScreen extends StatelessWidget {
   const SplashScreen({super.key});

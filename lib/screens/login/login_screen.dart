@@ -1,3 +1,4 @@
+import 'package:fgd_flutter/shared/router.dart';
 import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/src/widgets/container.dart';
@@ -188,7 +189,7 @@ class _LoginScreenState extends State<LoginScreen> {
                           ),
                           recognizer: TapGestureRecognizer()
                             ..onTap = () {
-                              // print('Register Here!');
+                              Navigator.pushNamed(context, register);
                           },
                         ),
                       ],
@@ -262,4 +263,5 @@ class IconButton extends StatelessWidget {
     );
   }
 }
+
 

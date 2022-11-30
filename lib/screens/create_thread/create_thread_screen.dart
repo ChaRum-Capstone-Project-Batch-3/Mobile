@@ -1,6 +1,5 @@
-import 'package:fgd_flutter/thread_label_modal.dart';
+import 'package:fgd_flutter/screens/create_thread/widgets/thread_label_modal.dart';
 import 'package:flutter/material.dart';
-import 'package:multi_select_flutter/multi_select_flutter.dart';
 
 class Topic {
   Topic({
@@ -20,32 +19,6 @@ class CreateThread extends StatefulWidget {
 }
 
 class _CreateThreadState extends State<CreateThread> {
-  static List<Topic> _topics = [
-    Topic(id: 1, name: "Business"),
-    Topic(id: 2, name: "Technology"),
-    Topic(id: 3, name: "Games"),
-    Topic(id: 4, name: "Education"),
-    Topic(id: 5, name: "Movie"),
-    Topic(id: 6, name: "Travel"),
-    Topic(id: 7, name: "Music"),
-    Topic(id: 8, name: "Horror"),
-    Topic(id: 9, name: "Fashion"),
-    Topic(id: 10, name: "Animal"),
-    Topic(id: 11, name: "Art"),
-    Topic(id: 12, name: "Food"),
-  ];
-  final _items = _topics
-      .map((topic) => MultiSelectItem<Topic>(topic, topic.name))
-      .toList();
-  List<Topic> _selectedTopics = [];
-  final _multiSelectKey = GlobalKey<FormFieldState>();
-
-  @override
-  void initState() { 
-    _selectedTopics = _topics;
-    super.initState();
-  }
-
   bool _hasBeenPressed = false;
 
   @override
