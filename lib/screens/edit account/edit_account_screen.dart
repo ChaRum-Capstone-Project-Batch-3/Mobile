@@ -49,7 +49,7 @@ class _EditAccountScreenState extends State<EditAccountScreen> {
                     width: 181,
                   ),
                   GestureDetector(
-                    onTap: () => editBio(),
+                    onTap: () => editPhoto(),
                     child: Image.asset('assets/icon_edit_profile.png',
                         width: 24, height: 24),
                   )
@@ -114,7 +114,7 @@ class _EditAccountScreenState extends State<EditAccountScreen> {
       builder: (BuildContext context) {
         return Container(
           alignment: Alignment.topLeft,
-          height: 310,
+          height: 302,
           padding: EdgeInsets.all(20),
           child: Column(
             mainAxisAlignment: MainAxisAlignment.start,
@@ -180,7 +180,7 @@ class _EditAccountScreenState extends State<EditAccountScreen> {
       builder: (BuildContext context) {
         return Container(
           alignment: Alignment.topLeft,
-          height: 250,
+          height: 245,
           padding: EdgeInsets.all(20),
           child: Column(
             mainAxisAlignment: MainAxisAlignment.start,
@@ -245,7 +245,7 @@ class _EditAccountScreenState extends State<EditAccountScreen> {
       builder: (BuildContext context) {
         return Container(
           alignment: Alignment.topLeft,
-          height: 430,
+          height: 421,
           padding: EdgeInsets.all(20),
           child: Column(
             mainAxisAlignment: MainAxisAlignment.start,
@@ -322,6 +322,62 @@ class _EditAccountScreenState extends State<EditAccountScreen> {
                       style: TextStyle(color: AppColors.kcPrimaryColor),
                     )),
               )
+            ],
+          ),
+        );
+      },
+    );
+  }
+
+  void editPhoto() {
+    showModalBottomSheet(
+      shape: RoundedRectangleBorder(
+        borderRadius: BorderRadius.only(
+            topLeft: Radius.circular(30), topRight: Radius.circular(30)),
+      ),
+      backgroundColor: Colors.white,
+      context: context,
+      builder: (BuildContext context) {
+        return Container(
+          alignment: Alignment.topLeft,
+          height: 210,
+          padding: EdgeInsets.all(20),
+          child: Column(
+            crossAxisAlignment: CrossAxisAlignment.center,
+            children: [
+              Center(
+                child: Image.asset(
+                  'assets/pony_bottom_sheet.png',
+                  width: 38,
+                ),
+              ),
+              SizedBox(
+                height: 30,
+              ),
+              Align(
+                alignment: Alignment.topLeft,
+                child: Text('Change image', style: body1Semi)),
+               SizedBox(
+                height: 20,
+              ),
+              Text(
+                'Camera',
+                style: body1Semi.copyWith(color: AppColors.kcBaseBlack),
+              ),
+              SizedBox(
+                height: 20,
+              ),
+              Text(
+                'Gallery',
+                style: body1Semi.copyWith(color: AppColors.kcBaseBlack),
+              ),
+              SizedBox(
+                height: 20,
+              ),
+              Text(
+                'Remove',
+                style: body1Semi.copyWith(color: Color(0xffE23900)),
+              ),
             ],
           ),
         );

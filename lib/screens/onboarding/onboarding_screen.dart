@@ -1,4 +1,4 @@
-import 'package:fgd_flutter/screens/main%20screen/main_screen.dart';
+import 'package:fgd_flutter/screens/login/login_screen.dart';
 import 'package:fgd_flutter/shared/charum_ui.dart';
 import 'package:fgd_flutter/shared/styles.dart';
 import 'package:flutter/material.dart';
@@ -108,7 +108,7 @@ class _OnBoardingScreenState extends State<OnBoardingScreen> {
                         Navigator.push(
                             context,
                             MaterialPageRoute(
-                                builder: (context) => MainScreen()));
+                                builder: (context) => LoginScreen()));
                         _controller.nextPage(
                           duration: Duration(seconds: 1),
                           curve: Curves.easeInOut,
@@ -131,7 +131,7 @@ class _OnBoardingScreenState extends State<OnBoardingScreen> {
                                 Navigator.push(
                                     context,
                                     MaterialPageRoute(
-                                        builder: (context) => MainScreen()));
+                                        builder: (context) => LoginScreen()));
                               },
                               child: Text(
                                 'Skip',

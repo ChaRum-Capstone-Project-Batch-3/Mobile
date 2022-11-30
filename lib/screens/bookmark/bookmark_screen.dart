@@ -259,12 +259,13 @@ class _BookmarkScreenState extends State<BookmarkScreen> {
           ),
           Row(
             children: [
-              Image.asset('assets/icon_comment.png', height: 24, width: 24),
+              Image.asset('assets/icon_like1.png', height: 24, width: 24),
               Text('592'),
               SizedBox(
                 width: 10,
               ),
-              Image.asset('assets/icon_like1.png', height: 24, width: 24),
+              Image.asset('assets/icon_comment.png', height: 24, width: 24),
+              
               Text('108'),
             ],
           )
