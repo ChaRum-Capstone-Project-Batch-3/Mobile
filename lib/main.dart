@@ -1,10 +1,8 @@
-import 'package:fgd_flutter/screens/account/account_screen.dart';
 import 'package:fgd_flutter/screens/bookmark/bookmark_screen.dart';
-import 'package:fgd_flutter/screens/edit%20account/edit_account_screen.dart';
-import 'package:fgd_flutter/screens/follow%20account/follow_account_screen.dart';
-import 'package:fgd_flutter/screens/main%20screen/main_screen.dart';
-import 'package:fgd_flutter/screens/onboarding/onboarding_screen.dart';
+import 'package:fgd_flutter/screens/edit_account/edit_account_screen.dart';
+import 'package:fgd_flutter/screens/main_screen/main_screen.dart';
 import 'package:fgd_flutter/shared/app_colors.dart';
+import 'package:fgd_flutter/shared/route_generator.dart';
 import 'package:fgd_flutter/shared/styles.dart';
 import 'package:flutter/material.dart';
 import 'package:fgd_flutter/screens/splash/splash_screen.dart';
@@ -22,6 +20,7 @@ class MyApp extends StatelessWidget {
     final whiteColor = AppColors.kcBaseWhite;
     return MaterialApp(
       title: 'Flutter Demo',
+      onGenerateRoute: RouteGenerator.generateRoute,
       theme: ThemeData(
         bottomNavigationBarTheme: BottomNavigationBarThemeData(
           unselectedLabelStyle: captionBold,
@@ -44,7 +43,7 @@ class MyApp extends StatelessWidget {
         primarySwatch: primaryColor,
       ),
       debugShowCheckedModeBanner: false,
-      home: const EditAccountScreen()      ,
+      home: const SplashScreen()      ,
     );
   }
 }

@@ -1,4 +1,4 @@
-import 'package:fgd_flutter/screens/follow%20account/follow_account_screen.dart';
+import 'package:fgd_flutter/screens/follow_account/follow_account_screen.dart';
 import 'package:fgd_flutter/shared/app_colors.dart';
 import 'package:fgd_flutter/shared/styles.dart';
 import 'package:flutter/material.dart';

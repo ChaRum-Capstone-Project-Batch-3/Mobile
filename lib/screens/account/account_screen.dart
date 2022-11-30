@@ -1,4 +1,4 @@
-import 'package:fgd_flutter/screens/edit%20account/edit_account_screen.dart';
+import 'package:fgd_flutter/screens/edit_account/edit_account_screen.dart';
 import 'package:fgd_flutter/shared/charum_ui.dart';
 import 'package:fgd_flutter/shared/styles.dart';
 import 'package:flutter/material.dart';
