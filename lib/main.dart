@@ -1,3 +1,4 @@
+import 'package:fgd_flutter/create_thread_screen.dart';
 import 'package:fgd_flutter/login_screen.dart';
 import 'package:flutter/material.dart';
 
@@ -13,7 +14,7 @@ class MyApp extends StatelessWidget {
   Widget build(BuildContext context) {
     return MaterialApp(
       title: 'Flutter Demo',
-      home: const LoginScreen(),
+      home: const CreateThread(),
     );
   }
 }
