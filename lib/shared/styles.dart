@@ -6,6 +6,8 @@ TextStyle heading1 = GoogleFonts.roboto(textStyle: TextStyle(fontSize: 48));
 TextStyle heading2 = GoogleFonts.roboto(textStyle: TextStyle(fontSize: 34));
 TextStyle heading3 = GoogleFonts.roboto(textStyle: TextStyle(fontSize: 24));
 TextStyle heading4 = GoogleFonts.roboto(textStyle: TextStyle(fontSize: 20));
+TextStyle subtitle1 = GoogleFonts.roboto(textStyle: TextStyle(fontSize: 16));
+TextStyle subtitle2 = GoogleFonts.roboto(textStyle: TextStyle(fontSize: 14));
 TextStyle body1 = GoogleFonts.roboto(textStyle: TextStyle(fontSize: 16));
 TextStyle body2 = GoogleFonts.roboto(textStyle: TextStyle(fontSize: 14));
 TextStyle body3 = GoogleFonts.roboto(textStyle: TextStyle(fontSize: 10));
@@ -32,6 +34,16 @@ TextStyle heading3Semi = GoogleFonts.roboto(
 TextStyle heading4Semi = GoogleFonts.roboto(
     textStyle: TextStyle(
   fontSize: 20,
+  fontWeight: FontWeight.w600,
+));
+TextStyle subtitle1Semi = GoogleFonts.roboto(
+    textStyle: TextStyle(
+  fontSize: 16,
+  fontWeight: FontWeight.w600,
+));
+TextStyle subtitle2Semi = GoogleFonts.roboto(
+    textStyle: TextStyle(
+  fontSize: 14,
   fontWeight: FontWeight.w600,
 ));
 TextStyle body1Semi = GoogleFonts.roboto(
@@ -84,6 +96,16 @@ TextStyle heading3Bold = GoogleFonts.roboto(
 TextStyle heading4Bold = GoogleFonts.roboto(
     textStyle: TextStyle(
   fontSize: 20,
+  fontWeight: FontWeight.w700,
+));
+TextStyle subtitle1Bold = GoogleFonts.roboto(
+    textStyle: TextStyle(
+  fontSize: 16,
+  fontWeight: FontWeight.w700,
+));
+TextStyle subtitle2Bold = GoogleFonts.roboto(
+    textStyle: TextStyle(
+  fontSize: 14,
   fontWeight: FontWeight.w700,
 ));
 TextStyle body1Bold = GoogleFonts.roboto(

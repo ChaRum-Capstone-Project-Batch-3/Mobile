@@ -15,6 +15,10 @@ class BoxText extends StatelessWidget {
       : style = heading3.copyWith(color: color);
   BoxText.heading4(this.text, {Color color = AppColors.kcBaseBlack})
       : style = heading4.copyWith(color: color);
+  BoxText.subtitle1(this.text, {Color color = AppColors.kcBaseBlack})
+      : style = subtitle1.copyWith(color: color);
+  BoxText.subtitle2(this.text, {Color color = AppColors.kcBaseBlack})
+      : style = subtitle2.copyWith(color: color);
   BoxText.body1(this.text, {Color color = AppColors.kcBaseBlack})
       : style = body1.copyWith(color: color);
   BoxText.body2(this.text, {Color color = AppColors.kcBaseBlack})
@@ -23,8 +27,7 @@ class BoxText extends StatelessWidget {
       : style = body3.copyWith(color: color);
   BoxText.caption(this.text, {Color color = AppColors.kcBaseBlack})
       : style = caption.copyWith(color: color);
-  BoxText.button(this.text, {Color color = AppColors.kcBaseBlack})
-      : style = button.copyWith(color: color);
+  BoxText.button(this.text, this.style);
   BoxText.overline(this.text, {Color color = AppColors.kcBaseBlack})
       : style = overline.copyWith(color: color);
 
@@ -37,6 +40,10 @@ class BoxText extends StatelessWidget {
       : style = heading3Semi.copyWith(color: color);
   BoxText.heading4Semi(this.text, {Color color = AppColors.kcBaseBlack})
       : style = heading4Semi.copyWith(color: color);
+  BoxText.subtitle1Semi(this.text, {Color color = AppColors.kcBaseBlack})
+      : style = subtitle1Semi.copyWith(color: color);
+  BoxText.subtitle2Semi(this.text, {Color color = AppColors.kcBaseBlack})
+      : style = subtitle2Semi.copyWith(color: color);
   BoxText.body1Semi(this.text, {Color color = AppColors.kcBaseBlack})
       : style = body1Semi.copyWith(color: color);
   BoxText.body2Semi(this.text, {Color color = AppColors.kcBaseBlack})
@@ -45,8 +52,7 @@ class BoxText extends StatelessWidget {
       : style = body3Semi.copyWith(color: color);
   BoxText.captionSemi(this.text, {Color color = AppColors.kcBaseBlack})
       : style = captionSemi.copyWith(color: color);
-  BoxText.buttonSemi(this.text, {Color color = AppColors.kcBaseBlack})
-      : style = buttonSemi.copyWith(color: color);
+  BoxText.buttonSemi(this.text, this.style);
   BoxText.overlineSemi(this.text, {Color color = AppColors.kcBaseBlack})
       : style = overlineSemi.copyWith(color: color);
 
@@ -59,6 +65,10 @@ class BoxText extends StatelessWidget {
       : style = heading3Bold.copyWith(color: color);
   BoxText.heading4Bold(this.text, {Color color = AppColors.kcBaseBlack})
       : style = heading4Bold.copyWith(color: color);
+  BoxText.subtitle1Bold(this.text, {Color color = AppColors.kcBaseBlack})
+      : style = subtitle1Bold.copyWith(color: color);
+  BoxText.subtitle2Bold(this.text, {Color color = AppColors.kcBaseBlack})
+      : style = subtitle2Bold.copyWith(color: color);
   BoxText.body1Bold(this.text, {Color color = AppColors.kcBaseBlack})
       : style = body1Bold.copyWith(color: color);
   BoxText.body2Bold(this.text, {Color color = AppColors.kcBaseBlack})
@@ -67,8 +77,7 @@ class BoxText extends StatelessWidget {
       : style = body3Bold.copyWith(color: color);
   BoxText.captionBold(this.text, {Color color = AppColors.kcBaseBlack})
       : style = captionBold.copyWith(color: color);
-  BoxText.buttonBold(this.text, {Color color = AppColors.kcBaseBlack})
-      : style = buttonBold.copyWith(color: color);
+  BoxText.buttonBold(this.text, this.style);
   BoxText.overlineBold(this.text, {Color color = AppColors.kcBaseBlack})
       : style = overlineBold.copyWith(color: color);
 
