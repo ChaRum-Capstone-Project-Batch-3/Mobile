@@ -1,3 +1,4 @@
+import 'package:fgd_flutter/screens/create_thread/create_thread_screen.dart';
 import 'package:fgd_flutter/screens/register/regiester_screen.dart';
 import 'package:flutter/material.dart';
 import 'package:fgd_flutter/shared/router.dart';
@@ -17,6 +18,9 @@ class RouteGenerator {
       case register:
         final args = settings.arguments;
         return MaterialPageRoute(builder: (context) => RegisterScreen());
+      case createThread:
+        final args = settings.arguments;
+        return MaterialPageRoute(builder: (context) => CreateThread());
       default:
         return _errorPage();
     }

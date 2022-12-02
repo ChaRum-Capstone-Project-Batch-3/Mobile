@@ -1,6 +1,6 @@
 import 'package:bubble_tab_indicator/bubble_tab_indicator.dart';
-import 'package:fgd/shared/app_colors.dart';
-import 'package:fgd/shared/styles.dart';
+import '/shared/app_colors.dart';
+import '/shared/styles.dart';
 import 'package:flutter/material.dart';
 
 class HomePage extends StatefulWidget {

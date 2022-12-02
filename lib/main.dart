@@ -1,4 +1,5 @@
 import 'package:fgd_flutter/screens/bookmark/bookmark_screen.dart';
+import 'package:fgd_flutter/screens/create_thread/create_thread_screen.dart';
 import 'package:fgd_flutter/screens/edit_account/edit_account_screen.dart';
 import 'package:fgd_flutter/screens/main_screen/main_screen.dart';
 import 'package:fgd_flutter/shared/app_colors.dart';
@@ -43,7 +44,7 @@ class MyApp extends StatelessWidget {
         primarySwatch: primaryColor,
       ),
       debugShowCheckedModeBanner: false,
-      home: const SplashScreen()      ,
+      home: const CreateThread()      ,
     );
   }
 }
