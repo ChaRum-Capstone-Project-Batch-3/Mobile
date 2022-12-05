@@ -1,5 +1,6 @@
 import 'dart:ui';
 
+import 'package:fgd_flutter/screens/search/widget/recent_search.dart';
 import 'package:fgd_flutter/shared/app_colors.dart';
 import 'package:fgd_flutter/shared/styles.dart';
 import 'package:flutter/material.dart';
@@ -26,135 +27,136 @@ class _SearchScreenState extends State<SearchScreen> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      backgroundColor: AppColors.kcBaseWhite,
-      appBar: AppBar(
         backgroundColor: AppColors.kcBaseWhite,
-        elevation: 0,
-        title: Container(
-          margin: spacing20Horizontal,
-          padding: spacing16Vertical,
-          child: TextFormField(
-            controller: teSearch,
-            decoration: InputDecoration(
-              border:
-                  OutlineInputBorder(borderRadius: BorderRadius.circular(50)),
-              hintText: "Search",
-              prefixIcon: Icon(
-                Icons.search_outlined,
-                size: 30,
+        appBar: AppBar(
+          backgroundColor: AppColors.kcBaseWhite,
+          elevation: 0,
+          title: Container(
+            margin: spacing20Horizontal,
+            padding: spacing16Vertical,
+            child: TextFormField(
+              controller: teSearch,
+              decoration: InputDecoration(
+                border:
+                    OutlineInputBorder(borderRadius: BorderRadius.circular(50)),
+                hintText: "Search",
+                prefixIcon: Icon(
+                  Icons.search_outlined,
+                  size: 30,
+                ),
+                contentPadding: spacing32Horizontal,
               ),
-              contentPadding: spacing32Horizontal,
             ),
           ),
-        ),
-        centerTitle: true,
-        actions: [
-          Padding(
-            padding: spacing16Right,
-            child: GestureDetector(
-              child: Icon(
-                Icons.filter_alt_outlined,
-                color: AppColors.kcDarkestWhite,
-              ),
-            ),
-          )
-        ],
-      ),
-      body: DefaultTabController(
-        length: 3,
-        child: Column(
-          children: [
-            SizedBox(
-              height: 16,
-            ),
-            Center(
-              child: TabBar(
-                indicator: BoxDecoration(
-                  borderRadius: BorderRadius.all(Radius.circular(6)),
-                  color: AppColors.kcPrimaryColor!.shade200,
+          centerTitle: true,
+          actions: [
+            Padding(
+              padding: spacing16Right,
+              child: GestureDetector(
+                child: Icon(
+                  Icons.filter_alt_outlined,
+                  color: AppColors.kcDarkestWhite,
                 ),
-                indicatorColor: AppColors.kcPrimaryColor,
-                isScrollable: true,
-                labelColor: AppColors.kcPrimaryColor,
-                unselectedLabelColor: AppColors.kcDarkestWhite,
-                indicatorSize: TabBarIndicatorSize.tab,
-                tabs: [
-                  Tab(
-                    child: Row(
-                      children: [
-                        Icon(
-                          Icons.note_outlined,
-                        ),
-                        SizedBox(
-                          width: 10,
-                        ),
-                        Text(
-                          "Threads",
-                          style: subtitle2Semi,
-                        ),
-                      ],
-                    ),
-                  ),
-                  Tab(
-                    child: Row(
-                      children: [
-                        Icon(
-                          Icons.star_outline_rounded,
-                        ),
-                        SizedBox(
-                          width: 10,
-                        ),
-                        Text(
-                          "Popular",
-                          style: subtitle2Semi,
-                        ),
-                      ],
-                    ),
-                  ),
-                  Tab(
-                    child: Row(
-                      children: [
-                        Icon(
-                          Icons.note_add_outlined,
-                        ),
-                        SizedBox(
-                          width: 10,
-                        ),
-                        Text(
-                          "Followed",
-                          style: subtitle2Semi,
-                        ),
-                      ],
-                    ),
-                  ),
-                ],
-              ),
-            ),
-            SizedBox(
-              height: 12,
-            ),
-            Expanded(
-              child: TabBarView(
-                children: [
-                  Container(
-                    color: AppColors.kcDarkestWhite,
-                    child: threadsWidget(),
-                  ),
-                  Container(
-                    color: AppColors.kcDarkestWhite,
-                    child: popularWidget(),
-                  ),
-                  Container(
-                    color: AppColors.kcDarkestWhite,
-                    child: followedWidget(),
-                  ),
-                ],
               ),
             )
           ],
         ),
-      ),
-    );
+        body: teSearch.text.length > 0
+            ? DefaultTabController(
+                length: 3,
+                child: Column(
+                  children: [
+                    SizedBox(
+                      height: 16,
+                    ),
+                    Center(
+                      child: TabBar(
+                        indicator: BoxDecoration(
+                          borderRadius: BorderRadius.all(Radius.circular(6)),
+                          color: AppColors.kcPrimaryColor!.shade200,
+                        ),
+                        indicatorColor: AppColors.kcPrimaryColor,
+                        isScrollable: true,
+                        labelColor: AppColors.kcPrimaryColor,
+                        unselectedLabelColor: AppColors.kcDarkestWhite,
+                        indicatorSize: TabBarIndicatorSize.tab,
+                        tabs: [
+                          Tab(
+                            child: Row(
+                              children: [
+                                Icon(
+                                  Icons.note_outlined,
+                                ),
+                                SizedBox(
+                                  width: 10,
+                                ),
+                                Text(
+                                  "Threads",
+                                  style: subtitle2Semi,
+                                ),
+                              ],
+                            ),
+                          ),
+                          Tab(
+                            child: Row(
+                              children: [
+                                Icon(
+                                  Icons.star_outline_rounded,
+                                ),
+                                SizedBox(
+                                  width: 10,
+                                ),
+                                Text(
+                                  "Popular",
+                                  style: subtitle2Semi,
+                                ),
+                              ],
+                            ),
+                          ),
+                          Tab(
+                            child: Row(
+                              children: [
+                                Icon(
+                                  Icons.note_add_outlined,
+                                ),
+                                SizedBox(
+                                  width: 10,
+                                ),
+                                Text(
+                                  "Followed",
+                                  style: subtitle2Semi,
+                                ),
+                              ],
+                            ),
+                          ),
+                        ],
+                      ),
+                    ),
+                    SizedBox(
+                      height: 12,
+                    ),
+                    Expanded(
+                      child: TabBarView(
+                        children: [
+                          Container(
+                            color: AppColors.kcDarkestWhite,
+                            child: threadsWidget(),
+                          ),
+                          Container(
+                            color: AppColors.kcDarkestWhite,
+                            child: popularWidget(),
+                          ),
+                          Container(
+                            color: AppColors.kcDarkestWhite,
+                            child: followedWidget(),
+                          ),
+                        ],
+                      ),
+                    )
+                  ],
+                ),
+              )
+            : RecentSearchScreen());
   }
 
   Widget followedWidget() {
