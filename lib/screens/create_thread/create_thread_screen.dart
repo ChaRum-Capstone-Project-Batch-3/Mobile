@@ -1,5 +1,4 @@
 import 'package:fgd_flutter/screens/create_thread/widgets/thread_label_modal.dart';
-import 'package:filepicker_windows/filepicker_windows.dart';
 
 import 'package:flutter/material.dart';
 
@@ -227,18 +226,6 @@ class _CreateThreadState extends State<CreateThread> {
                       ),
                     ),
                     onPressed: () {
-                        final file = OpenFilePicker()
-                        ..filterSpecification = {
-                          'Image document': '*.jpg;*.jpeg',
-                        }
-                        ..defaultFilterIndex = 0
-                        ..defaultExtension = 'doc'
-                        ..title = 'Select a document';
-
-                      final result = file.getFile();
-                      if (result != null) {
-                        Image.file(result);
-                      }
                     },
                     child: const Image(
                       image: AssetImage('assets/Upload.png'),

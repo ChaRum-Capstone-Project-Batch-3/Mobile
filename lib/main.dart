@@ -44,7 +44,7 @@ class MyApp extends StatelessWidget {
         primarySwatch: primaryColor,
       ),
       debugShowCheckedModeBanner: false,
-      home: const CreateThread()      ,
+      home: const SplashScreen(),
     );
   }
 }
