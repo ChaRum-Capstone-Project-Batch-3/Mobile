@@ -1,3 +1,4 @@
+import 'package:fgd_flutter/screens/create_thread/create_thread_screen.dart';
 import 'package:fgd_flutter/screens/home/home_page.dart';
 import 'package:fgd_flutter/screens/onboarding/onboarding_screen.dart';
 import 'package:fgd_flutter/screens/register/regiester_screen.dart';
@@ -19,6 +20,9 @@ class RouteGenerator {
       case register:
         final args = settings.arguments;
         return MaterialPageRoute(builder: (context) => RegisterScreen());
+      case createThread:
+        final args = settings.arguments;
+        return MaterialPageRoute(builder: (context) => CreateThread
       case boarding:
         final args = settings.arguments;
         return MaterialPageRoute(builder: (context) => OnBoardingScreen());

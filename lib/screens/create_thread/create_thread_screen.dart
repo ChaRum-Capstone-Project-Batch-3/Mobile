@@ -1,5 +1,7 @@
 import 'package:fgd_flutter/screens/create_thread/widgets/thread_label_modal.dart';
+
 import 'package:flutter/material.dart';
+
 
 class Topic {
   Topic({
@@ -19,7 +21,32 @@ class CreateThread extends StatefulWidget {
 }
 
 class _CreateThreadState extends State<CreateThread> {
-  bool _hasBeenPressed = false;
+
+  int countBoolList(List<bool> _topicStatus) {
+    int count = 0;
+    for (int i = 0; i < _topicStatus.length; i++) {
+      if (_topicStatus.elementAt(i) == true) {
+        count++;
+      }
+    }
+    return count;
+  }
+
+  List<bool> _topicStatus = [
+    false, 
+    false, 
+    false,
+    false,
+    false,
+    false,
+    false,
+    false,
+    false,
+    false,
+    false,
+    false,
+    false
+  ];
 
   @override
   Widget build(BuildContext context) {
@@ -124,21 +151,13 @@ class _CreateThreadState extends State<CreateThread> {
                   ),
                 ),
                 const SizedBox(height: 8,),
-                // MultiSelectDialogField(
-                //   // chipDisplay:,
-                //   items: _topics.map((e) => MultiSelectItem(e, e.name)).toList(),
-                //   listType: MultiSelectListType.CHIP,
-                //   onConfirm: (values) {
-                //     // _selectedTopics = values;
-                //   },
-                // ),
                 Row(
                   children: [
                     ElevatedButton(
                       child: Text(
                         'All',
                         style: TextStyle(
-                          color: _hasBeenPressed ? Colors.white : Colors.grey,
+                          color: _topicStatus[0] ? Colors.white : Colors.grey,
                         ),
                       ),
                       style: ElevatedButton.styleFrom(
@@ -146,14 +165,14 @@ class _CreateThreadState extends State<CreateThread> {
                           color: const Color(0XFF178066),
                           width: 1,
                         ),
-                        backgroundColor: _hasBeenPressed ? const Color(0XFF178066) : Colors.white,
+                        backgroundColor: _topicStatus[0] ? const Color(0XFF178066) : Colors.white,
                         shape: RoundedRectangleBorder(
                           borderRadius: BorderRadius.circular(12.0),
                         ),
                       ),
                       onPressed: () => {
                         setState(() {
-                          _hasBeenPressed = !_hasBeenPressed;
+                          _topicStatus[0] = !_topicStatus[0];
                         }),
                         showModalBottomSheet(
                           shape: const RoundedRectangleBorder(
@@ -163,14 +182,15 @@ class _CreateThreadState extends State<CreateThread> {
                           ),
                           context: context, 
                           builder: (context) {
-                            return const TopicBottomModal();
+                            List<bool> topicStatus = _topicStatus;
+                            return TopicBottomModal(topicStatus: [],);
                           },
                         )
                       },
                     ),
                     const SizedBox(width: 8,),
-                    ChipButton('Business',),
-                    ChipButton('Technology',),
+                    ChipButton('Business', 1),
+                    ChipButton('Technology', 2),
                   ],
                 ),
                 const SizedBox(height: 12,),
@@ -205,7 +225,8 @@ class _CreateThreadState extends State<CreateThread> {
                         borderRadius: BorderRadius.circular(12.0),
                       ),
                     ),
-                    onPressed: () {},
+                    onPressed: () {
+                    },
                     child: const Image(
                       image: AssetImage('assets/Upload.png'),
                     ),
@@ -221,29 +242,29 @@ class _CreateThreadState extends State<CreateThread> {
     );
   }
 
-Row ChipButton(name) {
+Row ChipButton(name, iter) {
     return Row(
       children: [
         ElevatedButton(
           child: Text(
             '$name',
             style: TextStyle(
-              color: _hasBeenPressed ? Colors.white : Colors.grey,
+              color: _topicStatus[iter] ? Colors.white : Colors.grey,
             ),
           ),
           style: ElevatedButton.styleFrom(
             side: BorderSide(
-              color: _hasBeenPressed ? const Color(0XFF178066) : Colors.grey,
+              color: _topicStatus[iter] ? const Color(0XFF178066) : Colors.grey,
               width: 1,
             ),
-            backgroundColor: _hasBeenPressed ? const Color(0XFF178066) : Colors.white,
+            backgroundColor: _topicStatus[iter] ? const Color(0XFF178066) : Colors.white,
             shape: RoundedRectangleBorder(
               borderRadius: BorderRadius.circular(12.0),
             ),
           ),
           onPressed: () => {
             setState(() {
-              _hasBeenPressed = !_hasBeenPressed;
+              _topicStatus[iter] = !_topicStatus[iter];
             })
           },
         ),

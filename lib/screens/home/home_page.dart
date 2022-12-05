@@ -1,3 +1,6 @@
+import 'package:bubble_tab_indicator/bubble_tab_indicator.dart';
+import '/shared/app_colors.dart';
+import '/shared/styles.dart';
 // import 'package:bubble_tab_indicator/bubble_tab_indicator.dart';
 import 'package:fgd_flutter/shared/charum_ui.dart';
 import 'package:flutter/material.dart';
