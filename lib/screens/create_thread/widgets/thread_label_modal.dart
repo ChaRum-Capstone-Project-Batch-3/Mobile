@@ -1,14 +1,40 @@
 import 'package:flutter/material.dart';
 
 class TopicBottomModal extends StatefulWidget {
-  const TopicBottomModal({super.key});
+  final List<bool> topicStatus;
+  TopicBottomModal({Key? key, required this.topicStatus}) : super(key: key);
 
   @override
   State<TopicBottomModal> createState() => _TopicBottomModal();
 }
 
 class _TopicBottomModal extends State<TopicBottomModal> {
-  bool _hasBeenPressed = false;
+
+  int countBoolList(List<bool> _topicStatus) {
+    int count = 0;
+    for (int i = 0; i < _topicStatus.length; i++) {
+      if (_topicStatus.elementAt(i) == true) {
+        count++;
+      }
+    }
+    return count;
+  }
+
+  List<bool> _topicStatus = [
+    false, 
+    false, 
+    false,
+    false,
+    false,
+    false,
+    false,
+    false,
+    false,
+    false,
+    false,
+    false,
+    false
+  ];
 
   @override
   Widget build(BuildContext context) {
@@ -39,33 +65,33 @@ class _TopicBottomModal extends State<TopicBottomModal> {
           SizedBox(height: 16,),
           Row(
             children: [
-              ChipButton('Business'),
-              ChipButton('Technology'),
-              ChipButton('Games'),
+              ChipButton('Business', 1),
+              ChipButton('Technology', 2),
+              ChipButton('Games', 3),
             ],
           ),
           SizedBox(height: 8,),
           Row(
             children: [
-              ChipButton('Education'),
-              ChipButton('Movie'),
-              ChipButton('Travel'),
+              ChipButton('Education', 4),
+              ChipButton('Movie', 5),
+              ChipButton('Travel', 6),
             ],
           ),
           SizedBox(height: 8,),
           Row(
             children: [
-              ChipButton('Music'),
-              ChipButton('Horror'),
-              ChipButton('Fashion'),
+              ChipButton('Music', 7),
+              ChipButton('Horror', 8),
+              ChipButton('Fashion', 9),
             ],
           ),
           SizedBox(height: 8,),
           Row(
             children: [
-              ChipButton('Animal'),
-              ChipButton('Art'),
-              ChipButton('Food'),
+              ChipButton('Animal', 10),
+              ChipButton('Art', 11),
+              ChipButton('Food', 12),
             ],
           ),
           SizedBox(height: 64,),
@@ -103,29 +129,30 @@ class _TopicBottomModal extends State<TopicBottomModal> {
     );
   }
 
-  Row ChipButton(name) {
+  Row ChipButton(name, iter) {
     return Row(
       children: [
         ElevatedButton(
           child: Text(
             '$name',
             style: TextStyle(
-              color: _hasBeenPressed ? Colors.white : Colors.grey,
+              color: _topicStatus[iter] ? Colors.white : Colors.grey,
             ),
           ),
           style: ElevatedButton.styleFrom(
             side: BorderSide(
-              color: _hasBeenPressed ? Color(0XFF178066) : Colors.grey,
+              color: _topicStatus[iter] ? Color(0XFF178066) : Colors.grey,
               width: 1,
             ),
-            backgroundColor: _hasBeenPressed ? Color(0XFF178066) : Colors.white,
+
+            backgroundColor: _topicStatus[iter] ? Color(0XFF178066) : Colors.white,
             shape: RoundedRectangleBorder(
               borderRadius: BorderRadius.circular(12.0),
             ),
           ),
           onPressed: () => {
             setState(() {
-              _hasBeenPressed = !_hasBeenPressed;
+              _topicStatus[iter] = !_topicStatus[iter];
             })
           },
         ),
