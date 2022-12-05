@@ -62,166 +62,211 @@ class _CreateThreadState extends State<CreateThread> {
         backgroundColor: Colors.transparent,
       ),
       body: SingleChildScrollView(
-        child: Padding(
-          padding: const EdgeInsets.symmetric(horizontal: 20),
-          child: Form(
-            // key: _formKey,
-            autovalidateMode: AutovalidateMode.onUserInteraction,
-            child: Column(
-              crossAxisAlignment: CrossAxisAlignment.start,
-              mainAxisAlignment: MainAxisAlignment.start,
-              children: [
-                Container(
-                  height: 40,
-                  child: const TextField(
-                    style: TextStyle(
-                      fontSize: 16,
-                      fontWeight: FontWeight.bold,
-                    ),
-                    decoration: InputDecoration(
-                      border: InputBorder.none,
-                      hintText: 'Add an interesting title',
-                      hintStyle: TextStyle(
-                        color: Colors.grey,
-                        fontSize: 14,
-                        fontWeight: FontWeight.bold,
-                      ),
-                    ),
-                    maxLines: null,
-                    keyboardType: TextInputType.multiline,
-                  ),
-                ),
-                const SizedBox(height: 8,),
-                Container(
-                  height: 474,
-                  child: const TextField(
-                    decoration: InputDecoration(
-                      border: InputBorder.none,
-                      hintText: 'Write something...',
-                      hintStyle: TextStyle(
-                        color: Colors.grey,
-                        fontSize: 16,
-                      ),
-                    ),
-                    maxLines: null,
-                    keyboardType: TextInputType.multiline,
-                  ),
-                ),
-                const SizedBox(height: 36,),
-                Container(
-                  padding: const EdgeInsets.only(top: 12),
-                  child: const Align(
-                    alignment: Alignment.topLeft,
-                    child: Text(
-                      'Choose a topic',
-                      style: TextStyle(
-                        color: Colors.black,
-                        fontSize: 14,
-                        fontWeight: FontWeight.bold,
-                      ),
-                      textAlign: TextAlign.start,
-                    ),
-                  ),
-                ),
-                const SizedBox(height: 8,),
-                // MultiSelectDialogField(
-                //   // chipDisplay:,
-                //   items: _topics.map((e) => MultiSelectItem(e, e.name)).toList(),
-                //   listType: MultiSelectListType.CHIP,
-                //   onConfirm: (values) {
-                //     // _selectedTopics = values;
-                //   },
-                // ),
-                Row(
+          child: Padding(
+              padding: const EdgeInsets.symmetric(horizontal: 20),
+              child: Form(
+                // key: _formKey,
+                autovalidateMode: AutovalidateMode.onUserInteraction,
+                child: Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  mainAxisAlignment: MainAxisAlignment.start,
                   children: [
-                    ElevatedButton(
-                      child: Text(
-                        'All',
+                    Container(
+                      height: 40,
+                      child: const TextField(
                         style: TextStyle(
-                          color: _hasBeenPressed ? Colors.white : Colors.grey,
+                          fontSize: 16,
+                          fontWeight: FontWeight.bold,
                         ),
-                      ),
-                      style: ElevatedButton.styleFrom(
-                        side: BorderSide(
-                          color: const Color(0XFF178066),
-                          width: 1,
-                        ),
-                        backgroundColor: _hasBeenPressed ? const Color(0XFF178066) : Colors.white,
-                        shape: RoundedRectangleBorder(
-                          borderRadius: BorderRadius.circular(12.0),
-                        ),
-                      ),
-                      onPressed: () => {
-                        setState(() {
-                          _hasBeenPressed = !_hasBeenPressed;
-                        }),
-                        showModalBottomSheet(
-                          shape: const RoundedRectangleBorder(
-                            borderRadius: BorderRadius.vertical(
-                              top: Radius.circular(20),
-                            )
+                        decoration: InputDecoration(
+                          border: InputBorder.none,
+                          hintText: 'Add an interesting title',
+                          hintStyle: TextStyle(
+                            color: Colors.grey,
+                            fontSize: 14,
+                            fontWeight: FontWeight.bold,
                           ),
-                          context: context, 
-                          builder: (context) {
-                            return const TopicBottomModal();
-                          },
-                        )
-                      },
+                        ),
+                        maxLines: null,
+                        keyboardType: TextInputType.multiline,
+                      ),
                     ),
-                    const SizedBox(width: 8,),
-                    ChipButton('Business',),
-                    ChipButton('Technology',),
+                    const SizedBox(
+                      height: 8,
+                    ),
+                    Container(
+                      height: 474,
+                      child: const TextField(
+                        decoration: InputDecoration(
+                          border: InputBorder.none,
+                          hintText: 'Write something...',
+                          hintStyle: TextStyle(
+                            color: Colors.grey,
+                            fontSize: 16,
+                          ),
+                        ),
+                        maxLines: null,
+                        keyboardType: TextInputType.multiline,
+                      ),
+                    ),
+                    const SizedBox(
+                      height: 36,
+                    ),
+                    Container(
+                      padding: const EdgeInsets.only(top: 12),
+                      child: const Align(
+                        alignment: Alignment.topLeft,
+                        child: Text(
+                          'Choose a topic',
+                          style: TextStyle(
+                            color: Colors.black,
+                            fontSize: 14,
+                            fontWeight: FontWeight.bold,
+                          ),
+                          textAlign: TextAlign.start,
+                        ),
+                      ),
+                    ),
+                    const SizedBox(
+                      height: 8,
+                    ),
+                    // MultiSelectDialogField(
+                    //   // chipDisplay:,
+                    //   items: _topics.map((e) => MultiSelectItem(e, e.name)).toList(),
+                    //   listType: MultiSelectListType.CHIP,
+                    //   onConfirm: (values) {
+                    //     // _selectedTopics = values;
+                    //   },
+                    // ),
+                    Row(
+                      children: [
+                        ElevatedButton(
+                          child: Text(
+                            'All',
+                            style: TextStyle(
+                              color:
+                                  _hasBeenPressed ? Colors.white : Colors.grey,
+                            ),
+                          ),
+                          style: ElevatedButton.styleFrom(
+                            side: BorderSide(
+                              color: const Color(0XFF178066),
+                              width: 1,
+                            ),
+                            backgroundColor: _hasBeenPressed
+                                ? const Color(0XFF178066)
+                                : Colors.white,
+                            shape: RoundedRectangleBorder(
+                              borderRadius: BorderRadius.circular(12.0),
+                            ),
+                          ),
+                          onPressed: () => {
+                            setState(() {
+                              _hasBeenPressed = !_hasBeenPressed;
+                            }),
+                            showModalBottomSheet(
+                              shape: const RoundedRectangleBorder(
+                                  borderRadius: BorderRadius.vertical(
+                                top: Radius.circular(20),
+                              )),
+                              context: context,
+                              builder: (context) {
+                                return const TopicBottomModal();
+                              },
+                            )
+                          },
+                        ),
+                        const SizedBox(
+                          width: 8,
+                        ),
+                        Container(
+                          height: 50,
+                          width: 306,
+                          child: ListView(
+                            shrinkWrap: true,
+                            scrollDirection: Axis.horizontal,
+                            children: [
+                              ChipButton(
+                                'Business',
+                              ),
+                              ChipButton(
+                                'Technology',
+                              ),
+                              ChipButton(
+                                'Business',
+                              ),
+                              ChipButton(
+                                'Technology',
+                              ),
+                              ChipButton(
+                                'Business',
+                              ),
+                              ChipButton(
+                                'Technology',
+                              ),
+                              ChipButton(
+                                'Business',
+                              ),
+                              ChipButton(
+                                'Technology',
+                              ),
+                            ],
+                          ),
+                        )
+                      ],
+                    ),
+                    const SizedBox(
+                      height: 12,
+                    ),
+                    Container(
+                      padding: const EdgeInsets.only(top: 12),
+                      child: const Align(
+                        alignment: Alignment.topLeft,
+                        child: Text(
+                          'Add image',
+                          style: TextStyle(
+                            color: Colors.black,
+                            fontSize: 14,
+                            fontWeight: FontWeight.bold,
+                          ),
+                          textAlign: TextAlign.start,
+                        ),
+                      ),
+                    ),
+                    const SizedBox(
+                      height: 8,
+                    ),
+                    Container(
+                      height: 100,
+                      width: 100,
+                      child: ElevatedButton(
+                        style: ElevatedButton.styleFrom(
+                          primary: Colors.white,
+                          side: const BorderSide(
+                            color: Colors.grey,
+                            style: BorderStyle.solid,
+                            width: 1,
+                          ),
+                          shape: RoundedRectangleBorder(
+                            borderRadius: BorderRadius.circular(12.0),
+                          ),
+                        ),
+                        onPressed: () {},
+                        child: const Image(
+                          image: AssetImage('assets/Upload.png'),
+                        ),
+                      ),
+                    ),
+                    const SizedBox(
+                      height: 60,
+                    ),
                   ],
                 ),
-                const SizedBox(height: 12,),
-                Container(
-                  padding: const EdgeInsets.only(top: 12),
-                  child: const Align(
-                    alignment: Alignment.topLeft,
-                    child: Text(
-                      'Add image',
-                      style: TextStyle(
-                        color: Colors.black,
-                        fontSize: 14,
-                        fontWeight: FontWeight.bold,
-                      ),
-                      textAlign: TextAlign.start,
-                    ),
-                  ),
-                ),
-                const SizedBox(height: 8,),
-                Container(
-                  height: 100,
-                  width: 100,
-                  child: ElevatedButton(
-                    style: ElevatedButton.styleFrom(
-                      primary: Colors.white,
-                      side: const BorderSide(
-                        color: Colors.grey,
-                        style: BorderStyle.solid,
-                        width: 1,
-                      ),
-                      shape: RoundedRectangleBorder(
-                        borderRadius: BorderRadius.circular(12.0),
-                      ),
-                    ),
-                    onPressed: () {},
-                    child: const Image(
-                      image: AssetImage('assets/Upload.png'),
-                    ),
-                  ),
-                ),
-                const SizedBox(height: 60,),
-
-              ],
-            ),
-          )
-        )
-      ),
+              ))),
     );
   }
 
-Row ChipButton(name) {
+  Row ChipButton(name) {
     return Row(
       children: [
         ElevatedButton(
@@ -236,7 +281,8 @@ Row ChipButton(name) {
               color: _hasBeenPressed ? const Color(0XFF178066) : Colors.grey,
               width: 1,
             ),
-            backgroundColor: _hasBeenPressed ? const Color(0XFF178066) : Colors.white,
+            backgroundColor:
+                _hasBeenPressed ? const Color(0XFF178066) : Colors.white,
             shape: RoundedRectangleBorder(
               borderRadius: BorderRadius.circular(12.0),
             ),
@@ -247,7 +293,9 @@ Row ChipButton(name) {
             })
           },
         ),
-        const SizedBox(width: 8,),
+        const SizedBox(
+          width: 8,
+        ),
       ],
     );
   }
