@@ -16,21 +16,46 @@ class _BookmarkScreenState extends State<BookmarkScreen> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
+        toolbarHeight: 100,
         elevation: 1.0,
         backgroundColor: Colors.white,
-        title: Row(
-          mainAxisAlignment: MainAxisAlignment.spaceBetween,
+        title: Column(
           children: [
-            Text(
-              'Bookmark',
-              style: heading3Bold.copyWith(color: AppColors.kcPrimaryColor),
+            Container(
+              alignment: Alignment.centerLeft,
+              child: Text(
+                'Bookmark',
+                style: heading3Bold.copyWith(color: AppColors.kcPrimaryColor),
+              ),
             ),
-            Image.asset('assets/icon_search.png', height: 24, width: 24)
+            SizedBox(
+              height: 10,
+            ),
+            TextFormField(
+              decoration: InputDecoration(
+                hintText: "Search bookmark",
+                hintStyle: TextStyle(
+                  fontWeight: FontWeight.w600,
+                  fontSize: 14,
+                ),
+                border: OutlineInputBorder(
+                  borderRadius: BorderRadius.all(
+                    Radius.circular(50),
+                  ),
+                ),
+                contentPadding:
+                    EdgeInsets.symmetric(vertical: 12, horizontal: 12),
+                suffixIcon: Image.asset(
+                  'assets/icon_filter_search.png',
+                  height: 14,
+                  width: 14,
+                ),
+              ),
+            ),
           ],
         ),
       ),
       body: SingleChildScrollView(
-       
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.stretch,
           mainAxisAlignment: MainAxisAlignment.center,
@@ -49,35 +74,33 @@ class _BookmarkScreenState extends State<BookmarkScreen> {
   Container _buildPostThread() {
     return Container(
       color: Color(0xffeeeeee),
-     padding: EdgeInsets.only(top: 10, bottom: 10, left: 16, right: 16),
-        child: Container(
-          decoration: BoxDecoration(
-              color: Colors.white, borderRadius: BorderRadius.circular(10)),
-          child: Column(
-            children: [
-              _buildProfileThreadFake(),
-              SizedBox(
-                height: 5,
+      padding: EdgeInsets.only(top: 10, bottom: 10, left: 16, right: 16),
+      child: Container(
+        decoration: BoxDecoration(
+            color: Colors.white, borderRadius: BorderRadius.circular(10)),
+        child: Column(
+          children: [
+            _buildProfileThreadFake(),
+            SizedBox(
+              height: 5,
+            ),
+            Container(
+              margin: EdgeInsets.only(left: 16, right: 270),
+              decoration: BoxDecoration(
+                color: Color(0xffececec),
+                borderRadius: BorderRadius.circular(50),
               ),
-              Container(
-                margin: EdgeInsets.only(left: 16, right: 270),
-                decoration: BoxDecoration(
-                  color: Color(0xffececec),
-                  borderRadius: BorderRadius.circular(50),
-                ),
-                padding:
-                    EdgeInsets.only(top: 5, bottom: 5, left: 12, right: 12),
-                child: Text(
-                  'Education',
-                  textAlign: TextAlign.center,
-                  style: TextStyle(color: Colors.grey),
-                ),
+              padding: EdgeInsets.only(top: 5, bottom: 5, left: 12, right: 12),
+              child: Text(
+                'Education',
+                textAlign: TextAlign.center,
+                style: TextStyle(color: Colors.grey),
               ),
-              _buildThread(),
-            ],
-          ),
+            ),
+            _buildThread(),
+          ],
         ),
-      
+      ),
     );
   }
 
@@ -265,7 +288,6 @@ class _BookmarkScreenState extends State<BookmarkScreen> {
                 width: 10,
               ),
               Image.asset('assets/icon_comment.png', height: 24, width: 24),
-              
               Text('108'),
             ],
           )

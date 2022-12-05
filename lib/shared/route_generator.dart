@@ -22,7 +22,7 @@ class RouteGenerator {
         return MaterialPageRoute(builder: (context) => RegisterScreen());
       case createThread:
         final args = settings.arguments;
-        return MaterialPageRoute(builder: (context) => CreateThread
+        return MaterialPageRoute(builder: (context) => CreateThread());
       case boarding:
         final args = settings.arguments;
         return MaterialPageRoute(builder: (context) => OnBoardingScreen());
