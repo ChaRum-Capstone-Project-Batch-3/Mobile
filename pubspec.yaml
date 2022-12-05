@@ -38,6 +38,12 @@ dependencies:
   bubble_tab_indicator: ^0.1.6
   filepicker_windows: ^2.0.2
   image_picker: ^0.8.6
+  provider: ^6.0.4
+  shared_preferences: ^2.0.15
+  json_serializable: ^6.5.4
+  dio: ^4.0.6
+  build_runner: ^2.3.2
+  json_annotation: ^4.7.0
 
 dev_dependencies:
   flutter_test:
