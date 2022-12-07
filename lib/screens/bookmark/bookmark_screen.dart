@@ -1,4 +1,5 @@
 import 'package:fgd_flutter/screens/follow_account/follow_account_screen.dart';
+import 'package:fgd_flutter/screens/thread_detail/thread_detail_screen.dart';
 import 'package:fgd_flutter/shared/app_colors.dart';
 import 'package:fgd_flutter/shared/styles.dart';
 import 'package:flutter/material.dart';
@@ -12,56 +13,121 @@ class BookmarkScreen extends StatefulWidget {
 
 class _BookmarkScreenState extends State<BookmarkScreen> {
   bool actionLike = true;
+  bool actionConfirm = true;
+  bool actionFollow = true;
+  final primaryColor = AppColors.kcPrimaryColor;
+  final whiteColor = AppColors.kcBaseWhite;
+
+  int countBoolList(List<bool> _topicStatus) {
+    int count = 0;
+    for (int i = 0; i < _topicStatus.length; i++) {
+      if (_topicStatus.elementAt(i) == true) {
+        count++;
+      }
+    }
+    return count;
+  }
+
+  List<bool> _topicStatus = [
+    false,
+    false,
+    false,
+    false,
+    false,
+    false,
+    false,
+    false,
+    false,
+    false,
+    false,
+    false,
+    false,
+    false,
+    false,
+    false,
+    false,
+    false,
+    false,
+    false
+  ];
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        toolbarHeight: 100,
+        toolbarHeight: 120,
         elevation: 1.0,
         backgroundColor: Colors.white,
         title: Column(
           children: [
             Container(
               alignment: Alignment.centerLeft,
+              margin: EdgeInsets.only(top: 12.5, bottom: 12.5, left: 16),
               child: Text(
                 'Bookmark',
                 style: heading3Bold.copyWith(color: AppColors.kcPrimaryColor),
               ),
             ),
-            SizedBox(
-              height: 10,
-            ),
-            TextFormField(
-              decoration: InputDecoration(
-                hintText: "Search bookmark",
-                hintStyle: TextStyle(
-                  fontWeight: FontWeight.w600,
-                  fontSize: 14,
-                ),
-                border: OutlineInputBorder(
-                  borderRadius: BorderRadius.all(
-                    Radius.circular(50),
+            Row(
+              children: [
+                Flexible(
+                  child: TextFormField(
+                    decoration: InputDecoration(
+                      filled: true,
+                      fillColor: AppColors.kcDarkWhite,
+                      hintText: "Search bookmark",
+                      prefixIcon: Container(
+                        padding: const EdgeInsets.only(
+                            top: 10, bottom: 10, left: 20, right: 10),
+                        child: Image.asset(
+                          height: 24,
+                          width: 24,
+                          'assets/icon_search_normal.png',
+                        ),
+                      ),
+                      hintStyle: TextStyle(
+                        fontWeight: FontWeight.w600,
+                        fontSize: 14,
+                      ),
+                      border: OutlineInputBorder(
+                        borderRadius: BorderRadius.all(
+                          Radius.circular(50),
+                        ),
+                      ),
+                      contentPadding:
+                          EdgeInsets.symmetric(vertical: 12, horizontal: 12),
+                    ),
                   ),
                 ),
-                contentPadding:
-                    EdgeInsets.symmetric(vertical: 12, horizontal: 12),
-                suffixIcon: Image.asset(
-                  'assets/icon_filter_search.png',
-                  height: 14,
-                  width: 14,
+                InkWell(
+                  onTap: () {
+                    setState(() {
+                      _topicStatus[0] = !_topicStatus[0];
+                    });
+                    buildFilterSearch();
+                  },
+                  child: Container(
+                    margin: EdgeInsets.only(left: 8, right: 8),
+                    child: Image.asset(
+                      height: 24,
+                      width: 24,
+                      'assets/icon_filter_search.png',
+                    ),
+                  ),
                 ),
-              ),
+              ],
             ),
           ],
         ),
       ),
       body: SingleChildScrollView(
+        padding: EdgeInsets.only(bottom: 10),
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.stretch,
-          mainAxisAlignment: MainAxisAlignment.center,
           mainAxisSize: MainAxisSize.min,
           children: [
-            _buildPostThread(),
+            GestureDetector(
+                onTap: () => ThreadDetailScreen(), child: _buildPostThread()),
             _buildPostThreadWithImage(),
             _buildPostThread(),
             _buildPostThreadWithImage(),
@@ -181,7 +247,7 @@ class _BookmarkScreenState extends State<BookmarkScreen> {
     return Container(
       color: Color(0xffeeeeee),
       child: SingleChildScrollView(
-        padding: EdgeInsets.only(top: 10, left: 16, right: 16),
+        padding: EdgeInsets.only(top: 10, bottom: 10, left: 16, right: 16),
         child: Container(
           decoration: BoxDecoration(
               color: Colors.white, borderRadius: BorderRadius.circular(10)),
@@ -219,33 +285,42 @@ class _BookmarkScreenState extends State<BookmarkScreen> {
         mainAxisAlignment: MainAxisAlignment.start,
         children: [
           GestureDetector(
-              onTap: () {
-                Navigator.push(context,
-                    MaterialPageRoute(builder: (_) => FollowAccountScreen()));
-              },
-              child: Text(
-                'Evan Chris',
-                style: TextStyle(fontWeight: FontWeight.bold),
-              )),
-          SizedBox(
-            width: 5,
+            onTap: () {
+              Navigator.push(context,
+                  MaterialPageRoute(builder: (_) => FollowAccountScreen()));
+            },
+            child: Text(
+              'Evan Chris',
+              style: TextStyle(fontWeight: FontWeight.bold),
+            ),
           ),
           Container(
             margin: EdgeInsets.only(left: 10, right: 10),
-            child: CircleAvatar(
-              backgroundColor: Color(0xffC7C7C7),
+            decoration: BoxDecoration(
+              shape: BoxShape.circle,
+              color: Color(0xffC7C7C7),
             ),
-            color: Color(0xffC7C7C7),
             width: 6,
             height: 6,
           ),
           GestureDetector(
-            onTap: () {},
-            child: Text(
-              'Follow',
-              style: TextStyle(color: Colors.blue, fontWeight: FontWeight.bold),
-            ),
-          ),
+              onTap: () {
+                setState(() {
+                  actionFollow = !actionFollow;
+                });
+              },
+              child: actionFollow
+                  ? Text(
+                      'Follow',
+                      style: TextStyle(
+                          color: Colors.blue, fontWeight: FontWeight.bold),
+                    )
+                  : Text(
+                      'Following',
+                      style: TextStyle(
+                          color: AppColors.kcLightestBlack,
+                          fontWeight: FontWeight.bold),
+                    )),
         ],
       ),
       subtitle: Text('1h ago'),
@@ -293,6 +368,210 @@ class _BookmarkScreenState extends State<BookmarkScreen> {
           )
         ],
       ),
+    );
+  }
+
+  ElevatedButton ChipButton(name, iter) {
+    return ElevatedButton(
+      child: Text(
+        '$name',
+        style: TextStyle(
+          color: _topicStatus[iter] ? Colors.white : Colors.grey,
+        ),
+      ),
+      style: ElevatedButton.styleFrom(
+        side: BorderSide(
+          color: _topicStatus[iter] ? const Color(0XFF178066) : Colors.grey,
+          width: 1,
+        ),
+        backgroundColor:
+            _topicStatus[iter] ? const Color(0XFF178066) : Colors.white,
+        shape: RoundedRectangleBorder(
+          borderRadius: BorderRadius.circular(12.0),
+        ),
+      ),
+      onPressed: () => {
+        setState(() {
+          _topicStatus[iter] = !_topicStatus[iter];
+        })
+      },
+    );
+  }
+
+// Build Bottom Sheets
+  void buildFilterSearch() {
+    showModalBottomSheet(
+      isScrollControlled: true,
+      shape: RoundedRectangleBorder(
+        borderRadius: BorderRadius.only(
+            topLeft: Radius.circular(30), topRight: Radius.circular(30)),
+      ),
+      backgroundColor: Colors.white,
+      context: context,
+      builder: (BuildContext context) {
+        return Container(
+          height: 600,
+          padding: EdgeInsets.all(20),
+          child: Column(
+            crossAxisAlignment: CrossAxisAlignment.stretch,
+            children: [
+              Center(
+                child: Image.asset(
+                  'assets/pony_bottom_sheet.png',
+                  width: 38,
+                ),
+              ),
+              SizedBox(
+                height: 30,
+              ),
+              Align(
+                alignment: Alignment.centerLeft,
+                child: Text(
+                  'All people',
+                  style: body1Semi,
+                ),
+              ),
+              SizedBox(
+                height: 5,
+              ),
+              Row(
+                children: [
+                  ChipButton('People you follow', 1),
+                  SizedBox(
+                    width: 8,
+                  ),
+                  ChipButton('Thread you follow', 2),
+                ],
+              ),
+              SizedBox(
+                height: 5,
+              ),
+              Align(
+                alignment: Alignment.centerLeft,
+                child: Text(
+                  'All time',
+                  style: body1Semi,
+                ),
+              ),
+              SizedBox(
+                height: 5,
+              ),
+              Row(
+                children: [
+                  ChipButton('Earliest', 3),
+                  SizedBox(
+                    width: 8,
+                  ),
+                  ChipButton('Latest', 4),
+                ],
+              ),
+              SizedBox(
+                height: 5,
+              ),
+              Align(
+                alignment: Alignment.centerLeft,
+                child: Text(
+                  'Threads',
+                  style: body1Semi,
+                ),
+              ),
+              SizedBox(
+                height: 5,
+              ),
+              Row(
+                children: [
+                  ChipButton('Most popular', 5),
+                  SizedBox(
+                    width: 8,
+                  ),
+                  ChipButton('Least popular', 6),
+                ],
+              ),
+              SizedBox(
+                height: 5,
+              ),
+              Align(
+                alignment: Alignment.centerLeft,
+                child: Text(
+                  'Categories',
+                  style: body1Semi,
+                ),
+              ),
+              SizedBox(
+                height: 5,
+              ),
+              Row(children: [
+                ChipButton('Business', 7),
+                SizedBox(
+                  width: 8,
+                ),
+                ChipButton('Technology', 8),
+                SizedBox(
+                  width: 8,
+                ),
+                ChipButton('Games', 9),
+                SizedBox(
+                  width: 8,
+                ),
+              ]),
+              Row(
+                children: [
+                  ChipButton('Education', 10),
+                  SizedBox(
+                    width: 8,
+                  ),
+                  ChipButton('Movie', 11),
+                  SizedBox(
+                    width: 8,
+                  ),
+                  ChipButton('Travel', 12),
+                  SizedBox(
+                    width: 8,
+                  ),
+                  ChipButton('Music', 13),
+                ],
+              ),
+              Row(
+                children: [
+                  ChipButton('Horror', 14),
+                  SizedBox(
+                    width: 8,
+                  ),
+                  ChipButton('Fashion', 15),
+                  SizedBox(
+                    width: 8,
+                  ),
+                  ChipButton('Animal', 16),
+                  SizedBox(
+                    width: 8,
+                  ),
+                  ChipButton('Art', 17),
+                ],
+              ),
+              Row(
+                children: [
+                  ChipButton('Food', 18),
+                ],
+              ),
+              SizedBox(
+                height: 20,
+              ),
+              ElevatedButton(
+                  onPressed: () {},
+                  child: Text(
+                    'Confirm',
+                    style: body2Semi,
+                  ),
+                  style: ButtonStyle(
+                    shape: MaterialStateProperty.all(
+                      RoundedRectangleBorder(
+                          borderRadius: BorderRadius.circular(50)),
+                    ),
+                  )),
+            ],
+          ),
+        );
+      },
     );
   }
 }

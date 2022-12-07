@@ -1,5 +1,6 @@
 import 'package:fgd_flutter/screens/edit_account/edit_account_screen.dart';
 import 'package:fgd_flutter/shared/charum_ui.dart';
+import 'package:fgd_flutter/shared/router.dart';
 import 'package:fgd_flutter/shared/styles.dart';
 import 'package:flutter/material.dart';
 
@@ -12,71 +13,255 @@ class AccountScreen extends StatefulWidget {
 
 class _AccountScreenState extends State<AccountScreen> {
   bool actionLike = true;
+  bool actionFollow = true;
+  final primaryColor = AppColors.kcPrimaryColor;
+  final whiteColor = AppColors.kcBaseWhite;
 
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
-      appBar: AppBar(
-        centerTitle: true,
-        backgroundColor: Colors.white,
-        title: Text(
-          'Tom Cruise',
-          style: buttonSemi.copyWith(color: Colors.black),
-        ),
-        elevation: 1.0,
-      ),
-      body: SingleChildScrollView(
-        child: Column(
-          crossAxisAlignment: CrossAxisAlignment.stretch,
-          mainAxisAlignment: MainAxisAlignment.center,
-          mainAxisSize: MainAxisSize.min,
-          children: [
-            SizedBox(
-              height: 15,
-            ),
-            Image.asset(
-              'assets/account_default.png',
-              height: 72,
-              width: 72,
+    return DefaultTabController(
+      length: 2,
+      child: Scaffold(
+        appBar: AppBar(
+          backgroundColor: Colors.white,
+          title: Text(
+            'Account',
+            style: heading3Bold.copyWith(color: AppColors.kcPrimaryColor),
+          ),
+          actions: [
+            GestureDetector(
+              // onTap: () => _buildMoreUser(),
+              child: Image.asset(
+                'assets/icon_more.png',
+                height: 24,
+                width: 24,
+              ),
             ),
             SizedBox(
-              height: 20,
-            ),
-            Text(
-              'Tom Cruise',
-              style: buttonSemi,
-              textAlign: TextAlign.center,
-            ),
-            SizedBox(
-              height: 20,
-            ),
-            _buildProfile(),
-            Container(
-              margin: EdgeInsets.only(top: 10, bottom: 10, left: 16, right: 16),
-              child: ElevatedButton(
-                onPressed: () {
-                  Navigator.push(
-                      context,
-                      MaterialPageRoute(
-                        builder: (context) => EditAccountScreen(),
-                      ));
-                },
-                child: Text(
-                  'Edit Profile',
-                  style: body2Semi,
+              width: 10,
+            )
+          ],
+          elevation: 0.0,
+          bottom: PreferredSize(
+            preferredSize: Size.fromHeight(340),
+            child: Column(
+              crossAxisAlignment: CrossAxisAlignment.stretch,
+              mainAxisSize: MainAxisSize.min,
+              children: [
+                SizedBox(
+                  height: 15,
                 ),
-                style: ButtonStyle(
-                  shape: MaterialStateProperty.all(
-                    RoundedRectangleBorder(
-                        borderRadius: BorderRadius.circular(50)),
+                Image.asset(
+                  'assets/account_default.png',
+                  height: 72,
+                  width: 72,
+                ),
+                SizedBox(
+                  height: 20,
+                ),
+                Text(
+                  'Tom Cruise',
+                  style: body1Bold.copyWith(fontWeight: FontWeight.bold),
+                  textAlign: TextAlign.center,
+                ),
+                SizedBox(
+                  height: 5,
+                ),
+                Text(
+                  'tom_cruise',
+                  textAlign: TextAlign.center,
+                ),
+                SizedBox(
+                  height: 20,
+                ),
+                _buildProfile(),
+                Row(
+                  crossAxisAlignment: CrossAxisAlignment.center,
+                  children: [
+                    Container(
+                      margin: EdgeInsets.only(
+                          top: 10, bottom: 10, left: 87, right: 8),
+                      child: ElevatedButton(
+                          onPressed: () {
+                            setState(() {
+                              actionFollow = !actionFollow;
+                            });
+                          },
+                          child: Container(
+                            margin: EdgeInsets.only(
+                                left: 48, top: 10, bottom: 10, right: 48),
+                            child: GestureDetector(
+                              onTap: (() {
+                                Navigator.pushNamed(context, editAccount);
+                              }),
+                              child: Text(
+                                'Edit profile',
+                                style: body2Semi,
+                              ),
+                            ),
+                          ),
+                          style: ButtonStyle(
+                            shape: MaterialStateProperty.all(
+                              RoundedRectangleBorder(
+                                  borderRadius: BorderRadius.circular(8)),
+                            ),
+                          )),
+                    ),
+                    Container(
+                      decoration: BoxDecoration(
+                          color: Color(0xfff4f4f4),
+                          borderRadius: BorderRadius.circular(8)),
+                      padding:
+                          EdgeInsets.only(top: 8, right: 6, left: 6, bottom: 8),
+                      child: Image.asset(
+                        'assets/icon_message.png',
+                        height: 24,
+                        width: 24,
+                      ),
+                    )
+                  ],
+                ),
+                TabBar(
+                  padding:
+                      EdgeInsets.only(left: 18, right: 18, top: 8, bottom: 8),
+                  indicator: BoxDecoration(
+                    borderRadius: BorderRadius.all(
+                      Radius.circular(6),
+                    ),
+                    color: AppColors.kcPrimaryColor!.shade200,
                   ),
+                  indicatorColor: AppColors.kcPrimaryColor,
+                  isScrollable: true,
+                  labelColor: AppColors.kcPrimaryColor,
+                  unselectedLabelColor: AppColors.kcDarkestWhite,
+                  indicatorSize: TabBarIndicatorSize.tab,
+                  tabs: [
+                    Tab(
+                      child: Row(
+                        children: [
+                          Image.asset("assets/threads.png"),
+                          SizedBox(
+                            width: 10,
+                          ),
+                          Text(
+                            "Threads",
+                            style: body1.copyWith(fontWeight: FontWeight.bold),
+                          ),
+                        ],
+                      ),
+                    ),
+                    Tab(
+                      child: Row(
+                        children: [
+                          Image.asset(
+                            "assets/icon_about.png",
+                            height: 24,
+                            width: 24,
+                          ),
+                          SizedBox(
+                            width: 10,
+                          ),
+                          Text(
+                            "About",
+                            style: body1.copyWith(fontWeight: FontWeight.bold),
+                          ),
+                        ],
+                      ),
+                    ),
+                  ],
+                ),
+              ],
+            ),
+          ),
+        ),
+        body: TabBarView(
+          children: [
+            SingleChildScrollView(
+              child: Column(
+                crossAxisAlignment: CrossAxisAlignment.stretch,
+                mainAxisAlignment: MainAxisAlignment.center,
+                mainAxisSize: MainAxisSize.min,
+                children: [
+                  _buildPostThread(),
+                  _buildPostThread(),
+                ],
+              ),
+            ),
+            SingleChildScrollView(
+              child: Container(
+                padding: EdgeInsets.all(16),
+                child: Column(
+                  crossAxisAlignment: CrossAxisAlignment.stretch,
+                  mainAxisAlignment: MainAxisAlignment.center,
+                  mainAxisSize: MainAxisSize.min,
+                  children: [
+                    Text(
+                        'Hello, my name is Evan Chris, Lorem ipsum dolor sit amet consectetur. Sagittis faucibus malesuada vitae sodales tortor at. Turpis ullamcorper quam imperdiet risus aliquam eu. Accumsan risus fames diam non quam augue dictum. Lorem ipsum dolor sit amet consectetur. Sagittis faucibus malesuada vitae sodales tortor at.'),
+                    SizedBox(
+                      height: 10,
+                    ),
+                    Text('Contact me in :'),
+                    RichText(
+                      text: TextSpan(
+                        text: 'instagram : ',
+                        style: const TextStyle(
+                          color: Colors.black,
+                          fontSize: 14,
+                        ),
+                        children: [
+                          TextSpan(
+                            text: '@evanchris',
+                            style: const TextStyle(
+                              fontSize: 14,
+                              color: Colors.black,
+                              fontWeight: FontWeight.bold,
+                            ),
+                          ),
+                        ],
+                      ),
+                    ),
+                    RichText(
+                      text: TextSpan(
+                        text: 'twitter : ',
+                        style: const TextStyle(
+                          color: Colors.black,
+                          fontSize: 14,
+                        ),
+                        children: [
+                          TextSpan(
+                            text: 'evanchris',
+                            style: const TextStyle(
+                              fontSize: 14,
+                              color: Colors.black,
+                              fontWeight: FontWeight.bold,
+                            ),
+                          ),
+                        ],
+                      ),
+                    ),
+                    RichText(
+                      text: TextSpan(
+                        text: 'email : ',
+                        style: const TextStyle(
+                          color: Colors.black,
+                          fontSize: 14,
+                        ),
+                        children: [
+                          TextSpan(
+                            text: 'evanchris123@gmail.com',
+                            style: const TextStyle(
+                              fontSize: 14,
+                              color: Colors.black,
+                              fontWeight: FontWeight.bold,
+                            ),
+                          ),
+                        ],
+                      ),
+                    ),
+                  ],
                 ),
               ),
             ),
-            _buildPostThread(),
-            _buildPostThread(),
-            _buildPostThread(),
-            _buildPostThread(),
           ],
         ),
       ),

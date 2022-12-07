@@ -1,3 +1,6 @@
+import 'package:fgd_flutter/screens/account/account_screen.dart';
+import 'package:fgd_flutter/screens/follow_account/follow_account_screen.dart';
+import 'package:fgd_flutter/screens/home/home_screen.dart';
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:provider/provider.dart';
@@ -58,7 +61,7 @@ class MyApp extends StatelessWidget {
         primarySwatch: primaryColor,
       ),
       debugShowCheckedModeBanner: false,
-      home: const BookmarkScreen(),
+      home: const MainScreen(),
     );
   }
 }
