@@ -1,6 +1,9 @@
 import 'package:fgd_flutter/screens/account/account_screen.dart';
 import 'package:fgd_flutter/screens/follow_account/follow_account_screen.dart';
 import 'package:fgd_flutter/screens/home/home_screen.dart';
+import 'package:fgd_flutter/screens/onboarding/onboarding_screen.dart';
+import 'package:fgd_flutter/screens/space/space_screen.dart';
+import 'package:fgd_flutter/screens/thread_detail/thread_detail_screen.dart';
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:provider/provider.dart';
@@ -33,10 +36,10 @@ class MyApp extends StatelessWidget {
   const MyApp({super.key});
   @override
   Widget build(BuildContext context) {
-    final primaryColor = AppColors.kcPrimaryColor;
+    final primaryColor = AppColors.kcPrimaryColor;  
     final whiteColor = AppColors.kcBaseWhite;
     return MaterialApp(
-      title: 'Flutter Demo',
+      title: 'Charum Apps',
       initialRoute: init,
       onGenerateRoute: RouteGenerator.generateRoute,
       theme: ThemeData(

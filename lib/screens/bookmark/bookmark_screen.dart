@@ -56,13 +56,13 @@ class _BookmarkScreenState extends State<BookmarkScreen> {
     return Scaffold(
       appBar: AppBar(
         toolbarHeight: 120,
-        elevation: 1.0,
+        elevation: 0.0,
         backgroundColor: Colors.white,
         title: Column(
           children: [
             Container(
               alignment: Alignment.centerLeft,
-              margin: EdgeInsets.only(top: 12.5, bottom: 12.5, left: 16),
+              margin: EdgeInsets.only(top: 12.5, bottom: 12.5),
               child: Text(
                 'Bookmark',
                 style: heading3Bold.copyWith(color: AppColors.kcPrimaryColor),
@@ -126,9 +126,13 @@ class _BookmarkScreenState extends State<BookmarkScreen> {
           crossAxisAlignment: CrossAxisAlignment.stretch,
           mainAxisSize: MainAxisSize.min,
           children: [
+            _buildPostThread(),
             GestureDetector(
-                onTap: () => ThreadDetailScreen(), child: _buildPostThread()),
-            _buildPostThreadWithImage(),
+                onTap: () {
+                  Navigator.push(context,
+                      MaterialPageRoute(builder: (_) => ThreadDetailScreen()));
+                },
+                child: _buildPostThreadWithImage()),
             _buildPostThread(),
             _buildPostThreadWithImage(),
           ],

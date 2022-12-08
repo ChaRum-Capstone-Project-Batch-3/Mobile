@@ -13,6 +13,8 @@ class _ThreadDetailScreenState extends State<ThreadDetailScreen> {
   bool actionFollowAccount = true;
   bool actionLike = true;
   bool actionFollowThread = true;
+  bool actionBookmark = true;
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -32,12 +34,23 @@ class _ThreadDetailScreenState extends State<ThreadDetailScreen> {
         backgroundColor: Colors.white,
         actions: [
           GestureDetector(
-            onTap: () => _buildSnackBarAddBookmark(),
-            child: Image.asset(
-              'assets/icon_add_bookmark_bottom_sheet.png',
-              height: 24,
-              width: 24,
-            ),
+            onTap: () {
+              setState(() {
+                actionBookmark = !actionBookmark;
+              });
+              _buildSnackBarActionBookmark();
+            },
+            child: actionBookmark
+                ? Image.asset(
+                    'assets/icon_add_bookmark_bottom_sheet.png',
+                    height: 24,
+                    width: 24,
+                  )
+                : Image.asset(
+                    'assets/icon_remove_bookmark.png',
+                    height: 24,
+                    width: 24,
+                  ),
           ),
           SizedBox(
             width: 10,
@@ -142,7 +155,7 @@ class _ThreadDetailScreenState extends State<ThreadDetailScreen> {
                   alignment: Alignment.centerRight,
                   child: GestureDetector(
                       onTap: () {
-                        _buildSnackBarAddThread();
+                        _buildSnackBarActionThread();
                         setState(() {
                           actionFollowThread = !actionFollowThread;
                         });
@@ -290,42 +303,12 @@ class _ThreadDetailScreenState extends State<ThreadDetailScreen> {
     );
   }
 
-  void _buildSnackBarAddBookmark() {
-    ScaffoldMessenger.of(context).showSnackBar(SnackBar(
-        duration: Duration(milliseconds: 500),
-        backgroundColor: AppColors.kcPrimaryColor,
-        shape: RoundedRectangleBorder(
-          borderRadius: BorderRadius.circular(10),
-        ),
-        margin: EdgeInsets.only(
-            bottom: MediaQuery.of(context).size.height - 130,
-            right: 20,
-            left: 20),
-        behavior: SnackBarBehavior.floating,
-        content: Row(
-          mainAxisAlignment: MainAxisAlignment.center,
-          children: [
-            Image.asset(
-              'assets/icon_succes_add _bookmark_circle.png',
-              height: 24,
-              width: 24,
-            ),
-            SizedBox(
-              width: 10,
-            ),
-            Text(
-              'Thread added to your Bookmarks',
-              style: TextStyle(fontWeight: FontWeight.bold),
-            )
-          ],
-        )));
-  }
-
-  void _buildSnackBarAddThread() {
+  void _buildSnackBarActionBookmark() {
     ScaffoldMessenger.of(context).showSnackBar(
       SnackBar(
         duration: Duration(milliseconds: 500),
-        backgroundColor: AppColors.kcPrimaryColor,
+        backgroundColor:
+            actionBookmark ? Color(0xfff91516) : AppColors.kcPrimaryColor,
         shape: RoundedRectangleBorder(
           borderRadius: BorderRadius.circular(10),
         ),
@@ -334,21 +317,94 @@ class _ThreadDetailScreenState extends State<ThreadDetailScreen> {
             right: 20,
             left: 20),
         behavior: SnackBarBehavior.floating,
-        content: Row(
-          mainAxisAlignment: MainAxisAlignment.center,
-          children: [
-            Image.asset(
-              'assets/icon_succes_add _bookmark_circle.png',
-              height: 24,
-              width: 24,
-            ),
-            SizedBox(
-              width: 10,
-            ),
-            Text('Thread successfully followed',
-                style: TextStyle(fontWeight: FontWeight.bold))
-          ],
+        content: actionBookmark
+            ? Row(
+                mainAxisAlignment: MainAxisAlignment.center,
+                children: [
+                  Image.asset(
+                    'assets/icon_succes_remove_bookmark_circle.png',
+                    height: 22,
+                    width: 22,
+                  ),
+                  SizedBox(
+                    width: 10,
+                  ),
+                  Text(
+                    'Thread removed to your Bookmarks',
+                    style: TextStyle(
+                      fontWeight: FontWeight.bold,
+                    ),
+                  )
+                ],
+              )
+            : Row(
+                mainAxisAlignment: MainAxisAlignment.center,
+                children: [
+                  Image.asset(
+                    'assets/icon_succes_add_bookmark_circle.png',
+                    height: 24,
+                    width: 24,
+                  ),
+                  SizedBox(
+                    width: 10,
+                  ),
+                  Text(
+                    'Thread added to your Bookmarks',
+                    style: TextStyle(
+                      fontWeight: FontWeight.bold,
+                    ),
+                  )
+                ],
+              ),
+      ),
+    );
+  }
+
+  void _buildSnackBarActionThread() {
+    ScaffoldMessenger.of(context).showSnackBar(
+      SnackBar(
+        duration: Duration(milliseconds: 500),
+        backgroundColor:
+            actionFollowThread ? AppColors.kcPrimaryColor : Color(0xfff91516),
+        shape: RoundedRectangleBorder(
+          borderRadius: BorderRadius.circular(10),
         ),
+        margin: EdgeInsets.only(
+            bottom: MediaQuery.of(context).size.height - 130,
+            right: 20,
+            left: 20),
+        behavior: SnackBarBehavior.floating,
+        content: actionFollowThread
+            ? Row(
+                mainAxisAlignment: MainAxisAlignment.center,
+                children: [
+                  Image.asset(
+                    'assets/icon_succes_add_bookmark_circle.png',
+                    height: 24,
+                    width: 24,
+                  ),
+                  SizedBox(
+                    width: 10,
+                  ),
+                  Text('Thread successfully followed',
+                      style: TextStyle(fontWeight: FontWeight.bold))
+                ],
+              )
+            : Row(
+                mainAxisAlignment: MainAxisAlignment.center,
+                children: [
+                  Image.asset(
+                    'assets/icon_succes_remove_bookmark_circle.png',
+                    height: 22,
+                    width: 22,
+                  ),
+                  SizedBox(
+                    width: 10,
+                  ),
+                  Text('Thread successfully unfollowed',
+                      style: TextStyle(fontWeight: FontWeight.bold))
+                ],
+              ),
       ),
     );
   }
