@@ -36,7 +36,7 @@ class MyApp extends StatelessWidget {
   const MyApp({super.key});
   @override
   Widget build(BuildContext context) {
-    final primaryColor = AppColors.kcPrimaryColor;  
+    final primaryColor = AppColors.kcPrimaryColor;
     final whiteColor = AppColors.kcBaseWhite;
     return MaterialApp(
       title: 'Charum Apps',
@@ -64,7 +64,7 @@ class MyApp extends StatelessWidget {
         primarySwatch: primaryColor,
       ),
       debugShowCheckedModeBanner: false,
-      home: const MainScreen(),
+      home: const ThreadDetailScreen(),
     );
   }
 }
