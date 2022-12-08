@@ -1,4 +1,5 @@
 import 'package:bubble_tab_indicator/bubble_tab_indicator.dart';
+import 'package:fgd_flutter/shared/router.dart';
 import '/shared/app_colors.dart';
 import '/shared/styles.dart';
 // import 'package:bubble_tab_indicator/bubble_tab_indicator.dart';
@@ -27,9 +28,15 @@ class _HomePageState extends State<HomePage> {
                 InkWell(child: Image.asset("assets/notification.png")),
                 SizedBox(width: 15),
                 InkWell(
-                  child: Image.asset(
-                    "assets/search-normal.png",
+                  child: ImageIcon(
+                    AssetImage(
+                      "assets/search-normal.png",
+                    ),
+                    color: AppColors.kcBaseBlack,
                   ),
+                  onTap: () {
+                    Navigator.pushNamed(context, search);
+                  },
                 ),
                 SizedBox(
                   width: 10,
@@ -51,7 +58,9 @@ class _HomePageState extends State<HomePage> {
               Tab(
                 child: Row(
                   children: [
-                    Image.asset("assets/threads.png"),
+                    ImageIcon(
+                      AssetImage("assets/threads.png"),
+                    ),
                     SizedBox(
                       width: 10,
                     ),

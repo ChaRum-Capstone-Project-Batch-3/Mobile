@@ -1,3 +1,4 @@
+import 'package:fgd_flutter/providers/search_thread_view_model.dart';
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:provider/provider.dart';
@@ -19,7 +20,8 @@ void main() {
     MultiProvider(
       providers: [
         ChangeNotifierProvider(create: (context) => LoginViewModel()),
-        ChangeNotifierProvider(create: (context) => RegisterViewModel())
+        ChangeNotifierProvider(create: (context) => RegisterViewModel()),
+        ChangeNotifierProvider(create: (context) => SearchThreadViewModel())
       ],
       child: MyApp(),
     ),
@@ -58,7 +60,7 @@ class MyApp extends StatelessWidget {
         primarySwatch: primaryColor,
       ),
       debugShowCheckedModeBanner: false,
-      home: const BookmarkScreen(),
+      home: const SplashScreen(),
     );
   }
 }
