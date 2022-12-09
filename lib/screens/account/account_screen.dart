@@ -3,6 +3,9 @@ import 'package:fgd_flutter/shared/charum_ui.dart';
 import 'package:fgd_flutter/shared/router.dart';
 import 'package:fgd_flutter/shared/styles.dart';
 import 'package:flutter/material.dart';
+import 'package:provider/provider.dart';
+
+import '../../providers/user_view_model.dart';
 
 class AccountScreen extends StatefulWidget {
   const AccountScreen({super.key});
@@ -16,10 +19,11 @@ class _AccountScreenState extends State<AccountScreen> {
   bool actionFollow = true;
   final primaryColor = AppColors.kcPrimaryColor;
   final whiteColor = AppColors.kcBaseWhite;
-
+  
   @override
   Widget build(BuildContext context) {
-    return DefaultTabController(
+    return Consumer<UserViewModel>(builder: (context, provider, child){
+      return DefaultTabController(
       length: 2,
       child: Scaffold(
         appBar: AppBar(
@@ -30,7 +34,6 @@ class _AccountScreenState extends State<AccountScreen> {
           ),
           actions: [
             GestureDetector(
-              // onTap: () => _buildMoreUser(),
               child: Image.asset(
                 'assets/icon_more.png',
                 height: 24,
@@ -60,7 +63,7 @@ class _AccountScreenState extends State<AccountScreen> {
                   height: 20,
                 ),
                 Text(
-                  'Tom Cruise',
+                  provider.user.displayName!,
                   style: body1Bold.copyWith(fontWeight: FontWeight.bold),
                   textAlign: TextAlign.center,
                 ),
@@ -68,7 +71,7 @@ class _AccountScreenState extends State<AccountScreen> {
                   height: 5,
                 ),
                 Text(
-                  'tom_cruise',
+                  provider.user.userName!,
                   textAlign: TextAlign.center,
                 ),
                 SizedBox(
@@ -264,8 +267,8 @@ class _AccountScreenState extends State<AccountScreen> {
             ),
           ],
         ),
-      ),
-    );
+      ));
+    });
   }
 
   Row _buildProfile() {
