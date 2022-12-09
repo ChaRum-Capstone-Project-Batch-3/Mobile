@@ -30,10 +30,10 @@ class RouteGenerator {
         return MaterialPageRoute(builder: (context) => OnBoardingScreen());
       case home:
         final args = settings.arguments;
-        return MaterialPageRoute(builder: (context) => SearchScreen());
+        return MaterialPageRoute(builder: (context) => HomeScreen());
       case search:
         final args = settings.arguments;
-        return MaterialPageRoute(builder: (context) => HomeScreen());
+        return MaterialPageRoute(builder: (context) => SearchScreen());
       case editAccount:
         final args = settings.arguments;
         return MaterialPageRoute(builder: (context) => EditAccountScreen());
