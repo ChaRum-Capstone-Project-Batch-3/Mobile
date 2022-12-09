@@ -2,114 +2,115 @@ import 'package:bubble_tab_indicator/bubble_tab_indicator.dart';
 import 'package:fgd_flutter/shared/router.dart';
 import '/shared/app_colors.dart';
 import '/shared/styles.dart';
-// import 'package:bubble_tab_indicator/bubble_tab_indicator.dart';
 import 'package:fgd_flutter/shared/charum_ui.dart';
 import 'package:flutter/material.dart';
 
-class HomePage extends StatefulWidget {
-  const HomePage({super.key});
+class HomeScreen extends StatefulWidget {
+  const HomeScreen({super.key});
 
   @override
-  State<HomePage> createState() => _HomePageState();
+  State<HomeScreen> createState() => _HomeScreenState();
 }
 
-class _HomePageState extends State<HomePage> {
+class _HomeScreenState extends State<HomeScreen> {
   bool actionLike = true;
   @override
   Widget build(BuildContext context) {
     return DefaultTabController(
       length: 3,
       child: Scaffold(
-        appBar: AppBar(
-          backgroundColor: Colors.white,
-          actions: [
-            Row(
-              children: [
-                InkWell(child: Image.asset("assets/notification.png")),
-                SizedBox(width: 15),
-                InkWell(
-                  child: ImageIcon(
-                    AssetImage(
+        appBar: PreferredSize(
+          preferredSize: Size.fromHeight(120),
+          child: AppBar(
+            elevation: 0.0,
+            backgroundColor: Colors.white,
+            actions: [
+              Row(
+                children: [
+                  InkWell(child: Image.asset("assets/notification.png")),
+                  SizedBox(width: 15),
+                  InkWell(
+                    onTap: () {
+                      Navigator.pushNamed(context, search);
+                    },
+                    child: Image.asset(
                       "assets/search-normal.png",
                     ),
-                    color: AppColors.kcBaseBlack,
                   ),
-                  onTap: () {
-                    Navigator.pushNamed(context, search);
-                  },
+                  SizedBox(
+                    width: 10,
+                  )
+                ],
+              ),
+            ],
+            bottom: TabBar(
+              padding: EdgeInsets.only(left: 18, right: 18, top: 8, bottom: 8),
+              indicator: BoxDecoration(
+                borderRadius: BorderRadius.all(
+                  Radius.circular(6),
                 ),
-                SizedBox(
-                  width: 10,
-                )
+                color: AppColors.kcPrimaryColor!.shade200,
+              ),
+              indicatorColor: AppColors.kcPrimaryColor,
+              isScrollable: true,
+              labelColor: AppColors.kcPrimaryColor,
+              unselectedLabelColor: AppColors.kcDarkestWhite,
+              indicatorSize: TabBarIndicatorSize.tab,
+              tabs: [
+                Tab(
+                  child: Row(
+                    children: [
+                      Image.asset("assets/threads.png"),
+                      SizedBox(
+                        width: 10,
+                      ),
+                      Text(
+                        "Threads",
+                        style: body1.copyWith(fontWeight: FontWeight.bold),
+                      ),
+                    ],
+                  ),
+                ),
+                Tab(
+                  child: Row(
+                    children: [
+                      Image.asset("assets/star.png"),
+                      SizedBox(
+                        width: 10,
+                      ),
+                      Text(
+                        "Popular",
+                        style: body1.copyWith(fontWeight: FontWeight.bold),
+                      ),
+                    ],
+                  ),
+                ),
+                Tab(
+                  child: Row(
+                    children: [
+                      Image.asset("assets/followed.png"),
+                      SizedBox(
+                        width: 10,
+                      ),
+                      Text(
+                        "Followed",
+                        style: body1.copyWith(fontWeight: FontWeight.bold),
+                      ),
+                    ],
+                  ),
+                ),
               ],
             ),
-          ],
-          bottom: TabBar(
-            indicator: BoxDecoration(
-              borderRadius: BorderRadius.all(Radius.circular(6)),
-              color: AppColors.kcPrimaryColor!.shade200,
+            title: Row(
+              children: [
+                Image.asset("assets/logocharum.png"),
+                SizedBox(width: 5),
+                Text(
+                  'Charum',
+                  style: heading3Bold.copyWith(color: AppColors.kcPrimaryColor),
+                ),
+              ],
             ),
-            indicatorColor: AppColors.kcPrimaryColor,
-            isScrollable: true,
-            labelColor: AppColors.kcPrimaryColor,
-            unselectedLabelColor: AppColors.kcDarkestWhite,
-            indicatorSize: TabBarIndicatorSize.tab,
-            tabs: [
-              Tab(
-                child: Row(
-                  children: [
-                    ImageIcon(
-                      AssetImage("assets/threads.png"),
-                    ),
-                    SizedBox(
-                      width: 10,
-                    ),
-                    Text(
-                      "Threads",
-                      style: subtitle2Semi,
-                    ),
-                  ],
-                ),
-              ),
-              Tab(
-                child: Row(
-                  children: [
-                    Image.asset("assets/star.png"),
-                    SizedBox(
-                      width: 10,
-                    ),
-                    Text(
-                      "Popular",
-                      style: subtitle2Semi,
-                    ),
-                  ],
-                ),
-              ),
-              Tab(
-                child: Row(
-                  children: [
-                    Image.asset("assets/followed.png"),
-                    SizedBox(
-                      width: 10,
-                    ),
-                    Text(
-                      "Followed",
-                      style: subtitle2Semi,
-                    ),
-                  ],
-                ),
-              ),
-            ],
-          ),
-          title: Row(
-            children: [
-              Image.asset("assets/logocharum.png"),
-              SizedBox(width: 5),
-              Text(
-                'Charum',
-                style: heading3Bold.copyWith(color: AppColors.kcPrimaryColor),
-              ),
-            ],
           ),
         ),
         body: TabBarView(
@@ -157,8 +158,9 @@ class _HomePageState extends State<HomePage> {
         ),
         floatingActionButton: FloatingActionButton(
           backgroundColor: AppColors.kcPrimaryColor,
-          onPressed: () {},
-          // tooltip: 'Increment',
+          onPressed: () {
+            Navigator.pushNamed(context, createThread);
+          },
           child: const Icon(Icons.add),
         ),
       ),
