@@ -14,6 +14,8 @@ class SearchThreadViewModel with ChangeNotifier {
   List<Threads> get thread => _thread;
   List<Threads> _popular = [];
   List<Threads> get popular => _popular;
+  TextEditingController _teSearch = TextEditingController();
+  TextEditingController get teSearch => _teSearch;
 
   changeState(SearchThreadState s) {
     _state = s;
@@ -88,5 +90,11 @@ class SearchThreadViewModel with ChangeNotifier {
       changeState(SearchThreadState.error);
       notifyListeners();
     }
+  }
+
+  setSearch(int index) {
+    String data = this._recentSearch.elementAt(index);
+    this._teSearch.text = data;
+    notifyListeners();
   }
 }

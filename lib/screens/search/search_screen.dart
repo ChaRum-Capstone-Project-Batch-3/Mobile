@@ -5,6 +5,7 @@ import 'package:flutter/material.dart';
 import 'package:fgd_flutter/shared/charum_ui.dart';
 import 'package:intl/intl.dart';
 import 'package:provider/provider.dart';
+import 'package:shimmer/shimmer.dart';
 
 class SearchScreen extends StatefulWidget {
   const SearchScreen({super.key});
@@ -14,8 +15,6 @@ class SearchScreen extends StatefulWidget {
 }
 
 class _SearchScreenState extends State<SearchScreen> {
-  TextEditingController teSearch = TextEditingController();
-
   @override
   void didChangeDependencies() {
     // TODO: implement didChangeDependencies
@@ -26,13 +25,16 @@ class _SearchScreenState extends State<SearchScreen> {
   @override
   void dispose() {
     // TODO: implement dispose
-    teSearch.dispose();
+    Provider.of<SearchThreadViewModel>(context, listen: false)
+        .teSearch
+        .dispose();
     super.dispose();
   }
 
   @override
   Widget build(BuildContext context) {
     return Consumer<SearchThreadViewModel>(builder: (context, provider, child) {
+      final teSearch = provider.teSearch;
       return WillPopScope(
         onWillPop: () async {
           provider.changeState(SearchThreadState.iddle);
@@ -141,6 +143,212 @@ class _SearchScreenState extends State<SearchScreen> {
                     ),
                   );
                 }),
+          ),
+        ),
+      ],
+    );
+  }
+
+  Widget loadingThread() {
+    return Column(
+      children: [
+        Expanded(
+          child: Container(
+            margin: spacing16All,
+            child: ListView.builder(
+              scrollDirection: Axis.vertical,
+              shrinkWrap: true,
+              itemCount: 5,
+              itemBuilder: (context, index) {
+                return Container(
+                  margin: spacing8Bottom,
+                  padding: spacing16All,
+                  decoration: BoxDecoration(
+                    borderRadius: BorderRadius.all(
+                      Radius.circular(10),
+                    ),
+                    color: AppColors.kcBaseWhite,
+                  ),
+                  child: Shimmer.fromColors(
+                    baseColor: AppColors.kcDarkestWhite,
+                    highlightColor: AppColors.kcDarkWhite,
+                    child: Column(
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      children: [
+                        Row(
+                          mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                          children: [
+                            Container(
+                              child: Row(
+                                children: [
+                                  CircleAvatar(
+                                    backgroundColor: AppColors.kcPrimaryColor,
+                                  ),
+                                  Container(
+                                    margin: spacing8Left,
+                                    child: Column(
+                                      crossAxisAlignment:
+                                          CrossAxisAlignment.start,
+                                      children: [
+                                        Row(
+                                          children: [
+                                            Container(
+                                              width: 50,
+                                              height: 10,
+                                              decoration: BoxDecoration(
+                                                color: AppColors.kcDarkestWhite,
+                                                borderRadius: BorderRadius.all(
+                                                  Radius.circular(10),
+                                                ),
+                                              ),
+                                            ),
+                                            Container(
+                                              margin: spacing8Horizontal,
+                                              width: 4,
+                                              height: 4,
+                                              decoration: BoxDecoration(
+                                                color: AppColors.kcDarkestWhite,
+                                                shape: BoxShape.circle,
+                                              ),
+                                            ),
+                                            Container(
+                                              width: 50,
+                                              height: 10,
+                                              decoration: BoxDecoration(
+                                                color: AppColors.kcDarkestWhite,
+                                                borderRadius: BorderRadius.all(
+                                                  Radius.circular(10),
+                                                ),
+                                              ),
+                                            ),
+                                          ],
+                                        ),
+                                        SizedBox(
+                                          height: 10,
+                                        ),
+                                        Container(
+                                          width: 50,
+                                          height: 10,
+                                          decoration: BoxDecoration(
+                                            color: AppColors.kcDarkestWhite,
+                                            borderRadius: BorderRadius.all(
+                                              Radius.circular(10),
+                                            ),
+                                          ),
+                                        ),
+                                      ],
+                                    ),
+                                  ),
+                                ],
+                              ),
+                            ),
+                            Container(
+                              child: GestureDetector(
+                                child: ImageIcon(
+                                    AssetImage('assets/icon_more.png')),
+                              ),
+                            ),
+                          ],
+                        ),
+                        Container(
+                          margin: spacing16Top,
+                          padding: EdgeInsets.only(
+                            top: 5,
+                            bottom: 5,
+                            left: 12,
+                            right: 12,
+                          ),
+                          width: 50,
+                          decoration: BoxDecoration(
+                            color: AppColors.kcDarkerWhite,
+                            borderRadius: BorderRadius.all(Radius.circular(50)),
+                          ),
+                        ),
+                        SizedBox(
+                          height: 4,
+                        ),
+                        Container(
+                          width: 200,
+                          height: 10,
+                          decoration: BoxDecoration(
+                            color: AppColors.kcDarkestWhite,
+                            borderRadius: BorderRadius.all(
+                              Radius.circular(10),
+                            ),
+                          ),
+                        ),
+                        SizedBox(
+                          height: 10,
+                        ),
+                        Container(
+                          height: 10,
+                          decoration: BoxDecoration(
+                            color: AppColors.kcDarkestWhite,
+                            borderRadius: BorderRadius.all(
+                              Radius.circular(10),
+                            ),
+                          ),
+                        ),
+                        SizedBox(
+                          height: 5,
+                        ),
+                        Container(
+                          height: 10,
+                          decoration: BoxDecoration(
+                            color: AppColors.kcDarkestWhite,
+                            borderRadius: BorderRadius.all(
+                              Radius.circular(10),
+                            ),
+                          ),
+                        ),
+                        SizedBox(
+                          height: 5,
+                        ),
+                        Container(
+                          height: 10,
+                          decoration: BoxDecoration(
+                            color: AppColors.kcDarkestWhite,
+                            borderRadius: BorderRadius.all(
+                              Radius.circular(10),
+                            ),
+                          ),
+                        ),
+                        SizedBox(
+                          height: 10,
+                        ),
+                        Row(
+                          children: [
+                            Container(
+                              width: 50,
+                              height: 10,
+                              decoration: BoxDecoration(
+                                color: AppColors.kcDarkestWhite,
+                                borderRadius: BorderRadius.all(
+                                  Radius.circular(10),
+                                ),
+                              ),
+                            ),
+                            SizedBox(
+                              width: 12,
+                            ),
+                            Container(
+                              width: 50,
+                              height: 10,
+                              decoration: BoxDecoration(
+                                color: AppColors.kcDarkestWhite,
+                                borderRadius: BorderRadius.all(
+                                  Radius.circular(10),
+                                ),
+                              ),
+                            ),
+                          ],
+                        ),
+                      ],
+                    ),
+                  ),
+                );
+              },
+            ),
           ),
         ),
       ],
@@ -320,10 +528,10 @@ class _SearchScreenState extends State<SearchScreen> {
     switch (provider.state) {
       case SearchThreadState.iddle:
         return RecentSearchScreen(recent: provider.recentSearch);
-      case SearchThreadState.loaded:
-        return tab(context);
+      case SearchThreadState.error:
+        return error();
     }
-    return error();
+    return tab(context);
   }
 
   Widget error() {
@@ -338,6 +546,7 @@ class _SearchScreenState extends State<SearchScreen> {
   }
 
   Widget tab(BuildContext context) {
+    final provider = Provider.of<SearchThreadViewModel>(context, listen: false);
     return DefaultTabController(
       length: 3,
       child: Column(
@@ -408,14 +617,24 @@ class _SearchScreenState extends State<SearchScreen> {
           Expanded(
             child: TabBarView(
               children: [
-                Container(
-                  color: AppColors.kcDarkerWhite,
-                  child: threadsWidget(context),
-                ),
-                Container(
-                  color: AppColors.kcDarkerWhite,
-                  child: popularWidget(context),
-                ),
+                provider.state == SearchThreadState.loaded
+                    ? Container(
+                        color: AppColors.kcDarkerWhite,
+                        child: threadsWidget(context),
+                      )
+                    : Container(
+                        color: AppColors.kcDarkerWhite,
+                        child: loadingThread(),
+                      ),
+                provider.state == SearchThreadState.loaded
+                    ? Container(
+                        color: AppColors.kcDarkerWhite,
+                        child: popularWidget(context),
+                      )
+                    : Container(
+                        color: AppColors.kcDarkerWhite,
+                        child: loadingThread(),
+                      ),
                 Container(
                   color: AppColors.kcDarkerWhite,
                   child: followedWidget(),

@@ -12,6 +12,7 @@ class RecentSearchScreen extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final provider = Provider.of<SearchThreadViewModel>(context, listen: false);
     return Container(
       margin: spacing16All,
       child: Column(
@@ -22,8 +23,7 @@ class RecentSearchScreen extends StatelessWidget {
               BoxText.subtitle1Semi("Recent"),
               GestureDetector(
                 onTap: () {
-                  Provider.of<SearchThreadViewModel>(context, listen: false)
-                      .clearRecent();
+                  provider.clearRecent();
                 },
                 child: BoxText.caption('Clear All'),
               )
@@ -44,12 +44,17 @@ class RecentSearchScreen extends StatelessWidget {
                     child: Row(
                       mainAxisAlignment: MainAxisAlignment.spaceBetween,
                       children: [
-                        BoxText.body2(recent[index]),
                         GestureDetector(
                           onTap: () {
-                            Provider.of<SearchThreadViewModel>(context,
-                                    listen: false)
-                                .removeRecent(index);
+                            provider.setSearch(index);
+                            provider.searchThread(provider.teSearch.text);
+                            FocusScope.of(context).unfocus();
+                          },
+                          child: BoxText.body2(recent[index]),
+                        ),
+                        GestureDetector(
+                          onTap: () {
+                            provider.removeRecent(index);
                           },
                           child: Icon(Icons.clear_rounded),
                         ),
