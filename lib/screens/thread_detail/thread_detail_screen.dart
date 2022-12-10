@@ -2,6 +2,8 @@ import 'package:fgd_flutter/shared/app_colors.dart';
 import 'package:fgd_flutter/shared/styles.dart';
 import 'package:flutter/material.dart';
 
+import 'widgets/comment.dart';
+
 class ThreadDetailScreen extends StatefulWidget {
   const ThreadDetailScreen({super.key});
 
@@ -13,8 +15,6 @@ class _ThreadDetailScreenState extends State<ThreadDetailScreen> {
   bool actionFollowAccount = true;
   bool actionLike = true;
   bool actionFollowThread = true;
-  bool actionBookmark = true;
-
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -36,23 +36,16 @@ class _ThreadDetailScreenState extends State<ThreadDetailScreen> {
           GestureDetector(
             onTap: () {
               setState(() {
-                actionBookmark = !actionBookmark;
+                _buildSnackBarAddBookmark();
               });
-              _buildSnackBarActionBookmark();
             },
-            child: actionBookmark
-                ? Image.asset(
-                    'assets/icon_add_bookmark_bottom_sheet.png',
-                    height: 24,
-                    width: 24,
-                  )
-                : Image.asset(
-                    'assets/icon_remove_bookmark.png',
-                    height: 24,
-                    width: 24,
-                  ),
+            child: Image.asset(
+              'assets/icon_add_bookmark_bottom_sheet.png',
+              height: 24,
+              width: 24,
+            ),
           ),
-          SizedBox(
+          const SizedBox(
             width: 10,
           ),
           GestureDetector(
@@ -63,7 +56,7 @@ class _ThreadDetailScreenState extends State<ThreadDetailScreen> {
               width: 24,
             ),
           ),
-          SizedBox(
+          const SizedBox(
             width: 10,
           ),
         ],
@@ -76,26 +69,26 @@ class _ThreadDetailScreenState extends State<ThreadDetailScreen> {
             child: Column(
               children: [
                 Container(
-                  margin: EdgeInsets.only(left: 16, right: 300),
+                  margin: const EdgeInsets.only(right: 270, bottom: 10),
                   decoration: BoxDecoration(
-                    color: Color(0xffececec),
+                    color: const Color(0xffececec),
                     borderRadius: BorderRadius.circular(50),
                   ),
-                  padding:
-                      EdgeInsets.only(top: 5, bottom: 5, left: 12, right: 12),
-                  child: Text(
-                    'Education',
+                  padding: const EdgeInsets.only(
+                      top: 5, bottom: 5, left: 15, right: 15),
+                  child: const Text(
+                    'History',
                     textAlign: TextAlign.center,
                     style: TextStyle(color: Colors.grey),
                   ),
                 ),
-                _buildProfileThread(),
                 Container(
-                    margin: EdgeInsets.only(left: 16, right: 16),
+                    margin: const EdgeInsets.only(left: 16, right: 16),
                     child: Text(
-                      'How do you increase the visibility of your business?',
+                      'What are the differences between the ancient Turks, the proto-Turks, and the modern Turks?',
                       style: heading3Bold,
                     )),
+                _buildProfileThread(),
                 _buildThreadWithImage(),
               ],
             ),
@@ -105,7 +98,8 @@ class _ThreadDetailScreenState extends State<ThreadDetailScreen> {
       bottomNavigationBar: Container(
           decoration:
               BoxDecoration(border: Border.all(color: Color(0xffe3e3e3))),
-          padding: EdgeInsets.only(left: 16, right: 16, top: 12, bottom: 12),
+          padding:
+              const EdgeInsets.only(left: 16, right: 16, top: 12, bottom: 12),
           height: 48,
           width: 360,
           child: Stack(
@@ -124,30 +118,36 @@ class _ThreadDetailScreenState extends State<ThreadDetailScreen> {
                               children: [
                                 Image.asset('assets/icon_like1.png',
                                     height: 24, width: 24),
-                                Text('592'),
+                                const Text('401'),
                               ],
                             )
                           : Row(
                               children: [
                                 Image.asset('assets/icon_like2.png',
                                     height: 24, width: 24),
-                                Text(
-                                  '592',
+                                const Text(
+                                  '402',
                                   style:
                                       TextStyle(color: AppColors.kcInfoColor),
                                 ),
                               ],
                             )),
-                  SizedBox(
+                  const SizedBox(
                     width: 10,
                   ),
-                  Row(
-                    children: [
-                      Image.asset('assets/icon_comment.png',
-                          height: 24, width: 24),
-                      Text('108'),
-                    ],
-                  ),
+                  GestureDetector(
+                      onTap: () {
+                        setState(() {
+                          _buildComment();
+                        });
+                      },
+                      child: Row(
+                        children: [
+                          Image.asset('assets/icon_comment.png',
+                              height: 24, width: 24),
+                          const Text('2'),
+                        ],
+                      ))
                 ],
               ),
               Container(
@@ -155,19 +155,18 @@ class _ThreadDetailScreenState extends State<ThreadDetailScreen> {
                   alignment: Alignment.centerRight,
                   child: GestureDetector(
                       onTap: () {
-                        _buildSnackBarActionThread();
                         setState(() {
                           actionFollowThread = !actionFollowThread;
                         });
                       },
                       child: actionFollowThread
-                          ? Text(
+                          ? const Text(
                               'Follow thread',
                               style: TextStyle(
                                   color: AppColors.kcPrimaryColor,
                                   fontWeight: FontWeight.bold),
                             )
-                          : Text(
+                          : const Text(
                               'Following Thread',
                               style: TextStyle(
                                   color: AppColors.kcLightestBlack,
@@ -185,18 +184,18 @@ class _ThreadDetailScreenState extends State<ThreadDetailScreen> {
       title: Row(
         mainAxisAlignment: MainAxisAlignment.start,
         children: [
-          Text('Evan Chris'),
-          SizedBox(
+          const Text('Ade Winda'),
+          const SizedBox(
             width: 5,
           ),
           Container(
-            margin: EdgeInsets.only(left: 10, right: 10),
-            child: CircleAvatar(
-              backgroundColor: Color(0xffC7C7C7),
-            ),
-            color: Color(0xffC7C7C7),
+            margin: const EdgeInsets.only(left: 10, right: 10),
+            color: const Color(0xffC7C7C7),
             width: 6,
             height: 6,
+            child: const CircleAvatar(
+              backgroundColor: Color(0xffC7C7C7),
+            ),
           ),
           GestureDetector(
               onTap: () {
@@ -205,12 +204,12 @@ class _ThreadDetailScreenState extends State<ThreadDetailScreen> {
                 });
               },
               child: actionFollowAccount
-                  ? Text(
+                  ? const Text(
                       'Follow',
                       style: TextStyle(
                           color: Colors.blue, fontWeight: FontWeight.bold),
                     )
-                  : Text(
+                  : const Text(
                       'Following',
                       style: TextStyle(
                           color: AppColors.kcLightestBlack,
@@ -218,14 +217,14 @@ class _ThreadDetailScreenState extends State<ThreadDetailScreen> {
                     )),
         ],
       ),
-      subtitle: Text('1h ago'),
-      leading: Image.asset('assets/fake_profile.png'),
+      subtitle: const Text('1h ago'),
+      leading: Image.asset('assets/Ellipse 42.png'),
     );
   }
 
   Container _buildThreadWithImage() {
     return Container(
-      padding: EdgeInsets.only(left: 16, right: 16),
+      padding: const EdgeInsets.only(left: 16, right: 16),
       child: Column(
         mainAxisAlignment: MainAxisAlignment.center,
         crossAxisAlignment: CrossAxisAlignment.start,
@@ -234,14 +233,12 @@ class _ThreadDetailScreenState extends State<ThreadDetailScreen> {
             decoration: BoxDecoration(
               borderRadius: BorderRadius.circular(10),
             ),
-            child: Image.asset('assets/fake_thread.png'),
+            child: Image.asset('assets/image 1.png', width: 350),
           ),
-          Text(
-              'There are a number of ways to increase the visibility of your business. One of the most effective is to invest in search engine optimization (SEO). This involves optimizing your website and content so that it ranks higher in search engine results pages. Another great way to get your business seen by more people is through paid advertising. You can use platforms like Google AdWords or Facebook Ads to target specific audiences with your message. Finally, you can also promote your business through PR and marketing efforts. This includes getting featured in publications, online and offline, as well as reaching out to influencers in your industry.'),
-          Text(
-              'There are a number of ways to increase the visibility of your business. One of the most effective is to invest in search engine optimization (SEO). This involves optimizing your website and content so that it ranks higher in search engine results pages. Another great way to get your business seen by more people is through paid advertising. You can use platforms like Google AdWords or Facebook Ads to target specific audiences with your message. Finally, you can also promote your business through PR and marketing efforts. This includes getting featured in publications, online and offline, as well as reaching out to influencers in your industry.'),
-          Text(
-              'There are a number of ways to increase the visibility of your business. One of the most effective is to invest in search engine optimization (SEO). This involves optimizing your website and content so that it ranks higher in search engine results pages. Another great way to get your business seen by more people is through paid advertising. You can use platforms like Google AdWords or Facebook Ads to target specific audiences with your message. Finally, you can also promote your business through PR and marketing efforts. This includes getting featured in publications, online and offline, as well as reaching out to influencers in your industry.'),
+          const Text(
+              'Early proto-Turks, Aldy-Bel and Sagly-Uyuk culture in Southern Siberia, Scytho-Siberian. The ANE are also argued to have harbored the genes for blonde hair at high frequency, therefore several Siberian groups have light hair as well. Ancient DNA analysis (ADNA) has revealed that the oldest fossil known to carry the derived KITLG allele, which is responsible for blond hair in modern Europeans, is a 17,000 year old Ancient North Eurasian specimen from southern Siberia. Therefore the description of early Turks by Chinese chronics do not necessarily mean admixture with Iranian pastoralists, but the widespread layer of these phenotypes among Ancient Siberians. Chinese histories describe the early Turks (Tujue or Tüküe) as “mixed barbarians” having a noteworthy frequency of blonde to brown hair and blue or green eyes. The Tang historian Yan Shigu described them as "blue-eyed and red bearded". The ruling clan of the Turks, the Ashina, the tribe which first used the term “Türk”, were described'),
+          const Text(
+              'by Chinese authors as having an unusual appearance. According to Chinese scientist Xue Zongzheng, the early Turks had physical features that were quite different from those of East Asian people. These would include deep eye sockets, prominent noses, and light eye or hair color. However, over time, Turkic tribes intermarried with Chinese and Mongol groups, which shifted their physical appearance to a more East Asian one. This also'),
         ],
       ),
     );
@@ -249,7 +246,7 @@ class _ThreadDetailScreenState extends State<ThreadDetailScreen> {
 
   void _buildMoreThread() {
     showModalBottomSheet(
-      shape: RoundedRectangleBorder(
+      shape: const RoundedRectangleBorder(
         borderRadius: BorderRadius.only(
             topLeft: Radius.circular(30), topRight: Radius.circular(30)),
       ),
@@ -258,8 +255,8 @@ class _ThreadDetailScreenState extends State<ThreadDetailScreen> {
       builder: (BuildContext context) {
         return Container(
           alignment: Alignment.topLeft,
-          height: 160,
-          padding: EdgeInsets.all(20),
+          height: 250,
+          padding: const EdgeInsets.all(20),
           child: Column(
             mainAxisAlignment: MainAxisAlignment.start,
             crossAxisAlignment: CrossAxisAlignment.start,
@@ -270,30 +267,54 @@ class _ThreadDetailScreenState extends State<ThreadDetailScreen> {
                   width: 38,
                 ),
               ),
-              SizedBox(
+              const SizedBox(
                 height: 30,
+              ),
+              Row(children: [
+                Image.asset('assets/icon_follow_thread.jpeg',
+                    height: 24, width: 24),
+                const SizedBox(
+                  width: 10,
+                ),
+                Text('Follow thread', style: body1Semi),
+              ]),
+              const Divider(
+                height: 20,
+                color: Color(0xffDFDFDF),
+              ),
+              Row(children: [
+                Image.asset('assets/icon_add_bookmark_bottom_sheet.png',
+                    height: 24, width: 24),
+                const SizedBox(
+                  width: 10,
+                ),
+                Text('Bookmark', style: body1Semi),
+              ]),
+              const Divider(
+                height: 20,
+                color: Color(0xffDFDFDF),
               ),
               Row(children: [
                 Image.asset('assets/icon_share_bottom_sheet.png',
                     height: 24, width: 24),
-                SizedBox(
+                const SizedBox(
                   width: 10,
                 ),
                 Text('Share', style: body1Semi),
               ]),
-              Divider(
+              const Divider(
                 height: 20,
                 color: Color(0xffDFDFDF),
               ),
               Row(children: [
                 Image.asset('assets/icon_report_bottom_sheet.png',
                     height: 24, width: 24),
-                SizedBox(
+                const SizedBox(
                   width: 10,
                 ),
-                Text('Report', style: body1Semi),
+                Text('Report thread', style: body1Semi),
               ]),
-              SizedBox(
+              const SizedBox(
                 height: 10,
               ),
             ],
@@ -303,12 +324,11 @@ class _ThreadDetailScreenState extends State<ThreadDetailScreen> {
     );
   }
 
-  void _buildSnackBarActionBookmark() {
-    ScaffoldMessenger.of(context).showSnackBar(
-      SnackBar(
-        duration: Duration(milliseconds: 500),
-        backgroundColor:
-            actionBookmark ? Color(0xfff91516) : AppColors.kcPrimaryColor,
+  // ignore: unused_element
+  void _buildSnackBarAddBookmark() {
+    ScaffoldMessenger.of(context).showSnackBar(SnackBar(
+        duration: const Duration(milliseconds: 500),
+        backgroundColor: AppColors.kcPrimaryColor,
         shape: RoundedRectangleBorder(
           borderRadius: BorderRadius.circular(10),
         ),
@@ -317,95 +337,36 @@ class _ThreadDetailScreenState extends State<ThreadDetailScreen> {
             right: 20,
             left: 20),
         behavior: SnackBarBehavior.floating,
-        content: actionBookmark
-            ? Row(
-                mainAxisAlignment: MainAxisAlignment.center,
-                children: [
-                  Image.asset(
-                    'assets/icon_succes_remove_bookmark_circle.png',
-                    height: 22,
-                    width: 22,
-                  ),
-                  SizedBox(
-                    width: 10,
-                  ),
-                  Text(
-                    'Thread removed to your Bookmarks',
-                    style: TextStyle(
-                      fontWeight: FontWeight.bold,
-                    ),
-                  )
-                ],
-              )
-            : Row(
-                mainAxisAlignment: MainAxisAlignment.center,
-                children: [
-                  Image.asset(
-                    'assets/icon_succes_add_bookmark_circle.png',
-                    height: 24,
-                    width: 24,
-                  ),
-                  SizedBox(
-                    width: 10,
-                  ),
-                  Text(
-                    'Thread added to your Bookmarks',
-                    style: TextStyle(
-                      fontWeight: FontWeight.bold,
-                    ),
-                  )
-                ],
-              ),
-      ),
-    );
+        content: Row(
+          mainAxisAlignment: MainAxisAlignment.center,
+          children: [
+            Image.asset(
+              'assets/icon_succes_add_bookmark_circle.png',
+              height: 24,
+              width: 24,
+            ),
+            const SizedBox(
+              width: 10,
+            ),
+            const Text(
+              'Thread added to your Bookmarks',
+              style: TextStyle(fontWeight: FontWeight.bold),
+            )
+          ],
+        )));
   }
 
-  void _buildSnackBarActionThread() {
-    ScaffoldMessenger.of(context).showSnackBar(
-      SnackBar(
-        duration: Duration(milliseconds: 500),
-        backgroundColor:
-            actionFollowThread ? AppColors.kcPrimaryColor : Color(0xfff91516),
-        shape: RoundedRectangleBorder(
-          borderRadius: BorderRadius.circular(10),
+  void _buildComment() {
+    showModalBottomSheet(
+        shape: const RoundedRectangleBorder(
+          borderRadius: BorderRadius.only(
+              topLeft: Radius.circular(30), topRight: Radius.circular(30)),
         ),
-        margin: EdgeInsets.only(
-            bottom: MediaQuery.of(context).size.height - 130,
-            right: 20,
-            left: 20),
-        behavior: SnackBarBehavior.floating,
-        content: actionFollowThread
-            ? Row(
-                mainAxisAlignment: MainAxisAlignment.center,
-                children: [
-                  Image.asset(
-                    'assets/icon_succes_add_bookmark_circle.png',
-                    height: 24,
-                    width: 24,
-                  ),
-                  SizedBox(
-                    width: 10,
-                  ),
-                  Text('Thread successfully followed',
-                      style: TextStyle(fontWeight: FontWeight.bold))
-                ],
-              )
-            : Row(
-                mainAxisAlignment: MainAxisAlignment.center,
-                children: [
-                  Image.asset(
-                    'assets/icon_succes_remove_bookmark_circle.png',
-                    height: 22,
-                    width: 22,
-                  ),
-                  SizedBox(
-                    width: 10,
-                  ),
-                  Text('Thread successfully unfollowed',
-                      style: TextStyle(fontWeight: FontWeight.bold))
-                ],
-              ),
-      ),
-    );
+        backgroundColor: Colors.white,
+        context: context,
+        // ignore: dead_code
+        builder: (BuildContext context) {
+          return const Comment();
+        });
   }
 }

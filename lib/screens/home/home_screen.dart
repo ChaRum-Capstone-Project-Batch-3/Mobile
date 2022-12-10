@@ -30,6 +30,9 @@ class _HomeScreenState extends State<HomeScreen> {
                   InkWell(child: Image.asset("assets/notification.png")),
                   SizedBox(width: 15),
                   InkWell(
+                    onTap: () {
+                      Navigator.pushNamed(context, search);
+                    },
                     child: Image.asset(
                       "assets/search-normal.png",
                     ),

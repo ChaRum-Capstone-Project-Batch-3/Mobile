@@ -185,6 +185,7 @@ class _LoginScreenState extends State<LoginScreen> {
                       var response = provider.login(login);
                       await response.whenComplete(() async {
                         await response.then((value) {
+                          print(value.toString());
                           if (value) {
                             Navigator.pushNamedAndRemoveUntil(
                                 context, home, (route) => false);
