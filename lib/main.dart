@@ -1,3 +1,4 @@
+import 'package:fgd_flutter/providers/search_thread_view_model.dart';
 import 'package:fgd_flutter/screens/account/account_screen.dart';
 import 'package:fgd_flutter/screens/follow_account/follow_account_screen.dart';
 import 'package:fgd_flutter/screens/home/home_screen.dart';
@@ -25,7 +26,8 @@ void main() {
     MultiProvider(
       providers: [
         ChangeNotifierProvider(create: (context) => LoginViewModel()),
-        ChangeNotifierProvider(create: (context) => RegisterViewModel())
+        ChangeNotifierProvider(create: (context) => RegisterViewModel()),
+        ChangeNotifierProvider(create: (context) => SearchThreadViewModel())
       ],
       child: MyApp(),
     ),

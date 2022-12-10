@@ -3,6 +3,7 @@ import 'package:fgd_flutter/screens/edit_account/edit_account_screen.dart';
 import 'package:fgd_flutter/screens/home/home_screen.dart';
 import 'package:fgd_flutter/screens/onboarding/onboarding_screen.dart';
 import 'package:fgd_flutter/screens/register/regiester_screen.dart';
+import 'package:fgd_flutter/screens/search/search_screen.dart';
 import 'package:flutter/material.dart';
 import 'package:fgd_flutter/shared/router.dart';
 
@@ -30,6 +31,9 @@ class RouteGenerator {
       case home:
         final args = settings.arguments;
         return MaterialPageRoute(builder: (context) => HomeScreen());
+      case search:
+        final args = settings.arguments;
+        return MaterialPageRoute(builder: (context) => SearchScreen());
       case editAccount:
         final args = settings.arguments;
         return MaterialPageRoute(builder: (context) => EditAccountScreen());
