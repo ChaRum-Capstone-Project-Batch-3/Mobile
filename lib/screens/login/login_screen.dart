@@ -1,9 +1,10 @@
+import 'package:fgd_flutter/shared/styles.dart';
 import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/src/widgets/container.dart';
 import 'package:flutter/src/widgets/framework.dart';
 import 'package:provider/provider.dart';
-
+import 'package:lottie/lottie.dart';
 import 'package:fgd_flutter/models/login.dart';
 import 'package:fgd_flutter/providers/login_view_model.dart';
 import 'package:fgd_flutter/shared/app_colors.dart';
@@ -45,7 +46,7 @@ class _LoginScreenState extends State<LoginScreen> {
               key: _formKey,
               autovalidateMode: AutovalidateMode.onUserInteraction,
               child: Column(
-                crossAxisAlignment: CrossAxisAlignment.start,
+                crossAxisAlignment: CrossAxisAlignment.stretch,
                 children: [
                   const SizedBox(
                     height: 32,
@@ -152,6 +153,33 @@ class _LoginScreenState extends State<LoginScreen> {
                   ),
                   ElevatedButton(
                     onPressed: () async {
+                      showDialog(
+                        context: context,
+                        builder: (BuildContext context) {
+                          return AlertDialog(
+                              elevation: 0.0,
+                              shape: RoundedRectangleBorder(
+                                  borderRadius:
+                                      BorderRadius.all(Radius.circular(20))),
+                              backgroundColor: Color(0xffffffff),
+                              content: Container(
+                                height: 250,
+                                child: Column(
+                                    mainAxisAlignment: MainAxisAlignment.center,
+                                    crossAxisAlignment:
+                                        CrossAxisAlignment.center,
+                                    children: [
+                                      Lottie.asset('assets/loading.json'),
+                                      Text(
+                                        'Please wait...',
+                                        style: body1.copyWith(
+                                            fontWeight: FontWeight.bold,
+                                            color: Colors.black),
+                                      ),
+                                    ]),
+                              ));
+                        },
+                      );
                       Login login =
                           Login(key: teEmail.text, password: tePass.text);
                       var response = provider.login(login);
@@ -165,27 +193,16 @@ class _LoginScreenState extends State<LoginScreen> {
                         });
                       });
                     },
-                    style: ElevatedButton.styleFrom(
-                      primary: const Color(0xFF178066),
-                      padding: const EdgeInsets.symmetric(
-                          horizontal: 20, vertical: 10),
-                      shape: RoundedRectangleBorder(
-                        borderRadius: BorderRadius.circular(10),
-                      ),
-                    ),
-                    child: Container(
-                      width: double.infinity,
-                      height: 41,
-                      child: const Center(
-                        child: Text(
-                          'Sign In',
-                          style: TextStyle(
-                            color: Colors.white,
-                            fontSize: 14,
-                            fontWeight: FontWeight.bold,
-                          ),
-                        ),
-                      ),
+                    // style: ElevatedButton.styleFrom(
+                    //   primary: const Color(0xFF178066),
+                    //   padding: const EdgeInsets.symmetric(
+                    //       horizontal: 20, vertical: 10),
+                    //   shape: RoundedRectangleBorder(
+                    //     borderRadius: BorderRadius.circular(10),
+                    //   ),
+                    // ),
+                    child: Text(
+                      'Sign In',
                     ),
                   ),
                   const SizedBox(
@@ -220,7 +237,7 @@ class _LoginScreenState extends State<LoginScreen> {
                     ],
                   ),
                   const SizedBox(
-                    height: 60,
+                    height: 100,
                   ),
                   Align(
                     alignment: Alignment.center,
@@ -233,7 +250,7 @@ class _LoginScreenState extends State<LoginScreen> {
                         ),
                         children: [
                           TextSpan(
-                            text: 'Register Here!',
+                            text: 'Sing up here!',
                             style: const TextStyle(
                               fontSize: 14,
                               color: Color(0xFF178066),
@@ -241,7 +258,63 @@ class _LoginScreenState extends State<LoginScreen> {
                             ),
                             recognizer: TapGestureRecognizer()
                               ..onTap = () {
-                                Navigator.pushNamed(context, register);
+                                showDialog(
+                                  context: context,
+                                  builder: (BuildContext context) {
+                                    return AlertDialog(
+                                      actionsPadding: EdgeInsets.only(
+                                          left: 30, right: 30, bottom: 20),
+                                      elevation: 0.0,
+                                      shape: RoundedRectangleBorder(
+                                        borderRadius: BorderRadius.all(
+                                          Radius.circular(20),
+                                        ),
+                                      ),
+                                      backgroundColor: Color(0xffffffff),
+                                      title: const Text(
+                                        'Confirmation',
+                                        textAlign: TextAlign.center,
+                                        style: TextStyle(
+                                            color: Colors.black,
+                                            fontSize: 20,
+                                            fontWeight: FontWeight.bold),
+                                      ),
+                                      content: Container(
+                                        height: 60,
+                                        child: Text(
+                                          'Are you sure want to register with credentials that you filled in the register column?',
+                                          textAlign: TextAlign.justify,
+                                        ),
+                                      ),
+                                      actions: [
+                                        Row(
+                                          mainAxisAlignment:
+                                              MainAxisAlignment.spaceBetween,
+                                          children: [
+                                            ElevatedButton(
+                                              style: ElevatedButton.styleFrom(
+                                                foregroundColor:
+                                                    Color(0xff178066),
+                                                backgroundColor: Colors.white,
+                                              ),
+                                              onPressed: (() {
+                                                Navigator.pop(context);
+                                              }),
+                                              child: Text('No, I don\'t'),
+                                            ),
+                                            ElevatedButton(
+                                              onPressed: (() {
+                                                Navigator.pushNamed(
+                                                    context, register);
+                                              }),
+                                              child: Text('Yes, I am'),
+                                            )
+                                          ],
+                                        )
+                                      ],
+                                    );
+                                  },
+                                );
                               },
                           ),
                         ],

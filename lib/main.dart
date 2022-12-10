@@ -2,6 +2,7 @@ import 'package:fgd_flutter/providers/search_thread_view_model.dart';
 import 'package:fgd_flutter/screens/account/account_screen.dart';
 import 'package:fgd_flutter/screens/follow_account/follow_account_screen.dart';
 import 'package:fgd_flutter/screens/home/home_screen.dart';
+import 'package:fgd_flutter/screens/login/login_screen.dart';
 import 'package:fgd_flutter/screens/onboarding/onboarding_screen.dart';
 import 'package:fgd_flutter/screens/space/space_screen.dart';
 import 'package:fgd_flutter/screens/thread_detail/thread_detail_screen.dart';
@@ -55,6 +56,7 @@ class MyApp extends StatelessWidget {
         textTheme: GoogleFonts.robotoTextTheme(),
         elevatedButtonTheme: ElevatedButtonThemeData(
           style: ButtonStyle(
+            padding: MaterialStateProperty.all(EdgeInsets.all(15)),
             shape: MaterialStateProperty.all(
               RoundedRectangleBorder(borderRadius: BorderRadius.circular(10)),
             ),
@@ -66,7 +68,7 @@ class MyApp extends StatelessWidget {
         primarySwatch: primaryColor,
       ),
       debugShowCheckedModeBanner: false,
-      home: const ThreadDetailScreen(),
+      home: HomeScreen(),
     );
   }
 }
