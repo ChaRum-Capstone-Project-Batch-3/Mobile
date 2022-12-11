@@ -1,4 +1,4 @@
-import 'package:fgd_flutter/models/space.dart';
+import 'package:fgd_flutter/models/space/space.dart';
 import 'package:flutter/material.dart';
 
 import '../../shared/app_colors.dart';

@@ -1,5 +1,5 @@
-import 'package:fgd_flutter/models/login.dart';
-import 'package:fgd_flutter/models/register.dart';
+import 'package:fgd_flutter/models/login/login.dart';
+import 'package:fgd_flutter/models/register/register.dart';
 import 'package:fgd_flutter/services/login_api.dart';
 import 'package:fgd_flutter/services/register_api.dart';
 import 'package:fgd_flutter/shared/local_storage.dart';

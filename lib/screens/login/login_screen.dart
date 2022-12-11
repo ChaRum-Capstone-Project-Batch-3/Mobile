@@ -5,7 +5,7 @@ import 'package:flutter/src/widgets/container.dart';
 import 'package:flutter/src/widgets/framework.dart';
 import 'package:provider/provider.dart';
 import 'package:lottie/lottie.dart';
-import 'package:fgd_flutter/models/login.dart';
+import 'package:fgd_flutter/models/login/login.dart';
 import 'package:fgd_flutter/providers/login_view_model.dart';
 import 'package:fgd_flutter/shared/app_colors.dart';
 import 'package:fgd_flutter/shared/router.dart';

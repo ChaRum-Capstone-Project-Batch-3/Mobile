@@ -3,7 +3,7 @@ import 'package:fgd_flutter/screens/login/login_screen.dart';
 import 'package:fgd_flutter/shared/charum_ui.dart';
 import 'package:fgd_flutter/shared/styles.dart';
 import 'package:flutter/material.dart';
-import 'package:fgd_flutter/models/onboarding.dart';
+import 'package:fgd_flutter/models/onboarding/onboarding.dart';
 
 class OnBoardingScreen extends StatefulWidget {
   const OnBoardingScreen({super.key});

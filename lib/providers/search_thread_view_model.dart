@@ -1,4 +1,4 @@
-import 'package:fgd_flutter/models/thread_response.dart';
+import 'package:fgd_flutter/models/thread_detail/thread_response.dart';
 import 'package:fgd_flutter/services/thread_api.dart';
 import 'package:fgd_flutter/shared/local_storage.dart';
 import 'package:fgd_flutter/state/search_thread_state.dart';

@@ -1,4 +1,4 @@
-import 'package:fgd_flutter/models/get_user_response.dart';
+import 'package:fgd_flutter/models/account/get_user_response.dart';
 import 'package:flutter/material.dart';
 
 import '../services/user_api.dart';

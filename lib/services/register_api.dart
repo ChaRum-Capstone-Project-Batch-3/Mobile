@@ -1,5 +1,5 @@
-import 'package:fgd_flutter/models/register.dart';
-import 'package:fgd_flutter/models/register_response.dart';
+import 'package:fgd_flutter/models/register/register.dart';
+import 'package:fgd_flutter/models/register/register_response.dart';
 import 'package:fgd_flutter/shared/api_utils.dart';
 
 class RegisterApi extends ApiUtils {

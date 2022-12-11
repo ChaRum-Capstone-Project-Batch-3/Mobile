@@ -1,6 +1,6 @@
 import 'package:dio/dio.dart';
-import 'package:fgd_flutter/models/get_user_response.dart';
-import 'package:fgd_flutter/models/update_user_response.dart';
+import 'package:fgd_flutter/models/account/get_user_response.dart';
+import 'package:fgd_flutter/models/account/update_user_response.dart';
 
 import '../shared/api_utils.dart';
 

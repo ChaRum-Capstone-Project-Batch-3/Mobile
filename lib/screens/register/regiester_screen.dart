@@ -1,4 +1,4 @@
-import 'package:fgd_flutter/models/register.dart';
+import 'package:fgd_flutter/models/register/register.dart';
 import 'package:fgd_flutter/providers/register_view_model.dart';
 import 'package:fgd_flutter/shared/box_text.dart';
 import 'package:fgd_flutter/shared/router.dart';

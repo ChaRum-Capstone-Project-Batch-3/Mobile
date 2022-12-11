@@ -1,4 +1,4 @@
-import 'package:fgd_flutter/models/login.dart';
+import 'package:fgd_flutter/models/login/login.dart';
 import 'package:fgd_flutter/services/login_api.dart';
 import 'package:fgd_flutter/shared/local_storage.dart';
 import 'package:flutter/material.dart';
