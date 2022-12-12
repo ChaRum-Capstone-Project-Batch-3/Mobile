@@ -1,8 +1,9 @@
 import 'package:fgd_flutter/screens/login/login_screen.dart';
 import 'package:fgd_flutter/shared/charum_ui.dart';
+import 'package:fgd_flutter/shared/local_storage.dart';
 import 'package:fgd_flutter/shared/styles.dart';
 import 'package:flutter/material.dart';
-import 'package:fgd_flutter/models/onboarding.dart';
+import 'package:fgd_flutter/models/onboarding/onboarding.dart';
 
 class OnBoardingScreen extends StatefulWidget {
   const OnBoardingScreen({super.key});
@@ -15,6 +16,7 @@ class _OnBoardingScreenState extends State<OnBoardingScreen> {
   int currentIndex = 0;
   late PageController _controller;
   final primaryColor = AppColors.kcPrimaryColor;
+  final mPreferences = LocalStorage();
 
   _OnBoardingScreenState(this.revere);
 
@@ -58,9 +60,8 @@ class _OnBoardingScreenState extends State<OnBoardingScreen> {
                             alignment: AlignmentDirectional.center,
                             children: [
                               Container(
-                                padding: EdgeInsets.only(bottom :30),
-                                 width: 292,
-                  
+                                  padding: EdgeInsets.only(bottom: 30),
+                                  width: 292,
                                   child: Image.asset(onBoards[index].bgImage)),
                               Container(
                                   height: 315,
@@ -105,6 +106,7 @@ class _OnBoardingScreenState extends State<OnBoardingScreen> {
               child: currentIndex == onBoards.length - 1
                   ? ElevatedButton(
                       onPressed: () async {
+                        mPreferences.setBool("hasBoard", true);
                         Navigator.push(
                             context,
                             MaterialPageRoute(
@@ -128,6 +130,7 @@ class _OnBoardingScreenState extends State<OnBoardingScreen> {
                                   duration: Duration(seconds: 1),
                                   curve: Curves.easeInOut,
                                 );
+                                mPreferences.setBool("hasBoard", true);
                                 Navigator.push(
                                     context,
                                     MaterialPageRoute(

@@ -17,99 +17,262 @@ class _FollowAccountScreenState extends State<FollowAccountScreen> {
 
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
-      appBar: AppBar(
-        centerTitle: true,
-        leading: GestureDetector(
-          onTap: () => Navigator.pop(context),
-          child: Icon(
-            Icons.arrow_back,
-            color: Colors.black,
-            size: 30,
-          ),
-        ),
-        backgroundColor: Colors.white,
-        title: Text(
-          'Evan Chris’s thread',
-          style: body1Bold.copyWith(color: Colors.black),
-        ),
-        actions: [
-          GestureDetector(
-            onTap: () => _buildMoreUser(),
-            child: Image.asset(
-              'assets/icon_more.png',
-              height: 24,
-              width: 24,
+    return DefaultTabController(
+      length: 2,
+      child: Scaffold(
+        appBar: AppBar(
+          centerTitle: true,
+          leading: GestureDetector(
+            onTap: () => Navigator.pop(context),
+            child: Icon(
+              Icons.arrow_back,
+              color: Colors.black,
+              size: 30,
             ),
           ),
-          SizedBox(
-            width: 10,
-          )
-        ],
-        elevation: 1.0,
-      ),
-      body: SingleChildScrollView(
-        child: Column(
-          crossAxisAlignment: CrossAxisAlignment.stretch,
-          mainAxisSize: MainAxisSize.min,
-          children: [
-            SizedBox(
-              height: 15,
-            ),
-            Image.asset(
-              'assets/fake_profile.png',
-              height: 72,
-              width: 72,
-            ),
-            SizedBox(
-              height: 20,
-            ),
-            Text(
-              'Evan Chris’s thread',
-              style: buttonSemi,
-              textAlign: TextAlign.center,
-            ),
-            SizedBox(
-              height: 20,
-            ),
-            buildProfile(),
-            Container(
-              margin: EdgeInsets.only(top: 10, bottom: 10, left: 16, right: 16),
-              child: ElevatedButton(
-                onPressed: () {
-                  setState(() {
-                    actionFollow = !actionFollow;
-                  });
-                },
-                child: Text(
-                  actionFollow ? 'Follow' : 'Following',
-                  style: body2Semi,
-                ),
-                style: actionFollow
-                    ? ButtonStyle(
-                        shape: MaterialStateProperty.all(
-                          RoundedRectangleBorder(
-                              borderRadius: BorderRadius.circular(50)),
-                        ),
-                      )
-                    : ButtonStyle(
-                        backgroundColor: MaterialStateProperty.all(whiteColor),
-                        foregroundColor:
-                            MaterialStateProperty.all(primaryColor),
-                        shape: MaterialStateProperty.all(
-                          RoundedRectangleBorder(
-                            side:
-                                BorderSide(width: 1, color: Color(0xff178066)),
-                            borderRadius: BorderRadius.circular(50),
-                          ),
-                        ),
-                      ),
+          backgroundColor: Colors.white,
+          title: Text(
+            'Evan Chris’s thread',
+            style: body1Bold.copyWith(color: Colors.black),
+          ),
+          actions: [
+            GestureDetector(
+              onTap: () => _buildMoreUser(),
+              child: Image.asset(
+                'assets/icon_more.png',
+                height: 24,
+                width: 24,
               ),
             ),
-            _buildPostThread(),
-            _buildPostThread(),
-            _buildPostThread(),
-            _buildPostThread(),
+            SizedBox(
+              width: 10,
+            )
+          ],
+          elevation: 1.0,
+          bottom: PreferredSize(
+            preferredSize: Size.fromHeight(310),
+            child: Column(
+              crossAxisAlignment: CrossAxisAlignment.stretch,
+              mainAxisSize: MainAxisSize.min,
+              children: [
+                SizedBox(
+                  height: 15,
+                ),
+                Image.asset(
+                  'assets/fake_profile.png',
+                  height: 72,
+                  width: 72,
+                ),
+                SizedBox(
+                  height: 20,
+                ),
+                Text(
+                  'Evan Chris’s thread',
+                  style: buttonSemi,
+                  textAlign: TextAlign.center,
+                ),
+                SizedBox(
+                  height: 20,
+                ),
+                buildProfile(),
+                Row(
+                  crossAxisAlignment: CrossAxisAlignment.center,
+                  children: [
+                    Container(
+                      margin: EdgeInsets.only(
+                          top: 10, bottom: 10, left: 87, right: 8),
+                      child: ElevatedButton(
+                          onPressed: () {
+                            setState(() {
+                              actionFollow = !actionFollow;
+                            });
+                          },
+                          child: Container(
+                            margin: EdgeInsets.only(
+                                left: 48, top: 10, bottom: 10, right: 48),
+                            child: Text(
+                              actionFollow ? 'Follow' : 'Following',
+                              style: body2Semi,
+                            ),
+                          ),
+                          style: actionFollow
+                              ? ButtonStyle(
+                                  backgroundColor:
+                                      MaterialStateProperty.all(primaryColor),
+                                  foregroundColor:
+                                      MaterialStateProperty.all(whiteColor),
+                                  shape: MaterialStateProperty.all(
+                                    RoundedRectangleBorder(
+                                      borderRadius: BorderRadius.circular(8),
+                                    ),
+                                  ),
+                                )
+                              : ButtonStyle(
+                                  backgroundColor: MaterialStateProperty.all(
+                                      Color(0xffb1b1b1)),
+                                  foregroundColor:
+                                      MaterialStateProperty.all(whiteColor),
+                                  shape: MaterialStateProperty.all(
+                                    RoundedRectangleBorder(
+                                        borderRadius: BorderRadius.circular(8)),
+                                  ),
+                                )),
+                    ),
+                    Container(
+                      decoration: BoxDecoration(
+                          color: Color(0xfff4f4f4),
+                          borderRadius: BorderRadius.circular(8)),
+                      padding:
+                          EdgeInsets.only(top: 8, right: 6, left: 6, bottom: 8),
+                      child: Image.asset(
+                        'assets/icon_message.png',
+                        height: 24,
+                        width: 24,
+                      ),
+                    )
+                  ],
+                ),
+                TabBar(
+                  padding:
+                      EdgeInsets.only(left: 18, right: 18, top: 8, bottom: 8),
+                  indicator: BoxDecoration(
+                    borderRadius: BorderRadius.all(
+                      Radius.circular(6),
+                    ),
+                    color: AppColors.kcPrimaryColor!.shade200,
+                  ),
+                  indicatorColor: AppColors.kcPrimaryColor,
+                  isScrollable: true,
+                  labelColor: AppColors.kcPrimaryColor,
+                  unselectedLabelColor: AppColors.kcDarkestWhite,
+                  indicatorSize: TabBarIndicatorSize.tab,
+                  tabs: [
+                    Tab(
+                      child: Row(
+                        children: [
+                          Image.asset("assets/threads.png"),
+                          SizedBox(
+                            width: 10,
+                          ),
+                          Text(
+                            "Threads",
+                            style: body1.copyWith(fontWeight: FontWeight.bold),
+                          ),
+                        ],
+                      ),
+                    ),
+                    Tab(
+                      child: Row(
+                        children: [
+                          Image.asset(
+                            "assets/icon_about.png",
+                            height: 24,
+                            width: 24,
+                          ),
+                          SizedBox(
+                            width: 10,
+                          ),
+                          Text(
+                            "About",
+                            style: body1.copyWith(fontWeight: FontWeight.bold),
+                          ),
+                        ],
+                      ),
+                    ),
+                  ],
+                ),
+              ],
+            ),
+          ),
+        ),
+        body: TabBarView(
+          children: [
+            SingleChildScrollView(
+              child: Column(
+                crossAxisAlignment: CrossAxisAlignment.stretch,
+                mainAxisAlignment: MainAxisAlignment.center,
+                mainAxisSize: MainAxisSize.min,
+                children: [
+                  _buildPostThread(),
+                  _buildPostThread(),
+                ],
+              ),
+            ),
+            SingleChildScrollView(
+              child: Container(
+                padding: EdgeInsets.all(16),
+                child: Column(
+                  crossAxisAlignment: CrossAxisAlignment.stretch,
+                  mainAxisAlignment: MainAxisAlignment.center,
+                  mainAxisSize: MainAxisSize.min,
+                  children: [
+                    Text(
+                        'Hello, my name is Evan Chris, Lorem ipsum dolor sit amet consectetur. Sagittis faucibus malesuada vitae sodales tortor at. Turpis ullamcorper quam imperdiet risus aliquam eu. Accumsan risus fames diam non quam augue dictum. Lorem ipsum dolor sit amet consectetur. Sagittis faucibus malesuada vitae sodales tortor at.'),
+                    SizedBox(
+                      height: 10,
+                    ),
+                    Text('Contact me in :'),
+                    RichText(
+                      text: TextSpan(
+                        text: 'instagram : ',
+                        style: const TextStyle(
+                          color: Colors.black,
+                          fontSize: 14,
+                        ),
+                        children: [
+                          TextSpan(
+                            text: '@evanchris',
+                            style: const TextStyle(
+                              fontSize: 14,
+                              color: Colors.black,
+                              fontWeight: FontWeight.bold,
+                            ),
+                          ),
+                        ],
+                      ),
+                    ),
+                    RichText(
+                      text: TextSpan(
+                        text: 'twitter : ',
+                        style: const TextStyle(
+                          color: Colors.black,
+                          fontSize: 14,
+                        ),
+                        children: [
+                          TextSpan(
+                            text: 'evanchris',
+                            style: const TextStyle(
+                              fontSize: 14,
+                              color: Colors.black,
+                              fontWeight: FontWeight.bold,
+                            ),
+                          ),
+                        ],
+                      ),
+                    ),
+                    RichText(
+                      text: TextSpan(
+                        text: 'email : ',
+                        style: const TextStyle(
+                          color: Colors.black,
+                          fontSize: 14,
+                        ),
+                        children: [
+                          TextSpan(
+                            text: 'evanchris123@gmail.com',
+                            style: const TextStyle(
+                              fontSize: 14,
+                              color: Colors.black,
+                              fontWeight: FontWeight.bold,
+                            ),
+                          ),
+                        ],
+                      ),
+                    ),
+                  ],
+                ),
+              ),
+            ),
           ],
         ),
       ),
@@ -197,15 +360,12 @@ class _FollowAccountScreenState extends State<FollowAccountScreen> {
         mainAxisAlignment: MainAxisAlignment.start,
         children: [
           Text('Evan Chris'),
-          SizedBox(
-            width: 5,
-          ),
           Container(
             margin: EdgeInsets.only(left: 10, right: 10),
-            child: CircleAvatar(
-              backgroundColor: Color(0xffC7C7C7),
+            decoration: BoxDecoration(
+              shape: BoxShape.circle,
+              color: Color(0xffC7C7C7),
             ),
-            color: Color(0xffC7C7C7),
             width: 6,
             height: 6,
           ),

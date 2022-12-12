@@ -1,5 +1,7 @@
 import 'package:fgd_flutter/screens/account/account_screen.dart';
 import 'package:fgd_flutter/screens/bookmark/bookmark_screen.dart';
+import 'package:fgd_flutter/screens/home/home_screen.dart';
+import 'package:fgd_flutter/screens/space/space_screen.dart';
 import 'package:fgd_flutter/shared/app_colors.dart';
 import 'package:flutter/material.dart';
 
@@ -13,8 +15,8 @@ class MainScreen extends StatefulWidget {
 class _MainScreenState extends State<MainScreen> {
   int selectedIndex = 0;
   final widgetOptions = [
-    const Text('Home Screen'),
-    const Text('Space Screen'),
+    HomeScreen(),
+    SpaceScreen(),
     BookmarkScreen(),
     AccountScreen(),
   ];

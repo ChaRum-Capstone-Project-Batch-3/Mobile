@@ -1,5 +1,5 @@
-import 'package:fgd/notification/notification_card.dart';
-import 'package:fgd/notification/notification_recent.dart';
+import '../notification/widget/notification_card.dart';
+import '../notification/widget/notification_recent.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/src/widgets/container.dart';
 import 'package:flutter/src/widgets/framework.dart';
