@@ -1,4 +1,5 @@
 import 'package:fgd_flutter/screens/create_thread/widgets/thread_label_modal.dart';
+import 'package:fgd_flutter/shared/router.dart';
 
 import 'package:flutter/material.dart';
 
@@ -70,7 +71,9 @@ class _CreateThreadState extends State<CreateThread> {
             focusColor: Colors.transparent,
             highlightColor: Colors.transparent,
             // splashColor: Colors.transparent,
-            onTap: () {},
+            onTap: () {
+              Navigator.pushNamed(context, home);
+            },
             child: const Padding(
               padding: EdgeInsets.only(right: 20, left: 20),
               child: Align(

@@ -19,6 +19,13 @@ class _AccountScreenState extends State<AccountScreen> {
   bool actionFollow = true;
   final primaryColor = AppColors.kcPrimaryColor;
   final whiteColor = AppColors.kcBaseWhite;
+
+  @override
+  void initState() {
+    // TODO: implement initState
+    super.initState();
+    Provider.of<UserViewModel>(context, listen:false).getUsers();
+  }
   
   @override
   Widget build(BuildContext context) {
@@ -63,7 +70,7 @@ class _AccountScreenState extends State<AccountScreen> {
                   height: 20,
                 ),
                 Text(
-                  provider.user.displayName!,
+                  provider.user.displayName ?? "",
                   style: body1Bold.copyWith(fontWeight: FontWeight.bold),
                   textAlign: TextAlign.center,
                 ),
@@ -71,7 +78,7 @@ class _AccountScreenState extends State<AccountScreen> {
                   height: 5,
                 ),
                 Text(
-                  provider.user.userName!,
+                  provider.user.userName ?? "",
                   textAlign: TextAlign.center,
                 ),
                 SizedBox(

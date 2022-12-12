@@ -1,9 +1,9 @@
-import 'package:fgd/shared/styles.dart';
+import '/shared/styles.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/src/widgets/container.dart';
 import 'package:flutter/src/widgets/framework.dart';
 
-import '../shared/app_colors.dart';
+import '/shared/app_colors.dart';
 
 class DetailSpace extends StatefulWidget {
   const DetailSpace({super.key});
