@@ -1,6 +1,7 @@
 import 'package:fgd_flutter/screens/create_thread/create_thread_screen.dart';
 import 'package:fgd_flutter/screens/edit_account/edit_account_screen.dart';
 import 'package:fgd_flutter/screens/home/home_screen.dart';
+import 'package:fgd_flutter/screens/main_screen/main_screen.dart';
 import 'package:fgd_flutter/screens/onboarding/onboarding_screen.dart';
 import 'package:fgd_flutter/screens/register/regiester_screen.dart';
 import 'package:fgd_flutter/screens/search/search_screen.dart';
@@ -30,7 +31,7 @@ class RouteGenerator {
         return MaterialPageRoute(builder: (context) => OnBoardingScreen());
       case home:
         final args = settings.arguments;
-        return MaterialPageRoute(builder: (context) => HomeScreen());
+        return MaterialPageRoute(builder: (context) => MainScreen());
       case search:
         final args = settings.arguments;
         return MaterialPageRoute(builder: (context) => SearchScreen());
