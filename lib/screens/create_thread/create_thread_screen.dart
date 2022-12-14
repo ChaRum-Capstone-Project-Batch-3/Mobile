@@ -1,5 +1,6 @@
 import 'package:fgd_flutter/screens/create_thread/widgets/thread_label_modal.dart';
 import 'package:fgd_flutter/shared/router.dart';
+import 'package:image_picker/image_picker.dart';
 
 import 'package:flutter/material.dart';
 
@@ -47,6 +48,8 @@ class _CreateThreadState extends State<CreateThread> {
     false
   ];
 
+  final ImagePicker _picker = ImagePicker();
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -70,7 +73,6 @@ class _CreateThreadState extends State<CreateThread> {
             hoverColor: Colors.transparent,
             focusColor: Colors.transparent,
             highlightColor: Colors.transparent,
-            // splashColor: Colors.transparent,
             onTap: () {
               Navigator.pushNamed(context, home);
             },
@@ -89,8 +91,8 @@ class _CreateThreadState extends State<CreateThread> {
             ),
           )
         ],
-        shadowColor: Colors.transparent,
-        backgroundColor: Colors.transparent,
+        shadowColor: Colors.white,
+        backgroundColor: Colors.white,
       ),
       body: SingleChildScrollView(
           child: Padding(
@@ -259,6 +261,19 @@ class _CreateThreadState extends State<CreateThread> {
               ))),
     );
   }
+
+  // _getFromGallery() async {
+  //   PickedFile? pickedFile = await ImagePicker().getImage(
+  //     source: ImageSource.gallery,
+  //     maxWidth: 1800,
+  //     maxHeight: 1800,
+  //   );
+  //   if (pickedFile != null) {
+  //     setState(() {
+  //       imageFile = File(pickedFile.path);
+  //     });
+  //   }
+  // }
 
   Row ChipButton(name, iter) {
     return Row(

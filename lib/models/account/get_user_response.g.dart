@@ -6,7 +6,8 @@ part of 'get_user_response.dart';
 // JsonSerializableGenerator
 // **************************************************************************
 
-GetUserResponse _$GetUserResponseFromJson(Map<String, dynamic> json) => GetUserResponse(
+GetUserResponse _$GetUserResponseFromJson(Map<String, dynamic> json) =>
+    GetUserResponse(
       status: json['status'] as int?,
       message: json['message'] as String?,
       data: json['data'] == null
