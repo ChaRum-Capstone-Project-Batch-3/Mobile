@@ -1,19 +1,24 @@
 import 'package:json_annotation/json_annotation.dart';
-part 'create_thread_response.g.dart';
+
+part 'home_thread_response.g.dart';
 
 @JsonSerializable()
 
-class CreateThreadResponse {
+class HomeThreadResponse {
   int? status;
   String? message;
   Data? data;
+  Pagination? pagination;
 
-  CreateThreadResponse({this.status, this.message, this.data});
+  HomeThreadResponse({this.status, this.message, this.data, this.pagination});
 
-  CreateThreadResponse.fromJson(Map<String, dynamic> json) {
+  HomeThreadResponse.fromJson(Map<String, dynamic> json) {
     status = json['status'];
     message = json['message'];
     data = json['data'] != null ? new Data.fromJson(json['data']) : null;
+    pagination = json['pagination'] != null
+        ? new Pagination.fromJson(json['pagination'])
+        : null;
   }
 
   Map<String, dynamic> toJson() {
@@ -23,36 +28,40 @@ class CreateThreadResponse {
     if (this.data != null) {
       data['data'] = this.data!.toJson();
     }
+    if (this.pagination != null) {
+      data['pagination'] = this.pagination!.toJson();
+    }
     return data;
   }
 }
 
 class Data {
-  Thread? thread;
-  String? field;
-  String? message;
+  int? totalPage;
+  List<Threads>? threads;
 
-  Data({this.thread, this.field, this.message});
+  Data({this.totalPage, this.threads});
 
   Data.fromJson(Map<String, dynamic> json) {
-    thread =
-        json['thread'] != null ? new Thread.fromJson(json['thread']) : null;
-    field = json['field'];
-    message = json['message'];
+    totalPage = json['totalPage'];
+    if (json['threads'] != null) {
+      threads = <Threads>[];
+      json['threads'].forEach((v) {
+        threads!.add(new Threads.fromJson(v));
+      });
+    }
   }
 
   Map<String, dynamic> toJson() {
     final Map<String, dynamic> data = new Map<String, dynamic>();
-    if (this.thread != null) {
-      data['thread'] = this.thread!.toJson();
+    data['totalPage'] = this.totalPage;
+    if (this.threads != null) {
+      data['threads'] = this.threads!.map((v) => v.toJson()).toList();
     }
-    data['field'] = this.field;
-    data['message'] = this.message;
     return data;
   }
 }
 
-class Thread {
+class Threads {
   String? sId;
   Topic? topic;
   Creator? creator;
@@ -63,7 +72,7 @@ class Thread {
   String? createdAt;
   String? updatedAt;
 
-  Thread(
+  Threads(
       {this.sId,
       this.topic,
       this.creator,
@@ -74,7 +83,7 @@ class Thread {
       this.createdAt,
       this.updatedAt});
 
-  Thread.fromJson(Map<String, dynamic> json) {
+  Threads.fromJson(Map<String, dynamic> json) {
     sId = json['_id'];
     topic = json['topic'] != null ? new Topic.fromJson(json['topic']) : null;
     creator =
@@ -212,6 +221,31 @@ class Likes {
       data['user'] = this.user!.toJson();
     }
     data['createdAt'] = this.createdAt;
+    return data;
+  }
+}
+
+class Pagination {
+  int? size;
+  int? totalData;
+  int? totalPage;
+  int? currentPage;
+
+  Pagination({this.size, this.totalData, this.totalPage, this.currentPage});
+
+  Pagination.fromJson(Map<String, dynamic> json) {
+    size = json['size'];
+    totalData = json['totalData'];
+    totalPage = json['totalPage'];
+    currentPage = json['currentPage'];
+  }
+
+  Map<String, dynamic> toJson() {
+    final Map<String, dynamic> data = new Map<String, dynamic>();
+    data['size'] = this.size;
+    data['totalData'] = this.totalData;
+    data['totalPage'] = this.totalPage;
+    data['currentPage'] = this.currentPage;
     return data;
   }
 }
