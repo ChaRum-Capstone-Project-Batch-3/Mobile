@@ -6,3 +6,4 @@ const String createThread = '/create_thread';
 const String boarding = '/boarding';
 const String home = "/home";
 const String editAccount = "/edit_account";
+const String detailThread = "/thread_detail";

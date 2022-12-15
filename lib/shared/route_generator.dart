@@ -5,6 +5,7 @@ import 'package:fgd_flutter/screens/main_screen/main_screen.dart';
 import 'package:fgd_flutter/screens/onboarding/onboarding_screen.dart';
 import 'package:fgd_flutter/screens/register/regiester_screen.dart';
 import 'package:fgd_flutter/screens/search/search_screen.dart';
+import 'package:fgd_flutter/screens/thread_detail/thread_detail_screen.dart';
 import 'package:flutter/material.dart';
 import 'package:fgd_flutter/shared/router.dart';
 
@@ -38,6 +39,13 @@ class RouteGenerator {
       case editAccount:
         final args = settings.arguments;
         return MaterialPageRoute(builder: (context) => EditAccountScreen());
+      case detailThread:
+        final args = settings.arguments as String;
+        return MaterialPageRoute(
+            builder: (context) => ThreadDetailScreen(
+                  id: args,
+                ));
+
       default:
         return _errorPage();
     }

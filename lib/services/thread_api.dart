@@ -2,7 +2,7 @@ import 'dart:io';
 
 import 'package:dio/dio.dart';
 import 'package:fgd_flutter/models/base_response.dart';
-import 'package:fgd_flutter/models/thread_detail/detail_thread_response.dart';
+import 'package:fgd_flutter/models/thread_detail/thread_response.dart';
 import 'package:fgd_flutter/models/thread_detail/thread_response.dart';
 import 'package:fgd_flutter/shared/api_utils.dart';
 import 'package:fgd_flutter/shared/local_storage.dart';
@@ -77,10 +77,10 @@ class ThreadApi extends ApiUtils {
     return result;
   }
 
-  Future<DetailThreadResponse> detailThread(String id, String token) async {
+  Future<ThreadResponse> detailThread(String id, String token) async {
     var response = await dio.get('/thread/id/$id',
         options: Options(headers: {"Authorization": token}));
-    DetailThreadResponse result = DetailThreadResponse.fromJson(response.data);
+    ThreadResponse result = ThreadResponse.fromJson(response.data);
     return result;
   }
 }
