@@ -4,10 +4,11 @@ import 'package:flutter/material.dart';
 import '../services/user_api.dart';
 import '../shared/local_storage.dart';
 
-class UserViewModel with ChangeNotifier {
+class GetUserViewModel with ChangeNotifier {
   var mPreferences = LocalStorage();
   User _user = User();
   User get user => _user;
+
 
   getUsers() async {
     try {
@@ -18,6 +19,7 @@ class UserViewModel with ChangeNotifier {
           await resultGetUser.whenComplete(() async {
             await resultGetUser.then((value) {
               this._user = value.data!.user!;
+              notifyListeners();
             });
           });
         });

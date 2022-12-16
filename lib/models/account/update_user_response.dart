@@ -1,3 +1,9 @@
+
+import 'package:json_annotation/json_annotation.dart';
+
+part 'update_user_response.g.dart';
+
+@JsonSerializable()
 class UpdateUserResponse {
   int? status;
   String? message;
@@ -45,7 +51,9 @@ class User {
   String? email;
   String? userName;
   String? displayName;
-  String? password;
+  String? biodata;
+  String? socialMedia;
+  String? profilePictureURL;
   bool? isActive;
   String? role;
   String? createdAt;
@@ -56,7 +64,9 @@ class User {
       this.email,
       this.userName,
       this.displayName,
-      this.password,
+      this.biodata,
+      this.socialMedia,
+      this.profilePictureURL,
       this.isActive,
       this.role,
       this.createdAt,
@@ -67,7 +77,9 @@ class User {
     email = json['email'];
     userName = json['userName'];
     displayName = json['displayName'];
-    password = json['password'];
+    biodata = json['biodata'];
+    socialMedia = json['socialMedia'];
+    profilePictureURL = json['profilePictureURL'];
     isActive = json['isActive'];
     role = json['role'];
     createdAt = json['createdAt'];
@@ -80,7 +92,9 @@ class User {
     data['email'] = this.email;
     data['userName'] = this.userName;
     data['displayName'] = this.displayName;
-    data['password'] = this.password;
+    data['biodata'] = this.biodata;
+    data['socialMedia'] = this.socialMedia;
+    data['profilePictureURL'] = this.profilePictureURL;
     data['isActive'] = this.isActive;
     data['role'] = this.role;
     data['createdAt'] = this.createdAt;
