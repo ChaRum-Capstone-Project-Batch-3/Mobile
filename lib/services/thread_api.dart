@@ -2,7 +2,6 @@ import 'dart:io';
 
 import 'package:dio/dio.dart';
 import 'package:fgd_flutter/models/base_response.dart';
-import 'package:fgd_flutter/models/thread_detail/detail_thread_response.dart';
 import 'package:fgd_flutter/models/thread_detail/thread_response.dart';
 import 'package:fgd_flutter/shared/api_utils.dart';
 import 'package:fgd_flutter/shared/local_storage.dart';

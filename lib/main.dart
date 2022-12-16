@@ -24,7 +24,6 @@ void main() {
         ChangeNotifierProvider(create: (context) => SearchThreadViewModel()),
         ChangeNotifierProvider(create: (context) => GetUserViewModel()),
         ChangeNotifierProvider(create: (context) => UpdateUserViewModel()),
-        ChangeNotifierProvider(create: (context) => UserViewModel()),
         ChangeNotifierProvider(create: (context) => BookmarkViewModel())
       ],
       child: MyApp(),
