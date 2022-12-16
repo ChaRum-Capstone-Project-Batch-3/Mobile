@@ -5,16 +5,19 @@ import 'package:flutter/material.dart';
 
 class HomeThreadViewModel with ChangeNotifier {
   var mPreferences = LocalStorage();
-  List<String> _recentSearch = [];
-  List<String> get recentSearch => _recentSearch;
-  List<Threads> _thread = [];
-  List<Threads> get thread => _thread;
-  List<Threads> _popular = [];
-  List<Threads> get popular => _popular;
-  TextEditingController _teSearch = TextEditingController();
-  TextEditingController get teSearch => _teSearch;
+  List<String> _allThread = [];
+  List<String> get allThread => _allThread;
+  List<Threads> _popularThread = [];
+  List<Threads> get popularThread => _popularThread;
+  List<Threads> _followedThread = [];
+  List<Threads> get followedThread => _followedThread;
 
-  showThread () async {
+  // changeState(HomeThreadState s) {
+  //   _state = s;
+  //   notifyListeners();
+  // }
+
+  showAllThread() async {
     var token = mPreferences.getString('token');
     await token.whenComplete(() async {
       await token.then((value) async {
@@ -30,11 +33,38 @@ class HomeThreadViewModel with ChangeNotifier {
     });
   }
 
-  
+  showPopularThread() {
+    var token = mPreferences.getString('token');
+    token.whenComplete(() async {
+      await token.then((value) async {
+        var data = HomeThreadAPI().show("created_at", "desc", "", "", value);
+        await data.whenComplete(() async {
+          await data.then((value) {
+            // _popular = value.popular;
+            notifyListeners();
+          });
+        });
+      });
+    });
+  }
 
-  setSearch(int index) {
-    String data = this._recentSearch.elementAt(index);
-    this._teSearch.text = data;
-    notifyListeners();
+  showFollowdedThread() {
+    var token = mPreferences.getString('token');
+    token.whenComplete(() async {
+      await token.then((value) async {
+        var data = HomeThreadAPI().show("created_at", "desc", "", "", value);
+        await data.whenComplete(() async {
+          await data.then((value) {
+            // _thread = value.threads;
+            notifyListeners();
+          });
+        });
+      });
+    });
   }
 }
+
+          // var resultThread =
+          //     ThreadApi().search('updatedAt', 'desc', "", search, value);
+          // var resultPopular =
+          //     ThreadApi().search("likes", "desc", "", search, value);
