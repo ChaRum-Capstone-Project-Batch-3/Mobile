@@ -99,20 +99,16 @@ class _AccountScreenState extends State<AccountScreen> {
                               top: 10, bottom: 10, left: 87, right: 8),
                           child: ElevatedButton(
                               onPressed: () {
+                                Navigator.pushNamed(context, editAccount);
                                 setState(() {
                                   actionFollow = !actionFollow;
                                 });
                               },
                               child: Container(
                                 margin: EdgeInsets.only(left: 34, right: 34),
-                                child: GestureDetector(
-                                  onTap: (() {
-                                    Navigator.pushNamed(context, editAccount);
-                                  }),
-                                  child: Text(
-                                    'Edit profile',
-                                    style: body2Semi,
-                                  ),
+                                child: Text(
+                                  'Edit profile',
+                                  style: body2Semi,
                                 ),
                               ),
                               style: ButtonStyle(

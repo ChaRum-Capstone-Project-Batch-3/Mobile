@@ -228,7 +228,7 @@ class _EditAccountScreenState extends State<EditAccountScreen> {
                 ),
               ),
               TextField(
-                controller: teBio,
+                controller: teSosial,
                 obscureText: false,
               ),
               SizedBox(
