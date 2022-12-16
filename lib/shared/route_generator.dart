@@ -8,6 +8,7 @@ import 'package:fgd_flutter/screens/search/search_screen.dart';
 import 'package:flutter/material.dart';
 import 'package:fgd_flutter/shared/router.dart';
 
+import '../screens/account/account_screen.dart';
 import '../screens/login/login_screen.dart';
 import '../screens/splash/splash_screen.dart';
 
@@ -38,6 +39,9 @@ class RouteGenerator {
       case editAccount:
         final args = settings.arguments;
         return MaterialPageRoute(builder: (context) => EditAccountScreen());
+        case account:
+        final args = settings.arguments;
+        return MaterialPageRoute(builder: (context) => AccountScreen());
       default:
         return _errorPage();
     }
