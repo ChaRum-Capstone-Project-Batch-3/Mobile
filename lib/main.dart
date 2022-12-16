@@ -1,3 +1,4 @@
+import 'package:fgd_flutter/providers/bookmark_view_model.dart';
 import 'package:fgd_flutter/providers/search_thread_view_model.dart';
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
@@ -23,6 +24,8 @@ void main() {
         ChangeNotifierProvider(create: (context) => SearchThreadViewModel()),
         ChangeNotifierProvider(create: (context) => GetUserViewModel()),
         ChangeNotifierProvider(create: (context) => UpdateUserViewModel()),
+        ChangeNotifierProvider(create: (context) => UserViewModel()),
+        ChangeNotifierProvider(create: (context) => BookmarkViewModel())
       ],
       child: MyApp(),
     ),
