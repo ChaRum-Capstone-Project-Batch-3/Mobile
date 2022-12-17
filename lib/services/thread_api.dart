@@ -76,10 +76,10 @@ class ThreadApi extends ApiUtils {
     return result;
   }
 
-  Future<DetailThreadResponse> detailThread(String id, String token) async {
-    var response = await dio.get('/thread/id/$id',
-        options: Options(headers: {"Authorization": token}));
-    DetailThreadResponse result = DetailThreadResponse.fromJson(response.data);
-    return result;
-  }
+  // Future<DetailThreadResponse> detailThread(String id, String token) async {
+  //   var response = await dio.get('/thread/id/$id',
+  //       options: Options(headers: {"Authorization": token}));
+  //   DetailThreadResponse result = DetailThreadResponse.fromJson(response.data);
+  //   return result;
+  // }
 }
