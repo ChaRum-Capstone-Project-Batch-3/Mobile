@@ -1,4 +1,3 @@
-import 'package:fgd_flutter/providers/get_alltopics_view_model.dart';
 import 'package:fgd_flutter/providers/search_thread_view_model.dart';
 import 'package:fgd_flutter/screens/account/account_screen.dart';
 import 'package:fgd_flutter/screens/follow_account/follow_account_screen.dart';
@@ -29,8 +28,7 @@ void main() {
       providers: [
         ChangeNotifierProvider(create: (context) => LoginViewModel()),
         ChangeNotifierProvider(create: (context) => RegisterViewModel()),
-        ChangeNotifierProvider(create: (context) => SearchThreadViewModel()),
-        ChangeNotifierProvider(create: (context) => AllTopicsViewModel(),)
+        ChangeNotifierProvider(create: (context) => SearchThreadViewModel())
       ],
       child: MyApp(),
     ),
@@ -70,7 +68,7 @@ class MyApp extends StatelessWidget {
         primarySwatch: primaryColor,
       ),
       debugShowCheckedModeBanner: false,
-      home: SplashScreen(),
+      home: HomeScreen(),
     );
   }
 }

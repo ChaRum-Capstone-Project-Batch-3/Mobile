@@ -1,10 +1,6 @@
-import 'dart:async';
-
-import 'package:fgd_flutter/screens/DetailSpace/detail_space.dart';
 import 'package:fgd_flutter/screens/create_thread/create_thread_screen.dart';
 import 'package:fgd_flutter/screens/edit_account/edit_account_screen.dart';
 import 'package:fgd_flutter/screens/home/home_screen.dart';
-import 'package:fgd_flutter/screens/main_screen/main_screen.dart';
 import 'package:fgd_flutter/screens/onboarding/onboarding_screen.dart';
 import 'package:fgd_flutter/screens/register/regiester_screen.dart';
 import 'package:fgd_flutter/screens/search/search_screen.dart';
@@ -34,18 +30,13 @@ class RouteGenerator {
         return MaterialPageRoute(builder: (context) => OnBoardingScreen());
       case home:
         final args = settings.arguments;
-        return MaterialPageRoute(builder: (context) => MainScreen());
+        return MaterialPageRoute(builder: (context) => HomeScreen());
       case search:
         final args = settings.arguments;
         return MaterialPageRoute(builder: (context) => SearchScreen());
       case editAccount:
         final args = settings.arguments;
         return MaterialPageRoute(builder: (context) => EditAccountScreen());
-      case detailSpace:
-        final args = settings.arguments as String;
-        return MaterialPageRoute(
-          builder: (context) => DetailSpace(topicId: args),
-        );
       default:
         return _errorPage();
     }

@@ -1,5 +1,4 @@
 import 'package:bubble_tab_indicator/bubble_tab_indicator.dart';
-import 'package:fgd_flutter/screens/notification/notification.dart';
 import 'package:fgd_flutter/shared/router.dart';
 import '/shared/app_colors.dart';
 import '/shared/styles.dart';
@@ -28,10 +27,7 @@ class _HomeScreenState extends State<HomeScreen> {
             actions: [
               Row(
                 children: [
-                  InkWell(onTap: () {
-                    Navigator.push(context, MaterialPageRoute(builder: (context) => NotificationWidget(),));
-                  },
-                    child: Image.asset("assets/notification.png")),
+                  InkWell(child: Image.asset("assets/notification.png")),
                   SizedBox(width: 15),
                   InkWell(
                     onTap: () {
