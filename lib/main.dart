@@ -1,26 +1,19 @@
+import 'package:fgd_flutter/providers/bookmark_view_model.dart';
 import 'package:fgd_flutter/providers/search_thread_view_model.dart';
-import 'package:fgd_flutter/screens/account/account_screen.dart';
-import 'package:fgd_flutter/screens/follow_account/follow_account_screen.dart';
-import 'package:fgd_flutter/screens/home/home_screen.dart';
-import 'package:fgd_flutter/screens/login/login_screen.dart';
-import 'package:fgd_flutter/screens/onboarding/onboarding_screen.dart';
-import 'package:fgd_flutter/screens/space/space_screen.dart';
-import 'package:fgd_flutter/screens/thread_detail/thread_detail_screen.dart';
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:provider/provider.dart';
 
 import 'package:fgd_flutter/providers/login_view_model.dart';
 import 'package:fgd_flutter/providers/register_view_model.dart';
-import 'package:fgd_flutter/screens/bookmark/bookmark_screen.dart';
-import 'package:fgd_flutter/screens/create_thread/create_thread_screen.dart';
-import 'package:fgd_flutter/screens/edit_account/edit_account_screen.dart';
-import 'package:fgd_flutter/screens/main_screen/main_screen.dart';
 import 'package:fgd_flutter/screens/splash/splash_screen.dart';
 import 'package:fgd_flutter/shared/app_colors.dart';
 import 'package:fgd_flutter/shared/route_generator.dart';
 import 'package:fgd_flutter/shared/router.dart';
 import 'package:fgd_flutter/shared/styles.dart';
+
+import 'providers/get_user_view_model.dart';
+import 'providers/update_user_view_model.dart';
 
 void main() {
   runApp(
@@ -28,7 +21,10 @@ void main() {
       providers: [
         ChangeNotifierProvider(create: (context) => LoginViewModel()),
         ChangeNotifierProvider(create: (context) => RegisterViewModel()),
-        ChangeNotifierProvider(create: (context) => SearchThreadViewModel())
+        ChangeNotifierProvider(create: (context) => SearchThreadViewModel()),
+        ChangeNotifierProvider(create: (context) => GetUserViewModel()),
+        ChangeNotifierProvider(create: (context) => UpdateUserViewModel()),
+        ChangeNotifierProvider(create: (context) => BookmarkViewModel())
       ],
       child: MyApp(),
     ),
@@ -68,7 +64,7 @@ class MyApp extends StatelessWidget {
         primarySwatch: primaryColor,
       ),
       debugShowCheckedModeBanner: false,
-      home: HomeScreen(),
+      home: SplashScreen(),
     );
   }
 }

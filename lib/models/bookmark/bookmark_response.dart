@@ -1,23 +1,19 @@
 import 'package:json_annotation/json_annotation.dart';
 
-part 'thread_response.g.dart';
+part 'bookmark_response.g.dart';
 
 @JsonSerializable()
-class ThreadResponse {
+class BookmarkResponse {
   int? status;
   String? message;
   Data? data;
-  Pagination? pagination;
 
-  ThreadResponse({this.status, this.message, this.data, this.pagination});
+  BookmarkResponse({this.status, this.message, this.data});
 
-  ThreadResponse.fromJson(Map<String, dynamic> json) {
+  BookmarkResponse.fromJson(Map<String, dynamic> json) {
     status = json['status'];
     message = json['message'];
     data = json['data'] != null ? new Data.fromJson(json['data']) : null;
-    pagination = json['pagination'] != null
-        ? new Pagination.fromJson(json['pagination'])
-        : null;
   }
 
   Map<String, dynamic> toJson() {
@@ -27,31 +23,53 @@ class ThreadResponse {
     if (this.data != null) {
       data['data'] = this.data!.toJson();
     }
-    if (this.pagination != null) {
-      data['pagination'] = this.pagination!.toJson();
-    }
     return data;
   }
 }
 
 class Data {
-  List<Thread>? threads;
+  List<Bookmarks>? bookmarks;
 
-  Data({this.threads});
+  Data({this.bookmarks});
 
   Data.fromJson(Map<String, dynamic> json) {
-    if (json['threads'] != null) {
-      threads = <Thread>[];
-      json['threads'].forEach((v) {
-        threads!.add(new Thread.fromJson(v));
+    if (json['bookmarks'] != null) {
+      bookmarks = <Bookmarks>[];
+      json['bookmarks'].forEach((v) {
+        bookmarks!.add(new Bookmarks.fromJson(v));
       });
     }
   }
 
   Map<String, dynamic> toJson() {
     final Map<String, dynamic> data = new Map<String, dynamic>();
-    if (this.threads != null) {
-      data['threads'] = this.threads!.map((v) => v.toJson()).toList();
+    if (this.bookmarks != null) {
+      data['bookmarks'] = this.bookmarks!.map((v) => v.toJson()).toList();
+    }
+    return data;
+  }
+}
+
+class Bookmarks {
+  String? sId;
+  String? userID;
+  Thread? thread;
+
+  Bookmarks({this.sId, this.userID, this.thread});
+
+  Bookmarks.fromJson(Map<String, dynamic> json) {
+    sId = json['_id'];
+    userID = json['userID'];
+    thread =
+        json['thread'] != null ? new Thread.fromJson(json['thread']) : null;
+  }
+
+  Map<String, dynamic> toJson() {
+    final Map<String, dynamic> data = new Map<String, dynamic>();
+    data['_id'] = this.sId;
+    data['userID'] = this.userID;
+    if (this.thread != null) {
+      data['thread'] = this.thread!.toJson();
     }
     return data;
   }
@@ -150,16 +168,23 @@ class Topic {
   String? sId;
   String? topic;
   String? description;
+  String? imageURL;
   String? createdAt;
   String? updatedAt;
 
   Topic(
-      {this.sId, this.topic, this.description, this.createdAt, this.updatedAt});
+      {this.sId,
+      this.topic,
+      this.description,
+      this.imageURL,
+      this.createdAt,
+      this.updatedAt});
 
   Topic.fromJson(Map<String, dynamic> json) {
     sId = json['_id'];
     topic = json['topic'];
     description = json['description'];
+    imageURL = json['imageURL'];
     createdAt = json['createdAt'];
     updatedAt = json['updatedAt'];
   }
@@ -169,6 +194,7 @@ class Topic {
     data['_id'] = this.sId;
     data['topic'] = this.topic;
     data['description'] = this.description;
+    data['imageURL'] = this.imageURL;
     data['createdAt'] = this.createdAt;
     data['updatedAt'] = this.updatedAt;
     return data;
@@ -249,31 +275,6 @@ class Likes {
       data['user'] = this.user!.toJson();
     }
     data['timestamp'] = this.timestamp;
-    return data;
-  }
-}
-
-class Pagination {
-  int? size;
-  int? totalData;
-  int? currentPage;
-  int? totalPage;
-
-  Pagination({this.size, this.totalData, this.currentPage, this.totalPage});
-
-  Pagination.fromJson(Map<String, dynamic> json) {
-    size = json['size'];
-    totalData = json['totalData'];
-    currentPage = json['currentPage'];
-    totalPage = json['totalPage'];
-  }
-
-  Map<String, dynamic> toJson() {
-    final Map<String, dynamic> data = new Map<String, dynamic>();
-    data['size'] = this.size;
-    data['totalData'] = this.totalData;
-    data['currentPage'] = this.currentPage;
-    data['totalPage'] = this.totalPage;
     return data;
   }
 }

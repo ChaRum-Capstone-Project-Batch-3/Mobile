@@ -1,4 +1,5 @@
 import 'package:fgd_flutter/shared/styles.dart';
+import 'package:fgd_flutter/state/login_state.dart';
 import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/src/widgets/container.dart';
@@ -21,6 +22,7 @@ class _LoginScreenState extends State<LoginScreen> {
   final _formKey = GlobalKey<FormState>();
   TextEditingController teEmail = TextEditingController();
   TextEditingController tePass = TextEditingController();
+  bool obPass = true;
 
   @override
   void dispose() {
@@ -73,26 +75,26 @@ class _LoginScreenState extends State<LoginScreen> {
                   ),
                   TextFormField(
                     controller: teEmail,
-                    validator: _validateEmail,
+                    validator: (value) {
+                      if (value!.isEmpty || value == '') {
+                        return "This field is required";
+                      }
+                      return null;
+                    },
+                    keyboardType: TextInputType.name,
+                    textCapitalization: TextCapitalization.words,
                     decoration: InputDecoration(
-                      contentPadding:
-                          const EdgeInsets.fromLTRB(20.0, 10.0, 20.0, 10.0),
-                      labelText: 'Email',
-                      labelStyle: const TextStyle(
-                        color: Colors.grey,
+                      labelText: "Username / Email",
+                      hintText: "Username / Email",
+                      hintStyle: TextStyle(
                         fontWeight: FontWeight.w600,
+                        fontSize: 14,
                       ),
-                      enabledBorder: OutlineInputBorder(
-                        borderRadius: BorderRadius.circular(10),
-                        borderSide: const BorderSide(
-                          color: Color(0xFFD9D9D9),
-                        ),
+                      border: OutlineInputBorder(
+                        borderRadius: BorderRadius.all(Radius.circular(10)),
                       ),
-                      focusedBorder: const OutlineInputBorder(
-                        borderSide: BorderSide(
-                          color: Color(0xFFD9D9D9),
-                        ),
-                      ),
+                      contentPadding:
+                          EdgeInsets.symmetric(vertical: 12, horizontal: 12),
                     ),
                   ),
                   const SizedBox(
@@ -100,30 +102,35 @@ class _LoginScreenState extends State<LoginScreen> {
                   ),
                   TextFormField(
                     controller: tePass,
+                    validator: (value) {
+                      if (value == '' || value!.isEmpty) {
+                        return "This field is required";
+                      }
+                      return null;
+                    },
+                    obscureText: obPass,
                     decoration: InputDecoration(
-                      contentPadding: const EdgeInsets.symmetric(
-                          horizontal: 20, vertical: 10),
-                      labelText: 'Password',
-                      labelStyle: const TextStyle(
-                        color: Colors.grey,
+                      labelText: "Password",
+                      hintText: "Password",
+                      hintStyle: TextStyle(
                         fontWeight: FontWeight.w600,
+                        fontSize: 14,
                       ),
-                      suffixIcon: const Padding(
-                        padding: EdgeInsets.only(right: 12),
-                        child: Icon(
-                          Icons.visibility_outlined,
-                          color: Color(0xFFD9D9D9),
-                        ),
+                      border: OutlineInputBorder(
+                        borderRadius: BorderRadius.all(Radius.circular(10)),
                       ),
-                      enabledBorder: OutlineInputBorder(
-                        borderRadius: BorderRadius.circular(10),
-                        borderSide: const BorderSide(
-                          color: Color(0xFFD9D9D9),
-                        ),
-                      ),
-                      focusedBorder: const OutlineInputBorder(
-                        borderSide: BorderSide(
-                          color: Color(0xFFD9D9D9),
+                      contentPadding:
+                          EdgeInsets.symmetric(vertical: 12, horizontal: 12),
+                      suffixIcon: IconButton(
+                        onPressed: () {
+                          setState(() {
+                            obPass = !obPass;
+                          });
+                        },
+                        icon: Icon(
+                          obPass
+                              ? Icons.visibility_outlined
+                              : Icons.visibility_off_outlined,
                         ),
                       ),
                     ),
@@ -153,10 +160,14 @@ class _LoginScreenState extends State<LoginScreen> {
                   ),
                   ElevatedButton(
                     onPressed: () async {
-                      showDialog(
-                        context: context,
-                        builder: (BuildContext context) {
-                          return AlertDialog(
+                      Login login =
+                          Login(key: teEmail.text, password: tePass.text);
+                      var response = provider.login(login);
+                      if (provider.state == LoginState.loading) {
+                        showDialog(
+                          context: context,
+                          builder: (BuildContext context) {
+                            return AlertDialog(
                               elevation: 0.0,
                               shape: RoundedRectangleBorder(
                                   borderRadius:
@@ -165,30 +176,39 @@ class _LoginScreenState extends State<LoginScreen> {
                               content: Container(
                                 height: 250,
                                 child: Column(
-                                    mainAxisAlignment: MainAxisAlignment.center,
-                                    crossAxisAlignment:
-                                        CrossAxisAlignment.center,
-                                    children: [
-                                      Lottie.asset('assets/loading.json'),
-                                      Text(
-                                        'Please wait...',
-                                        style: body1.copyWith(
-                                            fontWeight: FontWeight.bold,
-                                            color: Colors.black),
+                                  mainAxisAlignment: MainAxisAlignment.center,
+                                  crossAxisAlignment: CrossAxisAlignment.center,
+                                  children: [
+                                    Lottie.asset('assets/loading.json'),
+                                    Text(
+                                      'Please wait...',
+                                      style: body1.copyWith(
+                                        fontWeight: FontWeight.bold,
+                                        color: Colors.black,
                                       ),
-                                    ]),
-                              ));
-                        },
-                      );
-                      Login login =
-                          Login(key: teEmail.text, password: tePass.text);
-                      var response = provider.login(login);
+                                    ),
+                                  ],
+                                ),
+                              ),
+                            );
+                          },
+                        );
+                      }
                       await response.whenComplete(() async {
-                        await response.then((value) {
-                          print(value.toString());
-                          if (value) {
+                        await response.then((value) async {
+                          print(
+                              "Login Status :" + provider.isSuccess.toString());
+                          if (provider.isSuccess) {
                             Navigator.pushNamedAndRemoveUntil(
                                 context, home, (route) => false);
+                          } else {
+                            Navigator.pop(context);
+                            ScaffoldMessenger.of(context).showSnackBar(
+                              const SnackBar(
+                                content: Text(
+                                    'Username / Email or Password is Wrong'),
+                              ),
+                            );
                           }
                         });
                       });
@@ -225,15 +245,15 @@ class _LoginScreenState extends State<LoginScreen> {
                     crossAxisAlignment: CrossAxisAlignment.center,
                     mainAxisAlignment: MainAxisAlignment.center,
                     children: const [
-                      IconButton(icon: 'assets/Google.png'),
+                      ButtonIcon(icon: 'assets/Google.png'),
                       SizedBox(
                         width: 24,
                       ),
-                      IconButton(icon: 'assets/Facebook.png'),
+                      ButtonIcon(icon: 'assets/Facebook.png'),
                       SizedBox(
                         width: 24,
                       ),
-                      IconButton(icon: 'assets/Twitter.png'),
+                      ButtonIcon(icon: 'assets/Twitter.png'),
                     ],
                   ),
                   const SizedBox(
@@ -258,63 +278,7 @@ class _LoginScreenState extends State<LoginScreen> {
                             ),
                             recognizer: TapGestureRecognizer()
                               ..onTap = () {
-                                showDialog(
-                                  context: context,
-                                  builder: (BuildContext context) {
-                                    return AlertDialog(
-                                      actionsPadding: EdgeInsets.only(
-                                          left: 30, right: 30, bottom: 20),
-                                      elevation: 0.0,
-                                      shape: RoundedRectangleBorder(
-                                        borderRadius: BorderRadius.all(
-                                          Radius.circular(20),
-                                        ),
-                                      ),
-                                      backgroundColor: Color(0xffffffff),
-                                      title: const Text(
-                                        'Confirmation',
-                                        textAlign: TextAlign.center,
-                                        style: TextStyle(
-                                            color: Colors.black,
-                                            fontSize: 20,
-                                            fontWeight: FontWeight.bold),
-                                      ),
-                                      content: Container(
-                                        height: 60,
-                                        child: Text(
-                                          'Are you sure want to register with credentials that you filled in the register column?',
-                                          textAlign: TextAlign.justify,
-                                        ),
-                                      ),
-                                      actions: [
-                                        Row(
-                                          mainAxisAlignment:
-                                              MainAxisAlignment.spaceBetween,
-                                          children: [
-                                            ElevatedButton(
-                                              style: ElevatedButton.styleFrom(
-                                                foregroundColor:
-                                                    Color(0xff178066),
-                                                backgroundColor: Colors.white,
-                                              ),
-                                              onPressed: (() {
-                                                Navigator.pop(context);
-                                              }),
-                                              child: Text('No, I don\'t'),
-                                            ),
-                                            ElevatedButton(
-                                              onPressed: (() {
-                                                Navigator.pushNamed(
-                                                    context, register);
-                                              }),
-                                              child: Text('Yes, I am'),
-                                            )
-                                          ],
-                                        )
-                                      ],
-                                    );
-                                  },
-                                );
+                                Navigator.pushNamed(context, register);
                               },
                           ),
                         ],
@@ -354,8 +318,8 @@ class _LoginScreenState extends State<LoginScreen> {
   }
 }
 
-class IconButton extends StatelessWidget {
-  const IconButton({
+class ButtonIcon extends StatelessWidget {
+  const ButtonIcon({
     Key? key,
     required this.icon,
   }) : super(key: key);

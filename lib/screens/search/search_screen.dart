@@ -356,8 +356,8 @@ class _SearchScreenState extends State<SearchScreen> {
   }
 
   Widget threadsWidget(BuildContext context) {
-    var threads =
-        Provider.of<SearchThreadViewModel>(context, listen: false).thread;
+    var provider = Provider.of<SearchThreadViewModel>(context, listen: false);
+    var threads = provider.thread;
     return threads.length > 0
         ? Column(
             children: [
@@ -473,40 +473,76 @@ class _SearchScreenState extends State<SearchScreen> {
                             Row(
                               children: [
                                 Container(
-                                  child: GestureDetector(
-                                    child: Row(children: [
-                                      ImageIcon(
-                                        AssetImage('assets/icon_like1.png'),
-                                        color: AppColors.kcLightestBlack,
-                                      ),
-                                      SizedBox(
-                                        width: 8,
-                                      ),
-                                      BoxText.captionSemi(
-                                        threads[index].totalLike.toString(),
-                                        color: AppColors.kcLightestBlack,
-                                      )
-                                    ]),
-                                  ),
+                                  child: threads[index].isLiked!
+                                      ? GestureDetector(
+                                          onTap: () {
+                                            provider.unlikeThread(
+                                                index, "thread");
+                                            // provider.getBookmark();
+                                          },
+                                          child: Row(children: [
+                                            ImageIcon(
+                                              AssetImage(
+                                                  'assets/icon_like2.png'),
+                                              color: AppColors.kcInfoColor,
+                                            ),
+                                            SizedBox(
+                                              width: 8,
+                                            ),
+                                            BoxText.captionSemi(
+                                              threads[index]
+                                                  .totalLike
+                                                  .toString(),
+                                              color: AppColors.kcInfoColor,
+                                            )
+                                          ]),
+                                        )
+                                      : GestureDetector(
+                                          onTap: () {
+                                            provider.likeThread(
+                                                index, "thread");
+                                            // provider.getBookmark();
+                                          },
+                                          child: Row(children: [
+                                            ImageIcon(
+                                              AssetImage(
+                                                  'assets/icon_like1.png'),
+                                              color: AppColors.kcLightestBlack,
+                                            ),
+                                            SizedBox(
+                                              width: 8,
+                                            ),
+                                            BoxText.captionSemi(
+                                              threads[index]
+                                                  .totalLike
+                                                  .toString(),
+                                              color: AppColors.kcLightestBlack,
+                                            )
+                                          ]),
+                                        ),
                                 ),
                                 SizedBox(
                                   width: 12,
                                 ),
                                 Container(
                                   child: GestureDetector(
-                                    child: Row(children: [
-                                      ImageIcon(
-                                        AssetImage('assets/icon_comment.png'),
-                                        color: AppColors.kcLightestBlack,
-                                      ),
-                                      SizedBox(
-                                        width: 8,
-                                      ),
-                                      BoxText.captionSemi(
-                                        threads[index].totalComment.toString(),
-                                        color: AppColors.kcLightestBlack,
-                                      )
-                                    ]),
+                                    child: Row(
+                                      children: [
+                                        ImageIcon(
+                                          AssetImage('assets/icon_comment.png'),
+                                          color: AppColors.kcLightestBlack,
+                                        ),
+                                        SizedBox(
+                                          width: 8,
+                                        ),
+                                        BoxText.captionSemi(
+                                          threads[index]
+                                              .totalComment
+                                              .toString(),
+                                          color: AppColors.kcLightestBlack,
+                                        )
+                                      ],
+                                    ),
                                   ),
                                 ),
                               ],
@@ -648,8 +684,8 @@ class _SearchScreenState extends State<SearchScreen> {
   }
 
   Widget popularWidget(BuildContext context) {
-    var threads =
-        Provider.of<SearchThreadViewModel>(context, listen: false).popular;
+    var provider = Provider.of<SearchThreadViewModel>(context, listen: false);
+    var threads = provider.popular;
     return threads.length > 0
         ? Column(
             children: [
@@ -765,21 +801,53 @@ class _SearchScreenState extends State<SearchScreen> {
                             Row(
                               children: [
                                 Container(
-                                  child: GestureDetector(
-                                    child: Row(children: [
-                                      ImageIcon(
-                                        AssetImage('assets/icon_like1.png'),
-                                        color: AppColors.kcLightestBlack,
-                                      ),
-                                      SizedBox(
-                                        width: 8,
-                                      ),
-                                      BoxText.captionSemi(
-                                        threads[index].totalLike.toString(),
-                                        color: AppColors.kcLightestBlack,
-                                      )
-                                    ]),
-                                  ),
+                                  child: threads[index].isLiked!
+                                      ? GestureDetector(
+                                          onTap: () {
+                                            provider.unlikeThread(
+                                                index, "popular");
+                                            // provider.getBookmark();
+                                          },
+                                          child: Row(children: [
+                                            ImageIcon(
+                                              AssetImage(
+                                                  'assets/icon_like2.png'),
+                                              color: AppColors.kcInfoColor,
+                                            ),
+                                            SizedBox(
+                                              width: 8,
+                                            ),
+                                            BoxText.captionSemi(
+                                              threads[index]
+                                                  .totalLike
+                                                  .toString(),
+                                              color: AppColors.kcInfoColor,
+                                            )
+                                          ]),
+                                        )
+                                      : GestureDetector(
+                                          onTap: () {
+                                            provider.likeThread(
+                                                index, "popular");
+                                            // provider.getBookmark();
+                                          },
+                                          child: Row(children: [
+                                            ImageIcon(
+                                              AssetImage(
+                                                  'assets/icon_like1.png'),
+                                              color: AppColors.kcLightestBlack,
+                                            ),
+                                            SizedBox(
+                                              width: 8,
+                                            ),
+                                            BoxText.captionSemi(
+                                              threads[index]
+                                                  .totalLike
+                                                  .toString(),
+                                              color: AppColors.kcLightestBlack,
+                                            )
+                                          ]),
+                                        ),
                                 ),
                                 SizedBox(
                                   width: 12,

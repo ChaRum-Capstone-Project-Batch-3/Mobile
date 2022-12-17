@@ -1,23 +1,18 @@
 // GENERATED CODE - DO NOT MODIFY BY HAND
 
-part of 'get_user_response.dart';
+part of 'base_response.dart';
 
 // **************************************************************************
 // JsonSerializableGenerator
 // **************************************************************************
 
-GetUserResponse _$GetUserResponseFromJson(Map<String, dynamic> json) =>
-    GetUserResponse(
+BaseResponse _$BaseResponseFromJson(Map<String, dynamic> json) => BaseResponse(
       status: json['status'] as int?,
       message: json['message'] as String?,
-      data: json['data'] == null
-          ? null
-          : Data.fromJson(json['data'] as Map<String, dynamic>),
     );
 
-Map<String, dynamic> _$GetUserResponseToJson(GetUserResponse instance) =>
+Map<String, dynamic> _$BaseResponseToJson(BaseResponse instance) =>
     <String, dynamic>{
       'status': instance.status,
       'message': instance.message,
-      'data': instance.data,
     };
