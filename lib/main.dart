@@ -1,5 +1,6 @@
 import 'package:fgd_flutter/providers/bookmark_view_model.dart';
 import 'package:fgd_flutter/providers/search_thread_view_model.dart';
+import 'package:fgd_flutter/providers/thread_detail_view_model.dart';
 import 'package:fgd_flutter/providers/user_view_model.dart';
 import 'package:fgd_flutter/screens/account/account_screen.dart';
 import 'package:fgd_flutter/screens/follow_account/follow_account_screen.dart';
@@ -32,7 +33,8 @@ void main() {
         ChangeNotifierProvider(create: (context) => RegisterViewModel()),
         ChangeNotifierProvider(create: (context) => SearchThreadViewModel()),
         ChangeNotifierProvider(create: (context) => UserViewModel()),
-        ChangeNotifierProvider(create: (context) => BookmarkViewModel())
+        ChangeNotifierProvider(create: (context) => BookmarkViewModel()),
+        ChangeNotifierProvider(create: (context) => ThreadDetailViewModel())
       ],
       child: MyApp(),
     ),
@@ -72,7 +74,9 @@ class MyApp extends StatelessWidget {
         primarySwatch: primaryColor,
       ),
       debugShowCheckedModeBanner: false,
-      home: SplashScreen(),
+      home: ThreadDetailScreen(
+        id: "6399791f14ae80f3f0879bcb",
+      ),
     );
   }
 }
