@@ -6,6 +6,7 @@ import 'package:fgd_flutter/models/thread_detail/thread_response.dart';
 import 'package:fgd_flutter/shared/api_utils.dart';
 import 'package:fgd_flutter/shared/local_storage.dart';
 
+
 class ThreadApi extends ApiUtils {
   Future<ThreadResponse?> search(String sort, String order, String topic,
       String title, String token) async {
@@ -76,10 +77,11 @@ class ThreadApi extends ApiUtils {
     return result;
   }
 
-  Future<DetailThreadResponse> detailThread(String id, String token) async {
-    var response = await dio.get('/thread/id/$id',
-        options: Options(headers: {"Authorization": token}));
-    DetailThreadResponse result = DetailThreadResponse.fromJson(response.data);
-    return result;
-  }
+  // Future<GetDetailThreadResponse> detailThread(String id, String token) async {
+  //   var response = await dio.get('/thread/id/$id',
+  //       options: Options(headers: {"Authorization": token}));
+  //   GetDetailThreadResponse result =
+  //       GetDetailThreadResponse.fromJson(response.data);
+  //   return result;
+  // }
 }

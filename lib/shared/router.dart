@@ -7,3 +7,5 @@ const String boarding = '/boarding';
 const String home = "/home";
 const String editAccount = "/edit_account";
 const String account = "/account";
+const String detailThread = "/detailThread";
+const String following = "/following";
