@@ -69,7 +69,6 @@ class _OnBoardingScreenState extends State<OnBoardingScreen> {
                                   child: Image.asset(onBoards[index].image)),
                             ],
                           ),
-                          // SizedBox(height: 20),
                           Text(
                             textAlign: TextAlign.center,
                             onBoards[index].title,
@@ -90,17 +89,14 @@ class _OnBoardingScreenState extends State<OnBoardingScreen> {
                 },
               ),
             ),
-            Container(
-              child: Row(
-                mainAxisAlignment: MainAxisAlignment.center,
-                children: List.generate(
-                  onBoards.length,
-                  (index) => buildPage(index, context),
-                ),
+            Row(
+              mainAxisAlignment: MainAxisAlignment.center,
+              children: List.generate(
+                onBoards.length,
+                (index) => buildPage(index, context),
               ),
             ),
             Container(
-              height: 40,
               width: double.infinity,
               margin: EdgeInsets.only(top: 35, bottom: 24, left: 20, right: 20),
               child: currentIndex == onBoards.length - 1
@@ -122,42 +118,36 @@ class _OnBoardingScreenState extends State<OnBoardingScreen> {
                       children: [
                         Flexible(
                           fit: FlexFit.tight,
-                          child: Container(
-                            height: 40,
-                            child: TextButton(
-                              onPressed: () {
-                                _controller.nextPage(
-                                  duration: Duration(seconds: 1),
-                                  curve: Curves.easeInOut,
-                                );
-                                mPreferences.setBool("hasBoard", true);
-                                Navigator.push(
-                                    context,
-                                    MaterialPageRoute(
-                                        builder: (context) => LoginScreen()));
-                              },
-                              child: Text(
-                                'Skip',
-                                style: body2Semi.copyWith(
-                                  color: primaryColor,
-                                ),
+                          child: TextButton(
+                            onPressed: () {
+                              _controller.nextPage(
+                                duration: Duration(seconds: 1),
+                                curve: Curves.easeInOut,
+                              );
+                              mPreferences.setBool("hasBoard", true);
+                              Navigator.push(
+                                  context,
+                                  MaterialPageRoute(
+                                      builder: (context) => LoginScreen()));
+                            },
+                            child: Text(
+                              'Skip',
+                              style: body2Semi.copyWith(
+                                color: primaryColor,
                               ),
                             ),
                           ),
                         ),
                         Flexible(
                           fit: FlexFit.tight,
-                          child: Container(
-                            height: 40,
-                            child: ElevatedButton(
-                              onPressed: () {
-                                _controller.nextPage(
-                                  duration: Duration(seconds: 1),
-                                  curve: Curves.easeInOut,
-                                );
-                              },
-                              child: Text('Next', style: body2Semi),
-                            ),
+                          child: ElevatedButton(
+                            onPressed: () {
+                              _controller.nextPage(
+                                duration: Duration(seconds: 1),
+                                curve: Curves.easeInOut,
+                              );
+                            },
+                            child: Text('Next', style: body2Semi),
                           ),
                         )
                       ],

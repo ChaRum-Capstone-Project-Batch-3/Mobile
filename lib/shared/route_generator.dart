@@ -9,6 +9,7 @@ import 'package:fgd_flutter/screens/thread_detail/thread_detail_screen.dart';
 import 'package:flutter/material.dart';
 import 'package:fgd_flutter/shared/router.dart';
 
+import '../screens/account/account_screen.dart';
 import '../screens/login/login_screen.dart';
 import '../screens/splash/splash_screen.dart';
 
@@ -46,6 +47,9 @@ class RouteGenerator {
                   id: args,
                 ));
 
+      case account:
+        final args = settings.arguments;
+        return MaterialPageRoute(builder: (context) => AccountScreen());
       default:
         return _errorPage();
     }

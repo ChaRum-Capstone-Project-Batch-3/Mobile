@@ -1,6 +1,16 @@
+import 'dart:convert';
+import 'dart:io';
+import 'dart:typed_data';
+
+import 'package:fgd_flutter/providers/get_user_view_model.dart';
+import 'package:fgd_flutter/providers/update_user_view_model.dart';
 import 'package:fgd_flutter/shared/app_colors.dart';
-import 'package:fgd_flutter/shared/styles.dart';
 import 'package:flutter/material.dart';
+import 'package:image_picker/image_picker.dart';
+import 'package:provider/provider.dart';
+
+import '../../models/account/update_user_model.dart';
+import '../../shared/router.dart';
 
 class EditAccountScreen extends StatefulWidget {
   const EditAccountScreen({super.key});
@@ -11,6 +21,34 @@ class EditAccountScreen extends StatefulWidget {
 
 class _EditAccountScreenState extends State<EditAccountScreen> {
   final colorTitle = AppColors.kcLightBlack;
+  final ImagePicker _picker = ImagePicker();
+  File? image;
+
+  TextEditingController teUsername = TextEditingController();
+  TextEditingController teName = TextEditingController();
+  TextEditingController teBio = TextEditingController();
+  TextEditingController teSosial = TextEditingController();
+
+  @override
+  void initState() {
+    var providerUser = Provider.of<GetUserViewModel>(context, listen: false);
+    providerUser.getUsers();
+    teUsername.text = providerUser.user.userName ?? '';
+    teName.text = providerUser.user.displayName ?? '';
+    teBio.text = providerUser.user.biodata ?? '';
+    teSosial.text = providerUser.user.socialMedia ?? '';
+    super.initState();
+  }
+
+  @override
+  void dispose() {
+    // TODO: implement dispose
+    teUsername.dispose();
+    teName.dispose();
+    teBio.dispose();
+    teSosial.dispose();
+    super.dispose();
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -35,18 +73,49 @@ class _EditAccountScreenState extends State<EditAccountScreen> {
             ),
             Container(
               padding: EdgeInsets.all(14.5),
-              child: Text(
-                'Confirm',
-                style: TextStyle(
-                  fontSize: 20,
-                  fontWeight: FontWeight.bold,
-                  color: AppColors.kcPrimaryColor,
-                ),
+              child: Consumer<UpdateUserViewModel>(
+                builder: (context, provider, child) {
+                  return InkWell(
+                    onTap: () async {
+                      var providerGet =
+                          Provider.of<GetUserViewModel>(context, listen: false);
+                      // Uint8List imagebytes = await image!.readAsBytes();
+                      // String base64string = base64.encode(imagebytes);
+                      UpdateUserModel user = UpdateUserModel(
+                          email: providerGet.user.email,
+                          profilePictureURL: image.toString(),
+                          userName: teUsername.text,
+                          displayName: teName.text,
+                          biodata: teBio.text,
+                          socialMedia: teSosial.text);
+                      var result = provider.updateUsers(user);
+                      await result.whenComplete(() async {
+                        await result.then((value) {
+                          if (value) {
+                            ScaffoldMessenger.of(context).showSnackBar(
+                              const SnackBar(
+                                content: Text('Update Profile Success'),
+                              ),
+                            );
+                            Navigator.pushNamed(context, account);
+                          }
+                        });
+                      });
+                    },
+                    child: Text(
+                      'Confirm',
+                      style: TextStyle(
+                        fontSize: 20,
+                        fontWeight: FontWeight.bold,
+                        color: AppColors.kcPrimaryColor,
+                      ),
+                    ),
+                  );
+                },
               ),
             ),
           ],
         ),
-        actions: [],
       ),
       body: SingleChildScrollView(
         child: Container(
@@ -55,25 +124,54 @@ class _EditAccountScreenState extends State<EditAccountScreen> {
             children: [
               Container(
                 decoration: BoxDecoration(
-                    image: DecorationImage(
-                      image: AssetImage('assets/icon_edit_photo.png'),
-                      fit: BoxFit.cover,
-                    ),
-                    shape: BoxShape.circle,
-                    border: Border.all(
-                      color: Colors.grey,
-                      width: 2,
-                    )),
-                child: Stack(
-                  children: [
-                    Image.asset('assets/account_default.png',
-                        width: 80, height: 80),
-                    Container(
-                      padding: const EdgeInsets.only(top: 50, left: 50),
-                      child: Image.asset('assets/icon_edit_photo.png',
-                          width: 28, height: 28),
-                    ),
-                  ],
+                  shape: BoxShape.circle,
+                  border: Border.all(
+                    color: Colors.grey,
+                    width: 2,
+                  ),
+                ),
+                child: Consumer<GetUserViewModel>(
+                  builder: (context, provider, child) {
+                    return Stack(
+                      children: [
+                        image != null
+                            ? Container(
+                                width: 100,
+                                height: 100,
+                                child: CircleAvatar(
+                                  backgroundImage: FileImage(
+                                    image!,
+                                  ),
+                                ),
+                              )
+                            : Container(
+                                height: 100,
+                                width: 100,
+                                child: provider.user.profilePictureURL != null
+                                    ? CircleAvatar(
+                                        backgroundImage: NetworkImage(provider
+                                            .user.profilePictureURL
+                                            .toString()),
+                                      )
+                                    : CircleAvatar(
+                                        backgroundImage: AssetImage(
+                                            'assets/account_default.png'),
+                                      ),
+                              ),
+                        Positioned.fill(
+                            child: Align(
+                          alignment: Alignment.bottomRight,
+                          child: GestureDetector(
+                            onTap: () {
+                              getImage();
+                            },
+                            child: Image.asset('assets/icon_edit_photo.png',
+                                width: 28, height: 28),
+                          ),
+                        )),
+                      ],
+                    );
+                  },
                 ),
               ),
               SizedBox(
@@ -88,6 +186,7 @@ class _EditAccountScreenState extends State<EditAccountScreen> {
               ),
               TextField(
                 obscureText: false,
+                controller: teUsername,
               ),
               SizedBox(
                 height: 30,
@@ -101,6 +200,7 @@ class _EditAccountScreenState extends State<EditAccountScreen> {
               ),
               TextField(
                 obscureText: false,
+                controller: teName,
               ),
               SizedBox(
                 height: 30,
@@ -113,6 +213,7 @@ class _EditAccountScreenState extends State<EditAccountScreen> {
                 ),
               ),
               TextField(
+                controller: teBio,
                 maxLines: 5,
                 obscureText: false,
               ),
@@ -127,6 +228,7 @@ class _EditAccountScreenState extends State<EditAccountScreen> {
                 ),
               ),
               TextField(
+                controller: teSosial,
                 obscureText: false,
               ),
               SizedBox(
@@ -137,5 +239,14 @@ class _EditAccountScreenState extends State<EditAccountScreen> {
         ),
       ),
     );
+  }
+
+  void getImage() async {
+    final pickedFile = await _picker.pickImage(source: ImageSource.gallery);
+    setState(() {
+      if (pickedFile != null) {
+        image = File(pickedFile.path);
+      }
+    });
   }
 }
