@@ -1,11 +1,13 @@
+import 'package:fgd_flutter/models/bookmark/bookmark_response.dart';
 import 'package:fgd_flutter/providers/search_thread_view_model.dart';
 import 'package:fgd_flutter/screens/search/widget/recent_search.dart';
+import 'package:fgd_flutter/screens/thread_detail/widgets/comment_screen.dart';
 import 'package:fgd_flutter/state/search_thread_state.dart';
 import 'package:flutter/material.dart';
 import 'package:fgd_flutter/shared/charum_ui.dart';
-import 'package:intl/intl.dart';
 import 'package:provider/provider.dart';
 import 'package:shimmer/shimmer.dart';
+import 'package:fgd_flutter/shared/helper.dart';
 
 class SearchScreen extends StatefulWidget {
   const SearchScreen({super.key});
@@ -526,6 +528,24 @@ class _SearchScreenState extends State<SearchScreen> {
                                 ),
                                 Container(
                                   child: GestureDetector(
+                                    onTap: () {
+                                      showModalBottomSheet(
+                                          isScrollControlled: true,
+                                          context: context,
+                                          backgroundColor: Colors.transparent,
+                                          shape: RoundedRectangleBorder(
+                                            borderRadius: BorderRadius.only(
+                                              topLeft: Radius.circular(30),
+                                              topRight: Radius.circular(30),
+                                            ),
+                                          ),
+                                          builder: (context) {
+                                            return CommentScreen(
+                                              threadId:
+                                                  threads[index].sId ?? "",
+                                            );
+                                          });
+                                    },
                                     child: Row(
                                       children: [
                                         ImageIcon(
@@ -854,6 +874,24 @@ class _SearchScreenState extends State<SearchScreen> {
                                 ),
                                 Container(
                                   child: GestureDetector(
+                                    onTap: () {
+                                      showModalBottomSheet(
+                                          isScrollControlled: true,
+                                          context: context,
+                                          backgroundColor: Colors.transparent,
+                                          shape: RoundedRectangleBorder(
+                                            borderRadius: BorderRadius.only(
+                                              topLeft: Radius.circular(30),
+                                              topRight: Radius.circular(30),
+                                            ),
+                                          ),
+                                          builder: (context) {
+                                            return CommentScreen(
+                                              threadId:
+                                                  threads[index].sId ?? "",
+                                            );
+                                          });
+                                    },
                                     child: Row(
                                       children: [
                                         ImageIcon(
@@ -906,25 +944,21 @@ class _SearchScreenState extends State<SearchScreen> {
     );
   }
 
-  String between(DateTime from, DateTime to) {
-    String diff = "";
-    from = DateTime(
-        from.year, from.month, from.day, from.hour, from.minute, from.second);
-    to = DateTime(to.year, to.month, to.day, to.hour, to.minute, to.second);
-    if (to.difference(from).inDays > 0 && to.difference(from).inDays <= 3) {
-      diff = to.difference(from).inDays.toString() + "d ago";
-    } else if (to.difference(from).inHours > 0 &&
-        to.difference(from).inHours <= 60) {
-      diff = to.difference(from).inHours.toString() + "h ago";
-    } else if (to.difference(from).inMinutes > 0 &&
-        to.difference(from).inMinutes <= 60) {
-      diff = to.difference(from).inMinutes.toString() + "m ago";
-    } else if (to.difference(from).inSeconds > 0 &&
-        to.difference(from).inSeconds <= 60) {
-      diff = to.difference(from).inSeconds.toString() + "s ago";
-    } else {
-      diff = DateFormat('MMMM d, yyyy').format(from);
-    }
-    return diff;
+  void comment(Thread thread) {
+    showModalBottomSheet(
+        isScrollControlled: true,
+        context: context,
+        backgroundColor: Colors.transparent,
+        shape: RoundedRectangleBorder(
+          borderRadius: BorderRadius.only(
+            topLeft: Radius.circular(30),
+            topRight: Radius.circular(30),
+          ),
+        ),
+        builder: (context) {
+          return CommentScreen(
+            threadId: thread.sId ?? "",
+          );
+        });
   }
 }

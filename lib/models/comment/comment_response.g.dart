@@ -1,14 +1,13 @@
 // GENERATED CODE - DO NOT MODIFY BY HAND
 
-part of 'get_thread_detail_response.dart';
+part of 'comment_response.dart';
 
 // **************************************************************************
 // JsonSerializableGenerator
 // **************************************************************************
 
-GetThreadDetailResponse _$GetThreadDetailResponseFromJson(
-        Map<String, dynamic> json) =>
-    GetThreadDetailResponse(
+CommentReponse _$CommentReponseFromJson(Map<String, dynamic> json) =>
+    CommentReponse(
       status: json['status'] as int?,
       message: json['message'] as String?,
       data: json['data'] == null
@@ -16,8 +15,7 @@ GetThreadDetailResponse _$GetThreadDetailResponseFromJson(
           : Data.fromJson(json['data'] as Map<String, dynamic>),
     );
 
-Map<String, dynamic> _$GetThreadDetailResponseToJson(
-        GetThreadDetailResponse instance) =>
+Map<String, dynamic> _$CommentReponseToJson(CommentReponse instance) =>
     <String, dynamic>{
       'status': instance.status,
       'message': instance.message,
