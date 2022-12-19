@@ -8,3 +8,4 @@ const String home = "/home";
 const String editAccount = "/edit_account";
 const String detailThread = "/thread_detail";
 const String account = "/account";
+const String following = "/following";

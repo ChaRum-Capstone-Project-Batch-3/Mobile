@@ -81,9 +81,10 @@ class _EditAccountScreenState extends State<EditAccountScreen> {
                           Provider.of<GetUserViewModel>(context, listen: false);
                       // Uint8List imagebytes = await image!.readAsBytes();
                       // String base64string = base64.encode(imagebytes);
+                      // var imageFix = image!.split('/').last;
                       UpdateUserModel user = UpdateUserModel(
                           email: providerGet.user.email,
-                          profilePictureURL: image.toString(),
+                          profilePictureURL: image!.path.toString(),
                           userName: teUsername.text,
                           displayName: teName.text,
                           biodata: teBio.text,
@@ -97,7 +98,7 @@ class _EditAccountScreenState extends State<EditAccountScreen> {
                                 content: Text('Update Profile Success'),
                               ),
                             );
-                            Navigator.pushNamed(context, account);
+                            Navigator.pop(context);
                           }
                         });
                       });
