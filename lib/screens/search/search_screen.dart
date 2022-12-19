@@ -43,6 +43,7 @@ class _SearchScreenState extends State<SearchScreen> {
         child: Scaffold(
           backgroundColor: AppColors.kcBaseWhite,
           appBar: AppBar(
+            toolbarHeight: 60,
             backgroundColor: AppColors.kcBaseWhite,
             foregroundColor: AppColors.kcBaseBlack,
             elevation: 0,
@@ -392,8 +393,10 @@ class _SearchScreenState extends State<SearchScreen> {
                                   child: Row(
                                     children: [
                                       CircleAvatar(
-                                        backgroundColor:
-                                            AppColors.kcPrimaryColor,
+                                        backgroundImage: NetworkImage(
+                                            threads[index]
+                                                .creator!
+                                                .profilePictureURL!),
                                       ),
                                       Container(
                                         margin: spacing8Left,
@@ -720,8 +723,10 @@ class _SearchScreenState extends State<SearchScreen> {
                                   child: Row(
                                     children: [
                                       CircleAvatar(
-                                        backgroundColor:
-                                            AppColors.kcPrimaryColor,
+                                        backgroundImage: NetworkImage(
+                                            threads[index]
+                                                .creator!
+                                                .profilePictureURL!),
                                       ),
                                       Container(
                                         margin: spacing8Left,
