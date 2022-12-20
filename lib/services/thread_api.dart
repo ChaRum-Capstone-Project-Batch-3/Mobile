@@ -2,7 +2,7 @@ import 'dart:io';
 
 import 'package:dio/dio.dart';
 import 'package:fgd_flutter/models/base_response.dart';
-import 'package:fgd_flutter/models/comment/comment.dart';
+import 'package:fgd_flutter/models/comment/comment_model.dart';
 import 'package:fgd_flutter/models/thread_detail/get_thread_detail_response.dart';
 import 'package:fgd_flutter/models/thread_detail/thread_response.dart';
 import 'package:fgd_flutter/models/thread_detail/thread_response.dart';
@@ -102,7 +102,7 @@ class ThreadApi extends ApiUtils {
   }
 
   Future<BaseResponse> addComment(
-      String threadId, Comment comment, String token) async {
+      String threadId, CommentModel comment, String token) async {
     var response = await dio.post('/thread/comment/$threadId',
         data: comment.toJson(),
         options: Options(headers: {"Authorization": token}));

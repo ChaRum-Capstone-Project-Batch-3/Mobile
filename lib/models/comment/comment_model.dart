@@ -1,15 +1,15 @@
 import 'package:json_annotation/json_annotation.dart';
 
-part 'comment.g.dart';
+part 'comment_model.g.dart';
 
 @JsonSerializable()
-class Comment {
+class CommentModel {
   String? parentID;
   String? comment;
 
-  Comment({this.parentID, this.comment});
+  CommentModel({this.parentID, this.comment});
 
-  Comment.fromJson(Map<String, dynamic> json) {
+  CommentModel.fromJson(Map<String, dynamic> json) {
     parentID = json['parentID'];
     comment = json['comment'];
   }

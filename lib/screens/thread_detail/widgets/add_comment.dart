@@ -38,18 +38,17 @@ class _AddCommentState extends State<AddComment>
       child: Container(
         decoration:
             BoxDecoration(border: Border.all(color: const Color(0xffe3e3e3))),
-        padding:
-            const EdgeInsets.only(left: 15, right: 15, top: 12, bottom: 12),
-        height: provider.reply.sId == null
-            ? MediaQuery.of(context).size.height * 0.095
-            : MediaQuery.of(context).size.height * 0.15,
+        padding: const EdgeInsets.only(left: 15, right: 15),
+        // height: provider.reply.sId == null
+        //     ? MediaQuery.of(context).size.height * 0.11
+        //     : MediaQuery.of(context).size.height * 0.19,
         width: 360,
         child: Column(children: [
           if (provider.reply.sId == null)
             Container()
           else
             Container(
-              padding: EdgeInsets.zero,
+              padding: spacing8Top,
               margin: EdgeInsets.zero,
               child: Row(
                 crossAxisAlignment: CrossAxisAlignment.center,
@@ -66,40 +65,39 @@ class _AddCommentState extends State<AddComment>
                 ],
               ),
             ),
-          Row(
-            mainAxisAlignment: MainAxisAlignment.spaceBetween,
-            crossAxisAlignment: CrossAxisAlignment.start,
-            children: [
-              Container(
-                margin: const EdgeInsets.only(right: 10),
-                child: const CircleAvatar(),
-              ),
-              SizedBox(
-                width: MediaQuery.of(context).size.width * 0.7,
-                height: 60,
-                child: TextFormField(
-                  controller: provider.teComment,
-                  decoration: InputDecoration(
-                    contentPadding: spacing16Horizontal,
-                    filled: true,
-                    fillColor: const Color.fromARGB(255, 232, 230, 230),
-                    hintText: "Add comment...",
-                    border: OutlineInputBorder(
-                        borderSide: const BorderSide(width: 1),
-                        borderRadius: BorderRadius.circular(25.0)),
+          Container(
+            padding: spacing8Vertical,
+            child: Row(
+              mainAxisAlignment: MainAxisAlignment.spaceBetween,
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                SizedBox(
+                  width: MediaQuery.of(context).size.width * 0.8,
+                  height: 60,
+                  child: TextFormField(
+                    controller: provider.teComment,
+                    decoration: InputDecoration(
+                      contentPadding: spacing16Horizontal,
+                      filled: true,
+                      fillColor: const Color.fromARGB(255, 232, 230, 230),
+                      hintText: "Add comment...",
+                      border: OutlineInputBorder(
+                          borderSide: const BorderSide(width: 1),
+                          borderRadius: BorderRadius.circular(25.0)),
+                    ),
                   ),
                 ),
-              ),
-              GestureDetector(
-                  onTap: () {
-                    provider.addComment(provider.thread.sId ?? "");
-                  },
-                  child: Container(
-                    margin: const EdgeInsets.only(left: 3, top: 10),
-                    child: Image.asset('assets/icon_send.jpeg',
-                        height: 24, width: 24),
-                  ))
-            ],
+                GestureDetector(
+                    onTap: () {
+                      provider.addComment(provider.thread.sId ?? "");
+                    },
+                    child: Container(
+                      margin: const EdgeInsets.only(left: 3, top: 10),
+                      child: Image.asset('assets/icon_send.jpeg',
+                          height: 24, width: 24),
+                    ))
+              ],
+            ),
           )
         ]),
       ),
