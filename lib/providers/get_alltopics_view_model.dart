@@ -6,6 +6,7 @@ import 'package:fgd_flutter/services/get_alltopics_api.dart';
 import 'package:fgd_flutter/services/thread_api.dart';
 
 import 'package:fgd_flutter/shared/local_storage.dart';
+import 'package:fgd_flutter/state/space_state.dart';
 import 'package:flutter/cupertino.dart';
 
 class AllTopicsViewModel with ChangeNotifier {
@@ -16,6 +17,12 @@ class AllTopicsViewModel with ChangeNotifier {
   DetailTopic get topic => _topic;
   List<Threads> _threads = [];
   List<Threads> get threads => _threads;
+  SpaceState _state = SpaceState.loaded;
+  SpaceState get state => _state;
+
+  changeState(SpaceState f) {
+    this._state = f;
+  }
 
   searchTopic(String topic) async {
     var token = mPrefenreces.getString("token");
@@ -39,14 +46,21 @@ class AllTopicsViewModel with ChangeNotifier {
     String topic,
     String title,
   ) async {
-    var token = mPrefenreces.getString("token");
+    changeState(SpaceState.loading);
     try {
+      var token = mPrefenreces.getString("token");
       await token.whenComplete(() async {
         await token.then((value) async {
           var result = GetTopicsApi().topics(sort, order, topic, title, value);
           await result.whenComplete(() async {
             await result.then((value) {
-              this._topics = value!.data!.topics ?? [];
+              if (value?.status == 200) {
+                // this._bookmarks = val.data!.bookmarks ?? [];
+                this._topics = value!.data!.topics ?? [];
+                changeState(SpaceState.loaded);
+              } else {
+                changeState(SpaceState.error);
+              }
             });
           });
         });

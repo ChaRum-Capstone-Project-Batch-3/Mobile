@@ -41,11 +41,11 @@ class RouteGenerator {
       case editAccount:
         final args = settings.arguments;
         return MaterialPageRoute(builder: (context) => EditAccountScreen());
-      case detailSpace:
-        final args = settings.arguments as String;
-        return MaterialPageRoute(
-          builder: (context) => DetailSpace(topicId: args),
-        );
+      // case detailSpace:
+      //   final args = settings.arguments as String;
+      //   return MaterialPageRoute(
+      //     builder: (context) => DetailSpace(topicId: args),
+      //   );
       default:
         return _errorPage();
     }
