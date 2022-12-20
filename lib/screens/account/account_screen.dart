@@ -1,11 +1,14 @@
-import 'package:fgd_flutter/screens/edit_account/edit_account_screen.dart';
+import 'package:fgd_flutter/models/account/get_thread_user_response.dart';
 import 'package:fgd_flutter/shared/charum_ui.dart';
 import 'package:fgd_flutter/shared/router.dart';
-import 'package:fgd_flutter/shared/styles.dart';
 import 'package:flutter/material.dart';
+import 'package:intl/intl.dart';
 import 'package:provider/provider.dart';
+import 'package:shimmer/shimmer.dart';
 
+import '../../providers/get_thread_user_view_model.dart';
 import '../../providers/get_user_view_model.dart';
+import '../../state/user_state.dart';
 
 class AccountScreen extends StatefulWidget {
   const AccountScreen({super.key});
@@ -15,15 +18,22 @@ class AccountScreen extends StatefulWidget {
 }
 
 class _AccountScreenState extends State<AccountScreen> {
-  bool actionLike = true;
-  bool actionFollow = true;
   final primaryColor = AppColors.kcPrimaryColor;
   final whiteColor = AppColors.kcBaseWhite;
 
   @override
-  void initState() {
+  void didChangeDependencies() {
+    Provider.of<GetThreadUserViewModel>(context, listen: false).getThreads();
     Provider.of<GetUserViewModel>(context, listen: false).getUsers();
-    // TODO: implement initState
+    // TODO: implement didChangeDependencies
+    super.didChangeDependencies();
+  }
+
+  @override
+  void initState() {
+    Provider.of<GetThreadUserViewModel>(context, listen: false)
+        .initialThreads();
+    Provider.of<GetUserViewModel>(context, listen: false).getUsers();
     super.initState();
   }
 
@@ -34,6 +44,7 @@ class _AccountScreenState extends State<AccountScreen> {
           length: 2,
           child: Scaffold(
             appBar: AppBar(
+              toolbarHeight: 90,
               backgroundColor: Colors.white,
               title: Text(
                 'Account',
@@ -64,13 +75,26 @@ class _AccountScreenState extends State<AccountScreen> {
                     SizedBox(
                       height: 15,
                     ),
-                    Container(
-                      height: 72,
-                      width: 72,
-                      child: Image.network(
-                        provider.user.profilePictureURL ??
-                            'assets/account_default.png',
-                      ),
+                    Stack(
+                      children: [
+                        Align(
+                          alignment: Alignment.center,
+                          child: Container(
+                              height: 100,
+                              width: 100,
+                              child: provider.user.profilePictureURL != null
+                                  ? CircleAvatar(
+                                      backgroundImage: NetworkImage(
+                                        provider.user.profilePictureURL
+                                            .toString(),
+                                      ),
+                                    )
+                                  : CircleAvatar(
+                                      backgroundImage: AssetImage(
+                                          'assets/account_default.png'),
+                                    )),
+                        ),
+                      ],
                     ),
                     SizedBox(
                       height: 20,
@@ -100,9 +124,6 @@ class _AccountScreenState extends State<AccountScreen> {
                           child: ElevatedButton(
                               onPressed: () {
                                 Navigator.pushNamed(context, editAccount);
-                                setState(() {
-                                  actionFollow = !actionFollow;
-                                });
                               },
                               child: Container(
                                 margin: EdgeInsets.only(left: 34, right: 34),
@@ -186,15 +207,14 @@ class _AccountScreenState extends State<AccountScreen> {
             ),
             body: TabBarView(
               children: [
-                SingleChildScrollView(
-                  child: Column(
-                    crossAxisAlignment: CrossAxisAlignment.stretch,
-                    mainAxisAlignment: MainAxisAlignment.center,
-                    mainAxisSize: MainAxisSize.min,
-                    children: [
-                      _buildPostThread(),
-                      _buildPostThread(),
-                    ],
+                Container(
+                  color: AppColors.kcDarkWhite,
+                  child: SingleChildScrollView(
+                    child: Consumer<GetThreadUserViewModel>(
+                      builder: (context, provider, child) {
+                        return body(provider);
+                      },
+                    ),
                   ),
                 ),
                 Container(
@@ -226,147 +246,576 @@ class _AccountScreenState extends State<AccountScreen> {
     });
   }
 
-  Row _buildProfile() {
+  Widget _buildProfile() {
+    return GestureDetector(
+      onTap: () {
+        Navigator.pushNamed(context, following);
+      },
+      child: Row(
+        mainAxisAlignment: MainAxisAlignment.center,
+        crossAxisAlignment: CrossAxisAlignment.center,
+        children: [
+          Column(
+            children: [
+              Text(
+                '1',
+                style: buttonSemi,
+              ),
+              Text('Thread'),
+            ],
+          ),
+          SizedBox(
+            width: 50,
+          ),
+          Column(
+            children: [
+              Text('500', style: buttonSemi),
+              Text('Following'),
+            ],
+          ),
+          SizedBox(
+            width: 50,
+          ),
+          Column(
+            children: [
+              Text(
+                '44',
+                style: buttonSemi,
+              ),
+              Text('Followers'),
+            ],
+          ),
+        ],
+      ),
+    );
+  }
+
+  Widget body(GetThreadUserViewModel provider) {
+    switch (provider.state) {
+      case UserState.loaded:
+        return SingleChildScrollView(
+          padding: EdgeInsets.only(bottom: 10),
+          child: Container(
+            color: AppColors.kcDarkWhite,
+            child: provider.threads.length > 0
+                ? Column(
+                    crossAxisAlignment: CrossAxisAlignment.stretch,
+                    mainAxisSize: MainAxisSize.min,
+                    children: [
+                      // Expanded(
+                      ListView.builder(
+                        scrollDirection: Axis.vertical,
+                        shrinkWrap: true,
+                        itemCount: provider.threads.length,
+                        itemBuilder: (context, index) {
+                          return GestureDetector(
+                              onTap: () {
+                                Navigator.pushNamed(context, detailThread,
+                                    arguments: provider.threads[index].sId);
+                              },
+                              child: _buildPostThread(index));
+                        },
+                      ),
+                      // )
+                    ],
+                  )
+                : Center(
+                    child: Container(
+                      margin: EdgeInsets.all(100),
+                      child: Column(
+                        mainAxisAlignment: MainAxisAlignment.center,
+                        children: [
+                          Image.asset('assets/not_found.png'),
+                          Text(
+                            "We can’t find any what you search.",
+                            style: subtitle1Semi.copyWith(
+                              color: AppColors.kcLightestBlack,
+                            ),
+                          ),
+                        ],
+                      ),
+                    ),
+                  ),
+          ),
+        );
+      case UserState.loading:
+        return loadingThread();
+    }
+    return Center();
+  }
+
+  Container _buildPostThread(int index) {
+    var provider = Provider.of<GetThreadUserViewModel>(context, listen: false);
+    var thread = provider.threads[index];
+    return Container(
+      color: Color(0xffeeeeee),
+      padding: EdgeInsets.only(top: 10, bottom: 10, left: 16, right: 16),
+      child: Container(
+        padding: spacing16All,
+        decoration: BoxDecoration(
+            color: Colors.white, borderRadius: BorderRadius.circular(10)),
+        child: Column(
+          crossAxisAlignment: CrossAxisAlignment.start,
+          children: [
+            _buildProfileThread(index),
+            Container(
+              margin: spacing16Top,
+              padding: EdgeInsets.only(top: 5, bottom: 5, left: 12, right: 12),
+              decoration: BoxDecoration(
+                color: AppColors.kcDarkerWhite,
+                borderRadius: BorderRadius.all(Radius.circular(50)),
+              ),
+              child: BoxText.caption(
+                thread.topic!.topic ?? '',
+                color: AppColors.kcLighterBlack,
+              ),
+            ),
+            _buildThread(index),
+          ],
+        ),
+      ),
+    );
+  }
+
+  Row _buildProfileThread(int index) {
+    var provider = Provider.of<GetThreadUserViewModel>(context, listen: false);
+    var thread = provider.threads[index];
+    final date = DateTime.parse(thread.createdAt!).toLocal();
+    final now = DateTime.now();
+    final diff = between(date, now);
     return Row(
-      mainAxisAlignment: MainAxisAlignment.center,
-      crossAxisAlignment: CrossAxisAlignment.center,
+      mainAxisAlignment: MainAxisAlignment.spaceBetween,
       children: [
-        Column(
-          children: [
-            Text(
-              '1',
-              style: buttonSemi,
-            ),
-            Text('Thread'),
-          ],
+        Container(
+          child: Row(
+            children: [
+              CircleAvatar(
+                backgroundImage:
+                    NetworkImage(thread.creator!.profilePictureURL!),
+              ),
+              Container(
+                margin: spacing8Left,
+                child: Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
+                    BoxText.captionSemi(thread.creator!.displayName!),
+                    BoxText.body3(
+                      diff.toString(),
+                      color: AppColors.kcLightestBlack,
+                    )
+                  ],
+                ),
+              ),
+            ],
+          ),
         ),
-        SizedBox(
-          width: 50,
-        ),
-        Column(
-          children: [
-            Text('500', style: buttonSemi),
-            Text('Following'),
-          ],
-        ),
-        SizedBox(
-          width: 50,
-        ),
-        Column(
-          children: [
-            Text(
-              '44',
-              style: buttonSemi,
-            ),
-            Text('Followers'),
-          ],
+        Container(
+          child: GestureDetector(
+            child: ImageIcon(AssetImage('assets/icon_more.png')),
+            onTap: () {
+              other(index);
+            },
+          ),
         ),
       ],
     );
   }
 
-  Container _buildPostThread() {
+  Widget _buildThread(int index) {
+    var provider = Provider.of<GetThreadUserViewModel>(context, listen: false);
+    var thread = provider.threads[index];
     return Container(
-      color: Color(0xffeeeeee),
-      padding: EdgeInsets.only(top: 10, bottom: 10, left: 16, right: 16),
-      child: Container(
-        decoration: BoxDecoration(
-            color: Colors.white, borderRadius: BorderRadius.circular(10)),
-        child: Column(
-          children: [
-            _buildProfileThread(),
-            SizedBox(
-              height: 5,
-            ),
-            Container(
-              margin: EdgeInsets.only(left: 16, right: 270),
-              decoration: BoxDecoration(
-                color: Color(0xffececec),
-                borderRadius: BorderRadius.circular(50),
-              ),
-              padding: EdgeInsets.only(top: 5, bottom: 5, left: 12, right: 12),
-              child: Text(
-                'Education',
-                textAlign: TextAlign.center,
-                style: TextStyle(color: Colors.grey),
-              ),
-            ),
-            _buildThread(),
-          ],
-        ),
-      ),
-    );
-  }
-
-  ListTile _buildProfileThread() {
-    return ListTile(
-      title: Text('Tom Cruise'),
-      subtitle: Text('1h ago'),
-      leading: Image.asset('assets/account_default.png'),
-      trailing: Image.asset(
-        'assets/icon_more.png',
-        height: 24,
-        width: 24,
-      ),
-    );
-  }
-
-  Container _buildThread() {
-    return Container(
-      padding: EdgeInsets.all(20),
       child: Column(
         mainAxisAlignment: MainAxisAlignment.center,
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
-          Text(
-            'Is it grammatically correct to say, “I am going to go”?',
-            style: body1Bold,
+          SizedBox(
+            height: 4,
           ),
-          Text(
-              'It is technically correct but it is ambiguous. The infinitive ‘to go\' is hanging. It may be clear from the context but not as written. Consider, does it mean ‘go now\' or ‘go to the event\''),
+          BoxText.subtitle2Semi(thread.title ?? ''),
+          Container(
+            height: 200,
+            decoration: BoxDecoration(
+              borderRadius: BorderRadius.all(Radius.circular(10)),
+              image: DecorationImage(
+                image: NetworkImage(thread.topic!.imageURL!),
+                fit: BoxFit.fill,
+              ),
+            ),
+          ),
+          Container(
+            margin: spacing8Top,
+            child: BoxText.caption(thread.description ?? ''),
+          ),
           SizedBox(
             height: 10,
           ),
           Row(
             children: [
-              GestureDetector(
-                  onTap: () {
-                    setState(() {
-                      actionLike = !actionLike;
-                    });
-                  },
-                  child: actionLike
-                      ? Row(
-                          children: [
-                            Image.asset('assets/icon_like1.png',
-                                height: 24, width: 24),
-                            Text('592'),
-                          ],
-                        )
-                      : Row(
-                          children: [
-                            Image.asset('assets/icon_like2.png',
-                                height: 24, width: 24),
-                            Text(
-                              '592',
-                              style: TextStyle(color: AppColors.kcInfoColor),
-                            ),
-                          ],
-                        )),
-              SizedBox(
-                width: 10,
+              Container(
+                child: thread.isLiked!
+                    ? GestureDetector(
+                        onTap: () {
+                          provider.unlikeThread(index);
+                        },
+                        child: Row(children: [
+                          ImageIcon(
+                            AssetImage('assets/icon_like2.png'),
+                            color: AppColors.kcInfoColor,
+                          ),
+                          SizedBox(
+                            width: 8,
+                          ),
+                          BoxText.captionSemi(
+                            thread.totalLike.toString(),
+                            color: AppColors.kcInfoColor,
+                          )
+                        ]),
+                      )
+                    : GestureDetector(
+                        onTap: () {
+                          provider.likeThread(index);
+                        },
+                        child: Row(children: [
+                          ImageIcon(
+                            AssetImage('assets/icon_like1.png'),
+                            color: AppColors.kcLightestBlack,
+                          ),
+                          SizedBox(
+                            width: 8,
+                          ),
+                          BoxText.captionSemi(
+                            thread.totalLike.toString(),
+                            color: AppColors.kcLightestBlack,
+                          )
+                        ]),
+                      ),
               ),
-              Row(
-                children: [
-                  Image.asset('assets/icon_comment.png', height: 24, width: 24),
-                  Text('108'),
-                ],
+              SizedBox(
+                width: 12,
+              ),
+              Container(
+                child: GestureDetector(
+                  child: Row(
+                    children: [
+                      ImageIcon(
+                        AssetImage('assets/icon_comment.png'),
+                        color: AppColors.kcLightestBlack,
+                      ),
+                      SizedBox(
+                        width: 8,
+                      ),
+                      BoxText.captionSemi(
+                        thread.totalComment.toString(),
+                        color: AppColors.kcLightestBlack,
+                      )
+                    ],
+                  ),
+                ),
               ),
             ],
-          )
+          ),
         ],
       ),
     );
+  }
+
+  Widget loadingThread() {
+    return Column(
+      children: [
+        Expanded(
+          child: Container(
+            margin: spacing16All,
+            child: ListView.builder(
+              scrollDirection: Axis.vertical,
+              shrinkWrap: true,
+              itemCount: 1,
+              itemBuilder: (context, index) {
+                return Container(
+                  margin: spacing8Bottom,
+                  padding: spacing16All,
+                  decoration: BoxDecoration(
+                    borderRadius: BorderRadius.all(
+                      Radius.circular(10),
+                    ),
+                    color: AppColors.kcBaseWhite,
+                  ),
+                  child: Shimmer.fromColors(
+                    baseColor: AppColors.kcDarkestWhite,
+                    highlightColor: AppColors.kcDarkWhite,
+                    child: Column(
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      children: [
+                        Row(
+                          mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                          children: [
+                            Container(
+                              child: Row(
+                                children: [
+                                  CircleAvatar(
+                                    backgroundColor: AppColors.kcPrimaryColor,
+                                  ),
+                                  Container(
+                                    margin: spacing8Left,
+                                    child: Column(
+                                      crossAxisAlignment:
+                                          CrossAxisAlignment.start,
+                                      children: [
+                                        Row(
+                                          children: [
+                                            Container(
+                                              width: 50,
+                                              height: 10,
+                                              decoration: BoxDecoration(
+                                                color: AppColors.kcDarkestWhite,
+                                                borderRadius: BorderRadius.all(
+                                                  Radius.circular(10),
+                                                ),
+                                              ),
+                                            ),
+                                            Container(
+                                              margin: spacing8Horizontal,
+                                              width: 4,
+                                              height: 4,
+                                              decoration: BoxDecoration(
+                                                color: AppColors.kcDarkestWhite,
+                                                shape: BoxShape.circle,
+                                              ),
+                                            ),
+                                            Container(
+                                              width: 50,
+                                              height: 10,
+                                              decoration: BoxDecoration(
+                                                color: AppColors.kcDarkestWhite,
+                                                borderRadius: BorderRadius.all(
+                                                  Radius.circular(10),
+                                                ),
+                                              ),
+                                            ),
+                                          ],
+                                        ),
+                                        SizedBox(
+                                          height: 10,
+                                        ),
+                                        Container(
+                                          width: 50,
+                                          height: 10,
+                                          decoration: BoxDecoration(
+                                            color: AppColors.kcDarkestWhite,
+                                            borderRadius: BorderRadius.all(
+                                              Radius.circular(10),
+                                            ),
+                                          ),
+                                        ),
+                                      ],
+                                    ),
+                                  ),
+                                ],
+                              ),
+                            ),
+                            Container(
+                              child: GestureDetector(
+                                child: ImageIcon(
+                                    AssetImage('assets/icon_more.png')),
+                              ),
+                            ),
+                          ],
+                        ),
+                        Container(
+                          margin: spacing16Top,
+                          padding: EdgeInsets.only(
+                            top: 5,
+                            bottom: 5,
+                            left: 12,
+                            right: 12,
+                          ),
+                          width: 50,
+                          decoration: BoxDecoration(
+                            color: AppColors.kcDarkerWhite,
+                            borderRadius: BorderRadius.all(Radius.circular(50)),
+                          ),
+                        ),
+                        SizedBox(
+                          height: 4,
+                        ),
+                        Container(
+                          width: 200,
+                          height: 10,
+                          decoration: BoxDecoration(
+                            color: AppColors.kcDarkestWhite,
+                            borderRadius: BorderRadius.all(
+                              Radius.circular(10),
+                            ),
+                          ),
+                        ),
+                        SizedBox(
+                          height: 10,
+                        ),
+                        Container(
+                          height: 10,
+                          decoration: BoxDecoration(
+                            color: AppColors.kcDarkestWhite,
+                            borderRadius: BorderRadius.all(
+                              Radius.circular(10),
+                            ),
+                          ),
+                        ),
+                        SizedBox(
+                          height: 5,
+                        ),
+                        Container(
+                          height: 10,
+                          decoration: BoxDecoration(
+                            color: AppColors.kcDarkestWhite,
+                            borderRadius: BorderRadius.all(
+                              Radius.circular(10),
+                            ),
+                          ),
+                        ),
+                        SizedBox(
+                          height: 5,
+                        ),
+                        Container(
+                          height: 10,
+                          decoration: BoxDecoration(
+                            color: AppColors.kcDarkestWhite,
+                            borderRadius: BorderRadius.all(
+                              Radius.circular(10),
+                            ),
+                          ),
+                        ),
+                        SizedBox(
+                          height: 10,
+                        ),
+                        Row(
+                          children: [
+                            Container(
+                              width: 50,
+                              height: 10,
+                              decoration: BoxDecoration(
+                                color: AppColors.kcDarkestWhite,
+                                borderRadius: BorderRadius.all(
+                                  Radius.circular(10),
+                                ),
+                              ),
+                            ),
+                            SizedBox(
+                              width: 12,
+                            ),
+                            Container(
+                              width: 50,
+                              height: 10,
+                              decoration: BoxDecoration(
+                                color: AppColors.kcDarkestWhite,
+                                borderRadius: BorderRadius.all(
+                                  Radius.circular(10),
+                                ),
+                              ),
+                            ),
+                          ],
+                        ),
+                      ],
+                    ),
+                  ),
+                );
+              },
+            ),
+          ),
+        ),
+      ],
+    );
+  }
+
+  String between(DateTime from, DateTime to) {
+    String diff = "";
+    from = DateTime(
+        from.year, from.month, from.day, from.hour, from.minute, from.second);
+    to = DateTime(to.year, to.month, to.day, to.hour, to.minute, to.second);
+    if (to.difference(from).inDays > 0 && to.difference(from).inDays <= 3) {
+      diff = to.difference(from).inDays.toString() + "d ago";
+    } else if (to.difference(from).inHours > 0 &&
+        to.difference(from).inHours <= 60) {
+      diff = to.difference(from).inHours.toString() + "h ago";
+    } else if (to.difference(from).inMinutes > 0 &&
+        to.difference(from).inMinutes <= 60) {
+      diff = to.difference(from).inMinutes.toString() + "m ago";
+    } else if (to.difference(from).inSeconds > 0 &&
+        to.difference(from).inSeconds <= 60) {
+      diff = to.difference(from).inSeconds.toString() + "s ago";
+    } else {
+      diff = DateFormat('MMMM d, yyyy').format(from);
+    }
+    return diff;
+  }
+
+  void other(int index) {
+    var provider = Provider.of<GetThreadUserViewModel>(context, listen: false);
+
+    var thread = provider.threads[index];
+    showModalBottomSheet(
+        context: context,
+        isScrollControlled: true,
+        shape: RoundedRectangleBorder(
+          borderRadius: BorderRadius.only(
+            topLeft: Radius.circular(30),
+            topRight: Radius.circular(30),
+          ),
+        ),
+        backgroundColor: AppColors.kcBaseWhite,
+        builder: (BuildContext context) {
+          return Container(
+            height: 150,
+            padding: spacing20All,
+            child: Column(
+              children: [
+                Center(
+                  child: Image.asset(
+                    'assets/pony_bottom_sheet.png',
+                    width: 38,
+                  ),
+                ),
+                SizedBox(
+                  height: 30,
+                ),
+                Row(
+                  children: [
+                    ImageIcon(AssetImage('assets/icon_share_bottom_sheet.png')),
+                    SizedBox(
+                      width: 10,
+                    ),
+                    Text(
+                      'Share',
+                      style: button,
+                    ),
+                  ],
+                ),
+                Divider(
+                  height: 20,
+                  color: Color(0xffDFDFDF),
+                ),
+                InkWell(
+                  onTap: () {
+                    provider.deleteThread(index);
+                    Navigator.pop(context);
+                  },
+                  child: Row(
+                    children: [
+                      ImageIcon(AssetImage(
+                          'assets/icon_delete_thread_bottom_sheet.png')),
+                      SizedBox(
+                        width: 10,
+                      ),
+                      Text(
+                        "Delete thread",
+                        style: button,
+                      ),
+                    ],
+                  ),
+                ),
+              ],
+            ),
+          );
+        });
   }
 
   void _buildMoreAccount() {
@@ -402,8 +851,7 @@ class _AccountScreenState extends State<AccountScreen> {
                 ),
                 Text('Settings', style: body1Semi),
               ]),
-              const Divider(
-                height: 20,
+              Divider(
                 color: Color(0xffDFDFDF),
               ),
               GestureDetector(

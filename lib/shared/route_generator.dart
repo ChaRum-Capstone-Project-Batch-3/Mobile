@@ -5,12 +5,15 @@ import 'package:fgd_flutter/screens/main_screen/main_screen.dart';
 import 'package:fgd_flutter/screens/onboarding/onboarding_screen.dart';
 import 'package:fgd_flutter/screens/register/regiester_screen.dart';
 import 'package:fgd_flutter/screens/search/search_screen.dart';
+import 'package:fgd_flutter/screens/thread_detail/thread_detail_screen.dart';
 import 'package:flutter/material.dart';
 import 'package:fgd_flutter/shared/router.dart';
 
 import '../screens/account/account_screen.dart';
+import '../screens/following_screen.dart/following_screen.dart';
 import '../screens/login/login_screen.dart';
 import '../screens/splash/splash_screen.dart';
+import '../screens/thread_detail/thread_detail_screen.dart';
 
 class RouteGenerator {
   static Route<dynamic> generateRoute(RouteSettings settings) {
@@ -39,9 +42,25 @@ class RouteGenerator {
       case editAccount:
         final args = settings.arguments;
         return MaterialPageRoute(builder: (context) => EditAccountScreen());
-        case account:
+      case detailThread:
+        final args = settings.arguments as String;
+        return MaterialPageRoute(
+            builder: (context) => ThreadDetailScreen(
+                  id: args,
+                ));
+
+      case account:
         final args = settings.arguments;
         return MaterialPageRoute(builder: (context) => AccountScreen());
+        case following:
+        final args = settings.arguments;
+        return MaterialPageRoute(builder: (context) => FollowingScreen());
+        // case detailThread:
+        // final args = settings.arguments as String;
+        // return MaterialPageRoute(
+        //     builder: (context) => ThreadDetailScreen(
+        //           id: args,
+        //         ));
       default:
         return _errorPage();
     }
