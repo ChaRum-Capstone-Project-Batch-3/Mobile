@@ -1,17 +1,18 @@
 // GENERATED CODE - DO NOT MODIFY BY HAND
 
-part of 'comment.dart';
+part of 'comment_model.dart';
 
 // **************************************************************************
 // JsonSerializableGenerator
 // **************************************************************************
 
-Comment _$CommentFromJson(Map<String, dynamic> json) => Comment(
+CommentModel _$CommentModelFromJson(Map<String, dynamic> json) => CommentModel(
       parentID: json['parentID'] as String?,
       comment: json['comment'] as String?,
     );
 
-Map<String, dynamic> _$CommentToJson(Comment instance) => <String, dynamic>{
+Map<String, dynamic> _$CommentModelToJson(CommentModel instance) =>
+    <String, dynamic>{
       'parentID': instance.parentID,
       'comment': instance.comment,
     };

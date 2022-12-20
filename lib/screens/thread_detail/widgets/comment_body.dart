@@ -38,6 +38,7 @@ class _CommentBodyState extends State<CommentBody> {
               ),
             ),
             child: Column(
+              mainAxisSize: MainAxisSize.min,
               children: [
                 const SizedBox(
                   height: 10,

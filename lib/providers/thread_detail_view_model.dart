@@ -1,3 +1,4 @@
+import 'package:fgd_flutter/models/thread/thread.dart';
 import 'package:fgd_flutter/services/thread_detail_api.dart';
 import 'package:fgd_flutter/shared/local_storage.dart';
 import 'package:flutter/material.dart';

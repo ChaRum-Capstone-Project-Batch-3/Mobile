@@ -1,4 +1,6 @@
-import 'package:fgd_flutter/models/comment/comment.dart';
+import 'package:fgd_flutter/models/comment/comment_model.dart';
+import 'package:fgd_flutter/models/thread/comment.dart';
+import 'package:fgd_flutter/models/thread/thread.dart';
 import 'package:fgd_flutter/models/thread_detail/get_thread_detail_response.dart';
 import 'package:fgd_flutter/services/thread_api.dart';
 import 'package:fgd_flutter/shared/local_storage.dart';
@@ -9,12 +11,12 @@ class CommentViewModel with ChangeNotifier {
   var mPreferences = LocalStorage();
   CommentState _state = CommentState.loaded;
   CommentState get state => _state;
-  List<Comments> _comments = [];
-  List<Comments> get comments => _comments;
+  List<Comment> _comments = [];
+  List<Comment> get comments => _comments;
   TextEditingController _teComment = TextEditingController();
   TextEditingController get teComment => _teComment;
-  Comments _reply = Comments();
-  Comments get reply => _reply;
+  Comment _reply = Comment();
+  Comment get reply => _reply;
   Thread _thread = Thread();
   Thread get thread => _thread;
 
@@ -76,8 +78,8 @@ class CommentViewModel with ChangeNotifier {
     var token = mPreferences.getString("token");
     await token.whenComplete(() async {
       await token.then((value) async {
-        Comment comment =
-            Comment(parentID: this._reply.sId, comment: this._teComment.text);
+        CommentModel comment = CommentModel(
+            parentID: this._reply.sId, comment: this._teComment.text);
         var result = ThreadApi().addComment(threadId, comment, value);
         await result.whenComplete(() async {
           await result.then((val) {
@@ -92,18 +94,18 @@ class CommentViewModel with ChangeNotifier {
     notifyListeners();
   }
 
-  replyComment(Comments comment) {
+  replyComment(Comment comment) {
     this._reply = comment;
     notifyListeners();
   }
 
   clearReply() async {
-    this._reply = Comments();
+    this._reply = Comment();
     notifyListeners();
   }
 
   clearAll() {
-    this._reply = Comments();
+    this._reply = Comment();
     this.teComment.text = "";
     notifyListeners();
   }

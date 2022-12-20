@@ -1,4 +1,4 @@
-import 'package:fgd_flutter/models/bookmark/bookmark_response.dart';
+import 'package:fgd_flutter/models/thread/thread.dart';
 import 'package:fgd_flutter/providers/bookmark_view_model.dart';
 import 'package:fgd_flutter/screens/follow_account/follow_account_screen.dart';
 import 'package:fgd_flutter/screens/thread_detail/thread_detail_screen.dart';
@@ -166,10 +166,10 @@ class _BookmarkScreenState extends State<BookmarkScreen> {
                   itemCount: provider.bookmarks.length,
                   itemBuilder: (context, index) {
                     return GestureDetector(
-                        onTap: () {
-                          Navigator.pushNamed(context, detailThread,
-                              arguments: provider.bookmarks[index].thread!.sId);
-                        },
+                        // onTap: () {
+                        //   Navigator.pushNamed(context, detailThread,
+                        //       arguments: provider.bookmarks[index].thread!.sId);
+                        // },
                         child: _buildPostThread(index));
                   },
                 ),
