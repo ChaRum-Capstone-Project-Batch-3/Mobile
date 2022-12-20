@@ -1,12 +1,14 @@
+import 'package:fgd_flutter/screens/thread_detail/widgets/comment_body.dart';
 import 'package:fgd_flutter/shared/app_colors.dart';
 import 'package:fgd_flutter/shared/styles.dart';
 import 'package:flutter/material.dart';
 
-import 'widgets/comment.dart';
+import 'widgets/comment_screen.dart';
 
 class ThreadDetailScreen extends StatefulWidget {
-  const ThreadDetailScreen({super.key});
+  const ThreadDetailScreen({super.key, required this.id});
 
+  final String id;
   @override
   State<ThreadDetailScreen> createState() => _ThreadDetailScreenState();
 }
@@ -137,9 +139,7 @@ class _ThreadDetailScreenState extends State<ThreadDetailScreen> {
                   ),
                   GestureDetector(
                       onTap: () {
-                        setState(() {
-                          _buildComment();
-                        });
+                        _buildComment();
                       },
                       child: Row(
                         children: [
@@ -358,15 +358,19 @@ class _ThreadDetailScreenState extends State<ThreadDetailScreen> {
 
   void _buildComment() {
     showModalBottomSheet(
-        shape: const RoundedRectangleBorder(
-          borderRadius: BorderRadius.only(
-              topLeft: Radius.circular(30), topRight: Radius.circular(30)),
-        ),
-        backgroundColor: Colors.white,
+        isScrollControlled: true,
         context: context,
-        // ignore: dead_code
-        builder: (BuildContext context) {
-          return const Comment();
+        backgroundColor: Colors.transparent,
+        shape: RoundedRectangleBorder(
+          borderRadius: BorderRadius.only(
+            topLeft: Radius.circular(30),
+            topRight: Radius.circular(30),
+          ),
+        ),
+        builder: (context) {
+          return CommentScreen(
+            threadId: widget.id,
+          );
         });
   }
 }

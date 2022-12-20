@@ -60,7 +60,7 @@ class _HomeScreenState extends State<HomeScreen> {
                 Tab(
                   child: Row(
                     children: [
-                      Image.asset("assets/threads.png"),
+                      ImageIcon(AssetImage("assets/threads.png")),
                       SizedBox(
                         width: 10,
                       ),
@@ -74,7 +74,7 @@ class _HomeScreenState extends State<HomeScreen> {
                 Tab(
                   child: Row(
                     children: [
-                      Image.asset("assets/star.png"),
+                      ImageIcon(AssetImage("assets/star.png")),
                       SizedBox(
                         width: 10,
                       ),
@@ -88,7 +88,7 @@ class _HomeScreenState extends State<HomeScreen> {
                 Tab(
                   child: Row(
                     children: [
-                      Image.asset("assets/followed.png"),
+                      ImageIcon(AssetImage("assets/followed.png")),
                       SizedBox(
                         width: 10,
                       ),

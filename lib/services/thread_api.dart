@@ -2,6 +2,9 @@ import 'dart:io';
 
 import 'package:dio/dio.dart';
 import 'package:fgd_flutter/models/base_response.dart';
+import 'package:fgd_flutter/models/comment/comment.dart';
+import 'package:fgd_flutter/models/thread_detail/get_thread_detail_response.dart';
+import 'package:fgd_flutter/models/thread_detail/thread_response.dart';
 import 'package:fgd_flutter/models/thread_detail/thread_response.dart';
 import 'package:fgd_flutter/shared/api_utils.dart';
 import 'package:fgd_flutter/shared/local_storage.dart';
@@ -82,4 +85,28 @@ class ThreadApi extends ApiUtils {
   //   DetailThreadResponse result = DetailThreadResponse.fromJson(response.data);
   //   return result;
   // }
+  Future<ThreadResponse> detailThread(String id, String token) async {
+    var response = await dio.get('/thread/id/$id',
+        options: Options(headers: {"Authorization": token}));
+    ThreadResponse result = ThreadResponse.fromJson(response.data);
+    return result;
+  }
+
+  Future<GetThreadDetailResponse> getThreadDetail(
+      String id, String token) async {
+    var response = await dio.get('/thread/id/$id',
+        options: Options(headers: {"Authorization": token}));
+    GetThreadDetailResponse result =
+        GetThreadDetailResponse.fromJson(response.data);
+    return result;
+  }
+
+  Future<BaseResponse> addComment(
+      String threadId, Comment comment, String token) async {
+    var response = await dio.post('/thread/comment/$threadId',
+        data: comment.toJson(),
+        options: Options(headers: {"Authorization": token}));
+    BaseResponse result = BaseResponse.fromJson(response.data);
+    return result;
+  }
 }

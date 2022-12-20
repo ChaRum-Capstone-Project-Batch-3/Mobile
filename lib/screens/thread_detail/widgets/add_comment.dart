@@ -1,4 +1,7 @@
+import 'package:fgd_flutter/providers/comment_view_model.dart';
+import 'package:fgd_flutter/shared/charum_ui.dart';
 import 'package:flutter/material.dart';
+import 'package:provider/provider.dart';
 
 class AddComment extends StatefulWidget {
   const AddComment({super.key});
@@ -7,49 +10,99 @@ class AddComment extends StatefulWidget {
   State<AddComment> createState() => _AddCommentState();
 }
 
-class _AddCommentState extends State<AddComment> {
-  TextEditingController _addkomenController = TextEditingController();
+class _AddCommentState extends State<AddComment>
+    with SingleTickerProviderStateMixin {
+  late Animation offset;
+
+  @override
+  void didChangeDependencies() {
+    // TODO: implement didChangeDependencies
+    var provider = Provider.of<CommentViewModel>(context, listen: false);
+    provider.teComment.text = "";
+    provider.clearReply();
+    super.didChangeDependencies();
+  }
+
+  @override
+  void dispose() {
+    // TODO: implement dispose
+    Provider.of<CommentViewModel>(context, listen: false).teComment.dispose();
+    super.dispose();
+  }
+
   @override
   Widget build(BuildContext context) {
+    var provider = Provider.of<CommentViewModel>(context, listen: false);
     return Container(
-      decoration:
-          BoxDecoration(border: Border.all(color: const Color(0xffe3e3e3))),
-      padding: const EdgeInsets.only(left: 15, right: 15, top: 12, bottom: 12),
-      height: 70,
-      width: 360,
-      child: Stack(children: [
-        Row(
-          crossAxisAlignment: CrossAxisAlignment.start,
-          children: [
+      color: AppColors.kcBaseWhite,
+      child: Container(
+        decoration:
+            BoxDecoration(border: Border.all(color: const Color(0xffe3e3e3))),
+        padding:
+            const EdgeInsets.only(left: 15, right: 15, top: 12, bottom: 12),
+        height: provider.reply.sId == null
+            ? MediaQuery.of(context).size.height * 0.095
+            : MediaQuery.of(context).size.height * 0.15,
+        width: 360,
+        child: Column(children: [
+          if (provider.reply.sId == null)
+            Container()
+          else
             Container(
-              margin: const EdgeInsets.only(right: 10),
-              child: const CircleAvatar(),
-            ),
-            SizedBox(
-              width: 250,
-              height: 60,
-              child: TextFormField(
-                controller: _addkomenController,
-                decoration: InputDecoration(
-                  filled: true,
-                  fillColor: const Color.fromARGB(255, 232, 230, 230),
-                  hintText: "Add comment...",
-                  border: OutlineInputBorder(
-                      borderSide: const BorderSide(width: 1),
-                      borderRadius: BorderRadius.circular(25.0)),
-                ),
+              padding: EdgeInsets.zero,
+              margin: EdgeInsets.zero,
+              child: Row(
+                crossAxisAlignment: CrossAxisAlignment.center,
+                mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                children: [
+                  Icon(Icons.reply_outlined),
+                  Text("Reply comment from " +
+                      provider.reply.user!.displayName!),
+                  IconButton(
+                      onPressed: () {
+                        provider.clearReply();
+                      },
+                      icon: Icon(Icons.close))
+                ],
               ),
             ),
-            GestureDetector(
-                onTap: () {},
-                child: Container(
-                  margin: const EdgeInsets.only(left: 3, top: 10),
-                  child: Image.asset('assets/icon_send.jpeg',
-                      height: 24, width: 24),
-                ))
-          ],
-        )
-      ]),
+          Row(
+            mainAxisAlignment: MainAxisAlignment.spaceBetween,
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: [
+              Container(
+                margin: const EdgeInsets.only(right: 10),
+                child: const CircleAvatar(),
+              ),
+              SizedBox(
+                width: MediaQuery.of(context).size.width * 0.7,
+                height: 60,
+                child: TextFormField(
+                  controller: provider.teComment,
+                  decoration: InputDecoration(
+                    contentPadding: spacing16Horizontal,
+                    filled: true,
+                    fillColor: const Color.fromARGB(255, 232, 230, 230),
+                    hintText: "Add comment...",
+                    border: OutlineInputBorder(
+                        borderSide: const BorderSide(width: 1),
+                        borderRadius: BorderRadius.circular(25.0)),
+                  ),
+                ),
+              ),
+              GestureDetector(
+                  onTap: () {
+                    provider.addComment(provider.thread.sId ?? "");
+                  },
+                  child: Container(
+                    margin: const EdgeInsets.only(left: 3, top: 10),
+                    child: Image.asset('assets/icon_send.jpeg',
+                        height: 24, width: 24),
+                  ))
+            ],
+          )
+        ]),
+      ),
     );
   }
 }

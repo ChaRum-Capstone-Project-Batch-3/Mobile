@@ -2,7 +2,9 @@ import 'package:fgd_flutter/models/thread/thread.dart';
 import 'package:fgd_flutter/providers/bookmark_view_model.dart';
 import 'package:fgd_flutter/screens/follow_account/follow_account_screen.dart';
 import 'package:fgd_flutter/screens/thread_detail/thread_detail_screen.dart';
+import 'package:fgd_flutter/screens/thread_detail/widgets/comment_screen.dart';
 import 'package:fgd_flutter/shared/charum_ui.dart';
+import 'package:fgd_flutter/shared/helper.dart';
 import 'package:fgd_flutter/shared/router.dart';
 import 'package:fgd_flutter/state/bookmark_state.dart';
 import 'package:flutter/material.dart';
@@ -360,6 +362,23 @@ class _BookmarkScreenState extends State<BookmarkScreen> {
               ),
               Container(
                 child: GestureDetector(
+                  onTap: () {
+                    showModalBottomSheet(
+                        isScrollControlled: true,
+                        context: context,
+                        backgroundColor: Colors.transparent,
+                        shape: RoundedRectangleBorder(
+                          borderRadius: BorderRadius.only(
+                            topLeft: Radius.circular(30),
+                            topRight: Radius.circular(30),
+                          ),
+                        ),
+                        builder: (context) {
+                          return CommentScreen(
+                            threadId: thread.sId ?? "",
+                          );
+                        });
+                  },
                   child: Row(
                     children: [
                       ImageIcon(
@@ -1076,27 +1095,5 @@ class _BookmarkScreenState extends State<BookmarkScreen> {
         ),
       ],
     );
-  }
-
-  String between(DateTime from, DateTime to) {
-    String diff = "";
-    from = DateTime(
-        from.year, from.month, from.day, from.hour, from.minute, from.second);
-    to = DateTime(to.year, to.month, to.day, to.hour, to.minute, to.second);
-    if (to.difference(from).inDays > 0 && to.difference(from).inDays <= 3) {
-      diff = to.difference(from).inDays.toString() + "d ago";
-    } else if (to.difference(from).inHours > 0 &&
-        to.difference(from).inHours <= 60) {
-      diff = to.difference(from).inHours.toString() + "h ago";
-    } else if (to.difference(from).inMinutes > 0 &&
-        to.difference(from).inMinutes <= 60) {
-      diff = to.difference(from).inMinutes.toString() + "m ago";
-    } else if (to.difference(from).inSeconds > 0 &&
-        to.difference(from).inSeconds <= 60) {
-      diff = to.difference(from).inSeconds.toString() + "s ago";
-    } else {
-      diff = DateFormat('MMMM d, yyyy').format(from);
-    }
-    return diff;
   }
 }

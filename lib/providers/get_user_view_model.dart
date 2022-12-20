@@ -9,7 +9,6 @@ class GetUserViewModel with ChangeNotifier {
   User _user = User();
   User get user => _user;
 
-
   getUsers() async {
     try {
       var token = mPreferences.getString('token');
