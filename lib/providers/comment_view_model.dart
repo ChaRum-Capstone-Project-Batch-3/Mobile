@@ -44,7 +44,6 @@ class CommentViewModel with ChangeNotifier {
       });
       notifyListeners();
     } catch (e) {
-      print(e.toString());
       changeState(CommentState.error);
       notifyListeners();
     }

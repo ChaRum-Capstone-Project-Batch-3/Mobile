@@ -5,6 +5,7 @@ import 'package:fgd_flutter/shared/helper.dart';
 import 'package:fgd_flutter/state/comment_state.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
+import 'package:shimmer/shimmer.dart';
 
 class CommentBody extends StatefulWidget {
   const CommentBody({super.key});
@@ -25,7 +26,7 @@ class _CommentBodyState extends State<CommentBody> {
         builder: (_, controller) {
           switch (provider.state) {
             case CommentState.loading:
-              return Text("loading");
+              return loading();
             case CommentState.error:
               return Text("ERROR");
           }
@@ -281,5 +282,223 @@ class _CommentBodyState extends State<CommentBody> {
             ),
           );
         });
+  }
+
+  Widget loading() {
+    return Container(
+      decoration: BoxDecoration(
+        color: AppColors.kcBaseWhite,
+        borderRadius: BorderRadius.vertical(
+          top: Radius.circular(15),
+        ),
+      ),
+      child: Shimmer.fromColors(
+        baseColor: AppColors.kcLightestBlack,
+        highlightColor: AppColors.kcDarkWhite,
+        child: Column(
+          children: [
+            const SizedBox(
+              height: 10,
+            ),
+            Center(
+              child: Image.asset(
+                'assets/pony_bottom_sheet.png',
+                width: 40,
+              ),
+            ),
+            const SizedBox(
+              height: 15,
+            ),
+            Center(
+              child: Container(
+                height: 30,
+                width: 100,
+                decoration: BoxDecoration(
+                  color: AppColors.kcLightestBlack,
+                  borderRadius: BorderRadius.all(Radius.circular(15)),
+                ),
+              ),
+            ),
+            const SizedBox(
+              height: 25,
+            ),
+            Column(
+              mainAxisAlignment: MainAxisAlignment.start,
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                Container(
+                  padding: spacing16All,
+                  child: Column(
+                    mainAxisAlignment: MainAxisAlignment.start,
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: [
+                      Row(
+                        crossAxisAlignment: CrossAxisAlignment.start,
+                        children: [
+                          const SizedBox(
+                            width: 5,
+                          ),
+                          CircleAvatar(
+                            radius: 20,
+                            backgroundColor: AppColors.kcLightestBlack,
+                          ),
+                          const SizedBox(
+                            width: 15,
+                          ),
+                          Expanded(
+                            child: Container(
+                              decoration: BoxDecoration(
+                                  borderRadius:
+                                      BorderRadius.all(Radius.circular(15)),
+                                  color: AppColors.kcDarkerWhite),
+                              child: Column(
+                                crossAxisAlignment: CrossAxisAlignment.start,
+                                children: [
+                                  ListTile(
+                                    title: Row(
+                                      children: [
+                                        Container(
+                                          width: 100,
+                                          height: 50,
+                                          decoration: BoxDecoration(
+                                            color: AppColors.kcLightestBlack,
+                                            borderRadius: BorderRadius.all(
+                                                Radius.circular(15)),
+                                          ),
+                                        ),
+                                        SizedBox(
+                                          width: 5,
+                                        ),
+                                      ],
+                                    ),
+                                    subtitle: Container(
+                                      width: 50,
+                                      height: 30,
+                                      decoration: BoxDecoration(
+                                        color: AppColors.kcLightestBlack,
+                                        borderRadius: BorderRadius.all(
+                                            Radius.circular(15)),
+                                      ),
+                                    ),
+                                  ),
+                                  Container(
+                                    padding: EdgeInsets.only(
+                                      top: 10,
+                                      bottom: 16,
+                                      left: 16,
+                                      right: 16,
+                                    ),
+                                    width: 100,
+                                    height: 50,
+                                    decoration: BoxDecoration(
+                                      color: AppColors.kcLightestBlack,
+                                      borderRadius:
+                                          BorderRadius.all(Radius.circular(15)),
+                                    ),
+                                  )
+                                ],
+                              ),
+                            ),
+                          ),
+                        ],
+                      ),
+                      SizedBox(
+                        height: 10,
+                      ),
+                      Container(
+                        margin: EdgeInsets.only(
+                            left: MediaQuery.of(context).size.width * 0.21),
+                        width: 70,
+                        height: 30,
+                        decoration: BoxDecoration(
+                          color: AppColors.kcLightestBlack,
+                          borderRadius: BorderRadius.all(Radius.circular(15)),
+                        ),
+                      ),
+                    ],
+                  ),
+                ),
+                Container(
+                  padding: spacing16All,
+                  margin: spacing24Left,
+                  child: Row(
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: [
+                      const SizedBox(
+                        width: 5,
+                      ),
+                      CircleAvatar(
+                        radius: 20,
+                        backgroundColor: AppColors.kcLightestBlack,
+                      ),
+                      const SizedBox(
+                        width: 15,
+                      ),
+                      Expanded(
+                        child: Container(
+                          decoration: BoxDecoration(
+                              borderRadius:
+                                  BorderRadius.all(Radius.circular(15)),
+                              color: AppColors.kcDarkerWhite),
+                          child: Column(
+                            crossAxisAlignment: CrossAxisAlignment.start,
+                            children: [
+                              ListTile(
+                                title: Row(
+                                  children: [
+                                    Container(
+                                      width: 100,
+                                      height: 50,
+                                      decoration: BoxDecoration(
+                                        color: AppColors.kcLightestBlack,
+                                        borderRadius: BorderRadius.all(
+                                            Radius.circular(15)),
+                                      ),
+                                    ),
+                                    SizedBox(
+                                      width: 5,
+                                    ),
+                                  ],
+                                ),
+                                subtitle: Container(
+                                  width: 50,
+                                  height: 30,
+                                  decoration: BoxDecoration(
+                                    color: AppColors.kcLightestBlack,
+                                    borderRadius:
+                                        BorderRadius.all(Radius.circular(15)),
+                                  ),
+                                ),
+                              ),
+                              Container(
+                                padding: EdgeInsets.only(
+                                  top: 10,
+                                  bottom: 16,
+                                  left: 16,
+                                  right: 16,
+                                ),
+                                width: 100,
+                                height: 50,
+                                decoration: BoxDecoration(
+                                  color: AppColors.kcLightestBlack,
+                                  borderRadius:
+                                      BorderRadius.all(Radius.circular(15)),
+                                ),
+                              )
+                            ],
+                          ),
+                        ),
+                      ),
+                    ],
+                  ),
+                ),
+              ],
+            ),
+
+            /**reply kedua */
+          ],
+        ),
+      ),
+    );
   }
 }
