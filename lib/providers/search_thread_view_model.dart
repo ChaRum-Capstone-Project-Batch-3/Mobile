@@ -202,6 +202,7 @@ class SearchThreadViewModel with ChangeNotifier {
     });
   }
 
+
   bookmarkThread(String id) async {
     var token = mPreferences.getString("token");
     await token.whenComplete(() async {

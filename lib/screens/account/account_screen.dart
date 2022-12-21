@@ -1,12 +1,11 @@
 import 'package:fgd_flutter/models/account/get_thread_user_response.dart';
 import 'package:fgd_flutter/shared/charum_ui.dart';
 import 'package:fgd_flutter/shared/router.dart';
+import 'package:fgd_flutter/state/bookmark_state.dart';
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
 import 'package:provider/provider.dart';
 import 'package:shimmer/shimmer.dart';
-
-import '../../providers/get_thread_user_view_model.dart';
 import '../../providers/get_user_view_model.dart';
 import '../../state/user_state.dart';
 
@@ -23,7 +22,7 @@ class _AccountScreenState extends State<AccountScreen> {
 
   @override
   void didChangeDependencies() {
-    Provider.of<GetThreadUserViewModel>(context, listen: false).getThreads();
+    Provider.of<GetUserViewModel>(context, listen: false).getThreads();
     Provider.of<GetUserViewModel>(context, listen: false).getUsers();
     // TODO: implement didChangeDependencies
     super.didChangeDependencies();
@@ -31,8 +30,7 @@ class _AccountScreenState extends State<AccountScreen> {
 
   @override
   void initState() {
-    Provider.of<GetThreadUserViewModel>(context, listen: false)
-        .initialThreads();
+    Provider.of<GetUserViewModel>(context, listen: false).initialThreads();
     Provider.of<GetUserViewModel>(context, listen: false).getUsers();
     super.initState();
   }
@@ -75,42 +73,7 @@ class _AccountScreenState extends State<AccountScreen> {
                     SizedBox(
                       height: 15,
                     ),
-                    Stack(
-                      children: [
-                        Align(
-                          alignment: Alignment.center,
-                          child: Container(
-                              height: 100,
-                              width: 100,
-                              child: provider.user.profilePictureURL != null
-                                  ? CircleAvatar(
-                                      backgroundImage: NetworkImage(
-                                        provider.user.profilePictureURL
-                                            .toString(),
-                                      ),
-                                    )
-                                  : CircleAvatar(
-                                      backgroundImage: AssetImage(
-                                          'assets/account_default.png'),
-                                    )),
-                        ),
-                      ],
-                    ),
-                    SizedBox(
-                      height: 20,
-                    ),
-                    Text(
-                      provider.user.displayName ?? "",
-                      style: body1Bold.copyWith(fontWeight: FontWeight.bold),
-                      textAlign: TextAlign.center,
-                    ),
-                    SizedBox(
-                      height: 5,
-                    ),
-                    Text(
-                      provider.user.userName ?? "",
-                      textAlign: TextAlign.center,
-                    ),
+                    bodyProfile(provider),
                     SizedBox(
                       height: 20,
                     ),
@@ -205,45 +168,97 @@ class _AccountScreenState extends State<AccountScreen> {
                 ),
               ),
             ),
-            body: TabBarView(
-              children: [
-                Container(
-                  color: AppColors.kcDarkWhite,
-                  child: SingleChildScrollView(
-                    child: Consumer<GetThreadUserViewModel>(
-                      builder: (context, provider, child) {
-                        return body(provider);
-                      },
-                    ),
+            body: Container(
+              height: MediaQuery.of(context).size.height,
+              width: MediaQuery.of(context).size.width,
+              child: TabBarView(
+                children: [
+                  Consumer<GetUserViewModel>(
+                    builder: (context, provider, child) {
+                      return Container(
+                        color: AppColors.kcDarkWhite,
+                        child: provider.state == UserState.loaded
+                            ? body(provider)
+                            : loadingThread(),
+                      );
+                    },
                   ),
-                ),
-                Container(
-                  color: Color(0xffeeeeee),
-                  padding: EdgeInsets.only(top: 10),
-                  child: SingleChildScrollView(
-                    child: Container(
-                      color: Colors.white,
-                      padding: EdgeInsets.all(16),
-                      child: Column(
-                        crossAxisAlignment: CrossAxisAlignment.stretch,
-                        mainAxisAlignment: MainAxisAlignment.center,
-                        mainAxisSize: MainAxisSize.min,
-                        children: [
-                          Text(provider.user.biodata ?? ""),
-                          SizedBox(
-                            height: 10,
-                          ),
-                          Text('Contact me in :'),
-                          Text(provider.user.socialMedia ?? ""),
-                        ],
+                  Container(
+                    color: Color(0xffeeeeee),
+                    padding: EdgeInsets.only(top: 10),
+                    child: SingleChildScrollView(
+                      child: Container(
+                        color: Colors.white,
+                        padding: EdgeInsets.all(16),
+                        child: Column(
+                          crossAxisAlignment: CrossAxisAlignment.stretch,
+                          mainAxisAlignment: MainAxisAlignment.center,
+                          mainAxisSize: MainAxisSize.min,
+                          children: [
+                            Text(provider.user.biodata ?? ""),
+                            SizedBox(
+                              height: 10,
+                            ),
+                            Text('Contact me in :'),
+                            Text(provider.user.socialMedia ?? ""),
+                          ],
+                        ),
                       ),
                     ),
                   ),
-                ),
-              ],
+                ],
+              ),
             ),
           ));
     });
+  }
+
+  Widget bodyProfile(GetUserViewModel provider) {
+    switch (provider.state) {
+      case UserState.loaded:
+        return Column(
+          children: [
+            Stack(
+              children: [
+                Align(
+                  alignment: Alignment.center,
+                  child: Container(
+                      height: 100,
+                      width: 100,
+                      child: provider.user.profilePictureURL != null
+                          ? CircleAvatar(
+                              backgroundImage: NetworkImage(
+                                provider.user.profilePictureURL.toString(),
+                              ),
+                            )
+                          : CircleAvatar(
+                              backgroundImage:
+                                  AssetImage('assets/account_default.png'),
+                            )),
+                ),
+              ],
+            ),
+            SizedBox(
+              height: 20,
+            ),
+            Text(
+              provider.user.displayName ?? "",
+              style: body1Bold.copyWith(fontWeight: FontWeight.bold),
+              textAlign: TextAlign.center,
+            ),
+            SizedBox(
+              height: 5,
+            ),
+            Text(
+              provider.user.userName ?? "",
+              textAlign: TextAlign.center,
+            ),
+          ],
+        );
+      case UserState.loading:
+        return loadingProfile();
+    }
+    return loadingProfile();
   }
 
   Widget _buildProfile() {
@@ -290,62 +305,42 @@ class _AccountScreenState extends State<AccountScreen> {
     );
   }
 
-  Widget body(GetThreadUserViewModel provider) {
-    switch (provider.state) {
-      case UserState.loaded:
-        return SingleChildScrollView(
-          padding: EdgeInsets.only(bottom: 10),
-          child: Container(
-            color: AppColors.kcDarkWhite,
-            child: provider.threads.length > 0
-                ? Column(
-                    crossAxisAlignment: CrossAxisAlignment.stretch,
-                    mainAxisSize: MainAxisSize.min,
-                    children: [
-                      // Expanded(
-                      ListView.builder(
-                        scrollDirection: Axis.vertical,
-                        shrinkWrap: true,
-                        itemCount: provider.threads.length,
-                        itemBuilder: (context, index) {
-                          return GestureDetector(
-                              onTap: () {
-                                Navigator.pushNamed(context, detailThread,
-                                    arguments: provider.threads[index].sId);
-                              },
-                              child: _buildPostThread(index));
-                        },
-                      ),
-                      // )
-                    ],
-                  )
-                : Center(
-                    child: Container(
-                      margin: EdgeInsets.all(100),
-                      child: Column(
-                        mainAxisAlignment: MainAxisAlignment.center,
-                        children: [
-                          Image.asset('assets/not_found.png'),
-                          Text(
-                            "We can’t find any what you search.",
-                            style: subtitle1Semi.copyWith(
-                              color: AppColors.kcLightestBlack,
-                            ),
-                          ),
-                        ],
-                      ),
+  Widget body(GetUserViewModel provider) {
+    return Container(
+      child: provider.threads.length > 0
+          ? Container(
+              color: AppColors.kcDarkWhite,
+              child: Column(
+                children: [
+                  Expanded(
+                    child: ListView.builder(
+                      scrollDirection: Axis.vertical,
+                      shrinkWrap: true,
+                      itemCount: provider.threads.length,
+                      itemBuilder: (context, index) {
+                        return GestureDetector(
+                            onTap: () {
+                              Navigator.pushNamed(context, detailThread,
+                                  arguments: provider.threads[index].sId);
+                            },
+                            child: _buildPostThread(index));
+                      },
                     ),
                   ),
-          ),
-        );
-      case UserState.loading:
-        return loadingThread();
-    }
-    return Center();
+                ],
+              ),
+            )
+          : Center(
+              child: Container(
+                margin: EdgeInsets.all(100),
+                child: Text('haven\'t created a thread yet'),
+              ),
+            ),
+    );
   }
 
   Container _buildPostThread(int index) {
-    var provider = Provider.of<GetThreadUserViewModel>(context, listen: false);
+    var provider = Provider.of<GetUserViewModel>(context, listen: false);
     var thread = provider.threads[index];
     return Container(
       color: Color(0xffeeeeee),
@@ -378,7 +373,7 @@ class _AccountScreenState extends State<AccountScreen> {
   }
 
   Row _buildProfileThread(int index) {
-    var provider = Provider.of<GetThreadUserViewModel>(context, listen: false);
+    var provider = Provider.of<GetUserViewModel>(context, listen: false);
     var thread = provider.threads[index];
     final date = DateTime.parse(thread.createdAt!).toLocal();
     final now = DateTime.now();
@@ -422,7 +417,7 @@ class _AccountScreenState extends State<AccountScreen> {
   }
 
   Widget _buildThread(int index) {
-    var provider = Provider.of<GetThreadUserViewModel>(context, listen: false);
+    var provider = Provider.of<GetUserViewModel>(context, listen: false);
     var thread = provider.threads[index];
     return Container(
       child: Column(
@@ -438,7 +433,7 @@ class _AccountScreenState extends State<AccountScreen> {
             decoration: BoxDecoration(
               borderRadius: BorderRadius.all(Radius.circular(10)),
               image: DecorationImage(
-                image: NetworkImage(thread.topic!.imageURL!),
+                image: NetworkImage(thread.imageURL ?? ''),
                 fit: BoxFit.fill,
               ),
             ),
@@ -529,7 +524,7 @@ class _AccountScreenState extends State<AccountScreen> {
             child: ListView.builder(
               scrollDirection: Axis.vertical,
               shrinkWrap: true,
-              itemCount: 1,
+              itemCount: 2,
               itemBuilder: (context, index) {
                 return Container(
                   margin: spacing8Bottom,
@@ -749,7 +744,7 @@ class _AccountScreenState extends State<AccountScreen> {
   }
 
   void other(int index) {
-    var provider = Provider.of<GetThreadUserViewModel>(context, listen: false);
+    var provider = Provider.of<GetUserViewModel>(context, listen: false);
 
     var thread = provider.threads[index];
     showModalBottomSheet(
@@ -870,6 +865,57 @@ class _AccountScreenState extends State<AccountScreen> {
           ),
         );
       },
+    );
+  }
+
+  Widget loadingProfile() {
+    return SizedBox(
+      width: MediaQuery.of(context).size.width,
+      height: 160.0,
+      child: Shimmer.fromColors(
+        baseColor: AppColors.kcDarkestWhite,
+        highlightColor: AppColors.kcDarkWhite,
+        child: Column(
+          children: [
+            Align(
+              alignment: Alignment.center,
+              child: Container(
+                height: 100,
+                width: 100,
+                child: CircleAvatar(
+                  backgroundColor: AppColors.kcPrimaryColor,
+                ),
+              ),
+            ),
+            SizedBox(
+              height: 20,
+            ),
+            Container(
+              width: 80,
+              height: 20,
+              decoration: BoxDecoration(
+                color: AppColors.kcDarkestWhite,
+                borderRadius: BorderRadius.all(
+                  Radius.circular(10),
+                ),
+              ),
+            ),
+            SizedBox(
+              height: 5,
+            ),
+            Container(
+              width: 60,
+              height: 15,
+              decoration: BoxDecoration(
+                color: AppColors.kcDarkestWhite,
+                borderRadius: BorderRadius.all(
+                  Radius.circular(10),
+                ),
+              ),
+            ),
+          ],
+        ),
+      ),
     );
   }
 }
