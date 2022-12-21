@@ -472,6 +472,14 @@ class _SearchScreenState extends State<SearchScreen> {
                               height: 4,
                             ),
                             BoxText.subtitle2Semi(threads[index].title!),
+                            if (threads[index].imageURL != "")
+                              Container(
+                                  margin: spacing8Top,
+                                  decoration: BoxDecoration(
+                                    borderRadius: BorderRadius.circular(10),
+                                  ),
+                                  child: Image.network(
+                                      '${threads[index].imageURL}')),
                             Container(
                               margin: spacing8Top,
                               child:
@@ -823,6 +831,14 @@ class _SearchScreenState extends State<SearchScreen> {
                               height: 4,
                             ),
                             BoxText.subtitle2Semi(threads[index].title!),
+                            if (threads[index].imageURL != "")
+                              Container(
+                                  margin: spacing8Top,
+                                  decoration: BoxDecoration(
+                                    borderRadius: BorderRadius.circular(10),
+                                  ),
+                                  child: Image.network(
+                                      '${threads[index].imageURL}')),
                             Container(
                               margin: spacing8Top,
                               child:
