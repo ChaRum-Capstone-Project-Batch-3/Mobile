@@ -1,0 +1,1 @@
+enum SpaceState { iddle, loading, loaded, error }
