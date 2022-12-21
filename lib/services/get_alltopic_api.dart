@@ -1,10 +1,12 @@
 import 'dart:io';
 
 import 'package:dio/dio.dart';
-import 'package:fgd_flutter/models/space/get_all_topics.dart';
-import 'package:fgd_flutter/models/space/get_detail_topics.dart';
+
 import 'package:fgd_flutter/shared/api_utils.dart';
 import 'package:fgd_flutter/shared/router.dart';
+
+import '../models/space/get_all_topics.dart';
+import '../models/space/get_detail_topics.dart';
 
 // class AllTopics extends ApiUtils {
 //   Future<getTopics> topics(String sort, String order, String topic,
@@ -41,7 +43,7 @@ class GetTopicsApi extends ApiUtils {
   Future<getDetailTopics?> detailTopics(String Id, String token) async {
     print("topicId"+Id);
     try {
-      var response = await dio.get("/topic/$Id",
+      var response = await dio.get("/topic/id/$Id",
           options: Options(headers: {"Authorization": token}));
       getDetailTopics result = getDetailTopics.fromJson(response.data);
       print(response.data.toString());

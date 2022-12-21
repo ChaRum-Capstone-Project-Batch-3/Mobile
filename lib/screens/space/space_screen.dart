@@ -1,11 +1,9 @@
 import 'package:fgd_flutter/models/space/space.dart';
 import 'package:fgd_flutter/providers/get_alltopics_view_model.dart';
-import 'package:fgd_flutter/screens/DetailSpace/detail_space.dart';
+
 import 'package:fgd_flutter/shared/router.dart';
-import 'package:fgd_flutter/state/space_state.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
-import 'package:shimmer/shimmer.dart';
 
 import '../../shared/app_colors.dart';
 import '../../shared/styles.dart';
@@ -138,91 +136,76 @@ class _SpaceScreenState extends State<SpaceScreen> {
             ),
           ),
           body: SingleChildScrollView(
-              child: value.state == SpaceState.loaded
-                  ? Container(
-                      color: Color(0xfff1f3f5),
-                      child: InkWell(
-                        child: GridView.builder(
-                            physics: NeverScrollableScrollPhysics(),
-                            shrinkWrap: true,
-                            // scrollDirection: Axis.vertical,
-                            gridDelegate:
-                                const SliverGridDelegateWithMaxCrossAxisExtent(
-                              maxCrossAxisExtent: 410,
-                              childAspectRatio: 2 / 3.2,
-                            ),
-                            itemCount: value.topics.length,
-                            itemBuilder: (BuildContext context, int index) {
-                              return GestureDetector(
-                                onTap: () {
-                                  Navigator.pushNamed(context, detailSpace,
-                                      arguments: value.topics[index].sId);
-                                },
-                                child: Container(
-                                  margin: EdgeInsets.all(16),
-                                  padding: EdgeInsets.all(10),
-                                  decoration: BoxDecoration(
-                                      color: Colors.white,
-                                      borderRadius: BorderRadius.circular(10)),
-                                  child: Column(
-                                    children: [
-                                      Container(
-                                          margin: EdgeInsets.all(20),
-                                          child: Image.network(
-                                              value.topics[index].imageURL ??
-                                                  "")),
-                                      Align(
-                                        alignment: Alignment.centerLeft,
-                                        child: Text(
-                                          '${value.topics[index].topic}',
-                                          style: body1.copyWith(
-                                              color: Colors.black,
-                                              fontWeight: FontWeight.bold),
-                                        ),
-                                      ),
-                                      Text(
-                                        '${value.topics[index].description}',
-                                        style: body1.copyWith(
-                                            color: Colors.grey,
-                                            fontWeight: FontWeight.bold),
-                                      ),
-                                    ],
-                                  ),
+            child: Container(
+              color: Color(0xfff1f3f5),
+              child: InkWell(
+                child: GridView.builder(
+                    physics: NeverScrollableScrollPhysics(),
+                    shrinkWrap: true,
+                    // scrollDirection: Axis.vertical,
+                    gridDelegate:
+                        const SliverGridDelegateWithMaxCrossAxisExtent(
+                      maxCrossAxisExtent: 410,
+                      childAspectRatio: 2 / 3.2,
+                    ),
+                    itemCount: value.topics.length,
+                    itemBuilder: (BuildContext context, int index) {
+                      return GestureDetector(
+                        onTap: () {
+                          Navigator.pushNamed(context, detailSpace,
+                              arguments: value.topics[index].sId);
+                        },
+                        child: Container(
+                          margin: EdgeInsets.all(16),
+                          padding: EdgeInsets.all(10),
+                          decoration: BoxDecoration(
+                              color: Colors.white,
+                              borderRadius: BorderRadius.circular(10)),
+                          child: Column(
+                            children: [
+                              Container(
+                                  margin: EdgeInsets.all(20),
+                                  child: Image.network(
+                                      value.topics[index].imageURL ?? "")),
+                              Align(
+                                alignment: Alignment.centerLeft,
+                                child: Text(
+                                  '${value.topics[index].topic}',
+                                  style: body1.copyWith(
+                                      color: Colors.black,
+                                      fontWeight: FontWeight.bold),
                                 ),
-                              );
-                            }),
-                      ),
-                    )
-                  : Container(
-                      height: MediaQuery.of(context).size.height,
-                      width: MediaQuery.of(context).size.width,
-                      color: Color(0xfff1f3f5),
-                      child: GridView.builder(
-                          physics: NeverScrollableScrollPhysics(),
-                          shrinkWrap: true,
-                          // scrollDirection: Axis.vertical,
-                          gridDelegate:
-                              const SliverGridDelegateWithMaxCrossAxisExtent(
-                            maxCrossAxisExtent: 410,
-                            childAspectRatio: 2 / 3.2,
-                          ),
-                          itemCount: value.topics.length,
-                          itemBuilder: (BuildContext context, int index) {
-                            return Shimmer.fromColors(
-                              baseColor: AppColors.kcDarkestWhite,
-                              highlightColor: AppColors.kcDarkWhite,
-                              child: Container(
-                                width: 50,
-                                height: 10,
-                                margin: EdgeInsets.all(16),
-                                padding: EdgeInsets.all(10),
-                                decoration: BoxDecoration(
-                                    color: Colors.white,
-                                    borderRadius: BorderRadius.circular(10)),
                               ),
-                            );
-                          }),
-                    )),
+                              Text(
+                                '${value.topics[index].description}',
+                                style: body1.copyWith(
+                                    color: Colors.grey,
+                                    fontWeight: FontWeight.bold),
+                              ),
+                              // Align(
+                              //   alignment: Alignment.centerLeft,
+                              //   child: Container(
+                              //     decoration: BoxDecoration(
+                              //         borderRadius: BorderRadius.circular(8),
+                              //         color: Color(0xfff1f3f5)),
+                              //     padding: EdgeInsets.only(
+                              //         top: 8, right: 12, bottom: 8, left: 12),
+                              //     child: Text(
+                              //       '${spaces[index].sumThread}',
+                              //       style: body1.copyWith(
+                              //           color: Colors.grey,
+                              //           fontWeight: FontWeight.bold),
+                              //     ),
+                              //   ),
+                              // )
+                            ],
+                          ),
+                        ),
+                      );
+                    }),
+              ),
+            ),
+          ),
         );
       },
     );

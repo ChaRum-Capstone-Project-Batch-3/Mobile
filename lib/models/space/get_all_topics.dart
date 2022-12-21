@@ -1,3 +1,4 @@
+import 'package:fgd_flutter/models/topic/topic.dart';
 import 'package:json_annotation/json_annotation.dart';
 
 part 'get_all_topics.g.dart';
@@ -35,15 +36,15 @@ class GetTopics {
 }
 
 class Data {
-  List<Topics>? topics;
+  List<Topic>? topics;
 
   Data({this.topics});
 
   Data.fromJson(Map<String, dynamic> json) {
     if (json['topics'] != null) {
-      topics = <Topics>[];
+      topics = <Topic>[];
       json['topics'].forEach((v) {
-        topics!.add(new Topics.fromJson(v));
+        topics!.add(new Topic.fromJson(v));
       });
     }
   }
@@ -57,42 +58,7 @@ class Data {
   }
 }
 
-class Topics {
-  String? sId;
-  String? topic;
-  String? description;
-  String? imageURL;
-  String? createdAt;
-  String? updatedAt;
 
-  Topics(
-      {this.sId,
-      this.topic,
-      this.description,
-      this.imageURL,
-      this.createdAt,
-      this.updatedAt});
-
-  Topics.fromJson(Map<String, dynamic> json) {
-    sId = json['_id'];
-    topic = json['topic'];
-    description = json['description'];
-    imageURL = json['imageURL'];
-    createdAt = json['createdAt'];
-    updatedAt = json['updatedAt'];
-  }
-
-  Map<String, dynamic> toJson() {
-    final Map<String, dynamic> data = new Map<String, dynamic>();
-    data['_id'] = this.sId;
-    data['topic'] = this.topic;
-    data['description'] = this.description;
-    data['imageURL'] = this.imageURL;
-    data['createdAt'] = this.createdAt;
-    data['updatedAt'] = this.updatedAt;
-    return data;
-  }
-}
 
 class Pagination {
   int? size;

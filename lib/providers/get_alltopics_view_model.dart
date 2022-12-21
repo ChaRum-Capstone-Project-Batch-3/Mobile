@@ -1,22 +1,24 @@
-import 'package:fgd_flutter/models/space/get_all_topics.dart';
-import 'package:fgd_flutter/models/space/get_detail_topics.dart';
 
-import 'package:fgd_flutter/models/thread_detail/thread_response.dart';
-import 'package:fgd_flutter/services/get_alltopics_api.dart';
+
 import 'package:fgd_flutter/services/thread_api.dart';
 
 import 'package:fgd_flutter/shared/local_storage.dart';
 import 'package:fgd_flutter/state/space_state.dart';
 import 'package:flutter/cupertino.dart';
 
+
+import '../models/thread/thread.dart';
+import '../models/topic/topic.dart';
+import '../services/get_alltopic_api.dart';
+
 class AllTopicsViewModel with ChangeNotifier {
   var mPrefenreces = LocalStorage();
-  List<Topics> _topics = [];
-  List<Topics> get topics => _topics;
-  DetailTopic _topic = DetailTopic();
-  DetailTopic get topic => _topic;
-  List<Threads> _threads = [];
-  List<Threads> get threads => _threads;
+  List<Topic> _topics = [];
+  List<Topic> get topics => _topics;
+  Topic _topic = Topic();
+  Topic get topic => _topic;
+  List<Thread> _threads = [];
+  List<Thread> get threads => _threads;
   SpaceState _state = SpaceState.loaded;
   SpaceState get state => _state;
 
@@ -77,7 +79,7 @@ class AllTopicsViewModel with ChangeNotifier {
         await result.whenComplete(() async {
           await result.then((value) {
             print("DetailTopic" + value!.message!);
-            this._topic = value!.data!.topic ?? DetailTopic();
+            this._topic = value!.data!.topic ?? Topic();
           });
         });
         var resultThreads =
@@ -89,5 +91,6 @@ class AllTopicsViewModel with ChangeNotifier {
         });
       });
     });
+    notifyListeners();
   }
 }

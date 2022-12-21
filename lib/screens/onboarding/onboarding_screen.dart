@@ -1,6 +1,6 @@
-
 import 'package:fgd_flutter/screens/login/login_screen.dart';
 import 'package:fgd_flutter/shared/charum_ui.dart';
+import 'package:fgd_flutter/shared/local_storage.dart';
 import 'package:fgd_flutter/shared/styles.dart';
 import 'package:flutter/material.dart';
 import 'package:fgd_flutter/models/onboarding/onboarding.dart';
@@ -16,6 +16,7 @@ class _OnBoardingScreenState extends State<OnBoardingScreen> {
   int currentIndex = 0;
   late PageController _controller;
   final primaryColor = AppColors.kcPrimaryColor;
+  final mPreferences = LocalStorage();
 
   _OnBoardingScreenState(this.revere);
 
@@ -59,9 +60,8 @@ class _OnBoardingScreenState extends State<OnBoardingScreen> {
                             alignment: AlignmentDirectional.center,
                             children: [
                               Container(
-                                padding: EdgeInsets.only(bottom :30),
-                                 width: 292,
-                  
+                                  padding: EdgeInsets.only(bottom: 30),
+                                  width: 292,
                                   child: Image.asset(onBoards[index].bgImage)),
                               Container(
                                   height: 315,
@@ -69,7 +69,6 @@ class _OnBoardingScreenState extends State<OnBoardingScreen> {
                                   child: Image.asset(onBoards[index].image)),
                             ],
                           ),
-                          // SizedBox(height: 20),
                           Text(
                             textAlign: TextAlign.center,
                             onBoards[index].title,
@@ -90,22 +89,20 @@ class _OnBoardingScreenState extends State<OnBoardingScreen> {
                 },
               ),
             ),
-            Container(
-              child: Row(
-                mainAxisAlignment: MainAxisAlignment.center,
-                children: List.generate(
-                  onBoards.length,
-                  (index) => buildPage(index, context),
-                ),
+            Row(
+              mainAxisAlignment: MainAxisAlignment.center,
+              children: List.generate(
+                onBoards.length,
+                (index) => buildPage(index, context),
               ),
             ),
             Container(
-              height: 40,
               width: double.infinity,
               margin: EdgeInsets.only(top: 35, bottom: 24, left: 20, right: 20),
               child: currentIndex == onBoards.length - 1
                   ? ElevatedButton(
                       onPressed: () async {
+                        mPreferences.setBool("hasBoard", true);
                         Navigator.push(
                             context,
                             MaterialPageRoute(
@@ -121,41 +118,36 @@ class _OnBoardingScreenState extends State<OnBoardingScreen> {
                       children: [
                         Flexible(
                           fit: FlexFit.tight,
-                          child: Container(
-                            height: 40,
-                            child: TextButton(
-                              onPressed: () {
-                                _controller.nextPage(
-                                  duration: Duration(seconds: 1),
-                                  curve: Curves.easeInOut,
-                                );
-                                Navigator.push(
-                                    context,
-                                    MaterialPageRoute(
-                                        builder: (context) => LoginScreen()));
-                              },
-                              child: Text(
-                                'Skip',
-                                style: body2Semi.copyWith(
-                                  color: primaryColor,
-                                ),
+                          child: TextButton(
+                            onPressed: () {
+                              _controller.nextPage(
+                                duration: Duration(seconds: 1),
+                                curve: Curves.easeInOut,
+                              );
+                              mPreferences.setBool("hasBoard", true);
+                              Navigator.push(
+                                  context,
+                                  MaterialPageRoute(
+                                      builder: (context) => LoginScreen()));
+                            },
+                            child: Text(
+                              'Skip',
+                              style: body2Semi.copyWith(
+                                color: primaryColor,
                               ),
                             ),
                           ),
                         ),
                         Flexible(
                           fit: FlexFit.tight,
-                          child: Container(
-                            height: 40,
-                            child: ElevatedButton(
-                              onPressed: () {
-                                _controller.nextPage(
-                                  duration: Duration(seconds: 1),
-                                  curve: Curves.easeInOut,
-                                );
-                              },
-                              child: Text('Next', style: body2Semi),
-                            ),
+                          child: ElevatedButton(
+                            onPressed: () {
+                              _controller.nextPage(
+                                duration: Duration(seconds: 1),
+                                curve: Curves.easeInOut,
+                              );
+                            },
+                            child: Text('Next', style: body2Semi),
                           ),
                         )
                       ],

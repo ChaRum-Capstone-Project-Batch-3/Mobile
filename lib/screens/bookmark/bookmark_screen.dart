@@ -1,8 +1,16 @@
+import 'package:fgd_flutter/models/thread/thread.dart';
+import 'package:fgd_flutter/providers/bookmark_view_model.dart';
 import 'package:fgd_flutter/screens/follow_account/follow_account_screen.dart';
 import 'package:fgd_flutter/screens/thread_detail/thread_detail_screen.dart';
-import 'package:fgd_flutter/shared/app_colors.dart';
-import 'package:fgd_flutter/shared/styles.dart';
+import 'package:fgd_flutter/screens/thread_detail/widgets/comment_screen.dart';
+import 'package:fgd_flutter/shared/charum_ui.dart';
+import 'package:fgd_flutter/shared/helper.dart';
+import 'package:fgd_flutter/shared/router.dart';
+import 'package:fgd_flutter/state/bookmark_state.dart';
 import 'package:flutter/material.dart';
+import 'package:intl/intl.dart';
+import 'package:provider/provider.dart';
+import 'package:shimmer/shimmer.dart';
 
 class BookmarkScreen extends StatefulWidget {
   const BookmarkScreen({super.key});
@@ -17,6 +25,20 @@ class _BookmarkScreenState extends State<BookmarkScreen> {
   bool actionFollow = true;
   final primaryColor = AppColors.kcPrimaryColor;
   final whiteColor = AppColors.kcBaseWhite;
+
+  @override
+  void didChangeDependencies() {
+    // TODO: implement didChangeDependencies
+    Provider.of<BookmarkViewModel>(context, listen: false).getBookmark();
+    super.didChangeDependencies();
+  }
+
+  @override
+  void initState() {
+    // TODO: implement initState
+    Provider.of<BookmarkViewModel>(context, listen: false).initial();
+    super.initState();
+  }
 
   int countBoolList(List<bool> _topicStatus) {
     int count = 0;
@@ -53,193 +75,329 @@ class _BookmarkScreenState extends State<BookmarkScreen> {
 
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
-      appBar: AppBar(
-        toolbarHeight: 120,
-        elevation: 0.0,
-        backgroundColor: Colors.white,
-        title: Column(
-          children: [
-            Container(
-              alignment: Alignment.centerLeft,
-              margin: EdgeInsets.only(top: 12.5, bottom: 12.5),
-              child: Text(
-                'Bookmark',
-                style: heading3Bold.copyWith(color: AppColors.kcPrimaryColor),
-              ),
-            ),
-            Row(
+    return Consumer<BookmarkViewModel>(builder: (context, provider, child) {
+      return Scaffold(
+          appBar: AppBar(
+            toolbarHeight: 120,
+            elevation: 0.0,
+            backgroundColor: Colors.white,
+            title: Column(
               children: [
-                Flexible(
-                  child: TextFormField(
-                    decoration: InputDecoration(
-                      filled: true,
-                      fillColor: AppColors.kcDarkWhite,
-                      hintText: "Search bookmark",
-                      prefixIcon: Container(
-                        padding: const EdgeInsets.only(
-                            top: 10, bottom: 10, left: 20, right: 10),
+                Container(
+                  alignment: Alignment.centerLeft,
+                  margin: EdgeInsets.only(top: 12.5, bottom: 12.5),
+                  child: Text(
+                    'Bookmark',
+                    style:
+                        heading3Bold.copyWith(color: AppColors.kcPrimaryColor),
+                  ),
+                ),
+                Row(
+                  children: [
+                    Flexible(
+                      child: TextFormField(
+                        decoration: InputDecoration(
+                          filled: true,
+                          fillColor: AppColors.kcDarkWhite,
+                          hintText: "Search bookmark",
+                          prefixIcon: Container(
+                            padding: const EdgeInsets.only(
+                                top: 10, bottom: 10, left: 20, right: 10),
+                            child: Image.asset(
+                              height: 24,
+                              width: 24,
+                              'assets/icon_search_normal.png',
+                            ),
+                          ),
+                          hintStyle: TextStyle(
+                            fontWeight: FontWeight.w600,
+                            fontSize: 14,
+                          ),
+                          border: OutlineInputBorder(
+                            borderRadius: BorderRadius.all(
+                              Radius.circular(50),
+                            ),
+                          ),
+                          contentPadding: EdgeInsets.symmetric(
+                              vertical: 12, horizontal: 12),
+                        ),
+                      ),
+                    ),
+                    InkWell(
+                      onTap: () {
+                        setState(() {
+                          _topicStatus[0] = !_topicStatus[0];
+                        });
+                        buildFilterSearch();
+                      },
+                      child: Container(
+                        margin: EdgeInsets.only(left: 8, right: 8),
                         child: Image.asset(
                           height: 24,
                           width: 24,
-                          'assets/icon_search_normal.png',
+                          'assets/icon_filter_search.png',
                         ),
                       ),
-                      hintStyle: TextStyle(
-                        fontWeight: FontWeight.w600,
-                        fontSize: 14,
-                      ),
-                      border: OutlineInputBorder(
-                        borderRadius: BorderRadius.all(
-                          Radius.circular(50),
-                        ),
-                      ),
-                      contentPadding:
-                          EdgeInsets.symmetric(vertical: 12, horizontal: 12),
                     ),
-                  ),
-                ),
-                InkWell(
-                  onTap: () {
-                    setState(() {
-                      _topicStatus[0] = !_topicStatus[0];
-                    });
-                    buildFilterSearch();
-                  },
-                  child: Container(
-                    margin: EdgeInsets.only(left: 8, right: 8),
-                    child: Image.asset(
-                      height: 24,
-                      width: 24,
-                      'assets/icon_filter_search.png',
-                    ),
-                  ),
+                  ],
                 ),
               ],
             ),
-          ],
-        ),
-      ),
-      body: SingleChildScrollView(
-        padding: EdgeInsets.only(bottom: 10),
-        child: Column(
-          crossAxisAlignment: CrossAxisAlignment.stretch,
-          mainAxisSize: MainAxisSize.min,
-          children: [
-            _buildPostThread(),
-            GestureDetector(
-                onTap: () {
-                  Navigator.push(context,
-                      MaterialPageRoute(builder: (_) => ThreadDetailScreen()));
-                },
-                child: _buildPostThreadWithImage()),
-            _buildPostThread(),
-            _buildPostThreadWithImage(),
-          ],
+          ),
+          body: body(provider));
+    });
+  }
+
+  Widget body(BookmarkViewModel provider) {
+    switch (provider.state) {
+      case BookmarkState.loaded:
+        return SingleChildScrollView(
+          padding: EdgeInsets.only(bottom: 10),
+          child: Container(
+            color: AppColors.kcDarkWhite,
+            child: Column(
+              crossAxisAlignment: CrossAxisAlignment.stretch,
+              mainAxisSize: MainAxisSize.min,
+              children: [
+                // Expanded(
+                ListView.builder(
+                  scrollDirection: Axis.vertical,
+                  shrinkWrap: true,
+                  itemCount: provider.bookmarks.length,
+                  itemBuilder: (context, index) {
+                    return GestureDetector(
+                        // onTap: () {
+                        //   Navigator.pushNamed(context, detailThread,
+                        //       arguments: provider.bookmarks[index].thread!.sId);
+                        // },
+                        child: _buildPostThread(index));
+                  },
+                ),
+                // )
+              ],
+            ),
+          ),
+        );
+      case BookmarkState.loading:
+        return loadingThread();
+    }
+    return Center(
+      child: Container(
+        child: Text(
+          "ERROR",
+          style: heading2Semi,
         ),
       ),
     );
   }
 
-  Container _buildPostThread() {
+  Container _buildPostThread(int index) {
+    var provider = Provider.of<BookmarkViewModel>(context, listen: false);
+    var bookmark = provider.bookmarks[index];
     return Container(
       color: Color(0xffeeeeee),
       padding: EdgeInsets.only(top: 10, bottom: 10, left: 16, right: 16),
       child: Container(
+        padding: spacing16All,
         decoration: BoxDecoration(
             color: Colors.white, borderRadius: BorderRadius.circular(10)),
         child: Column(
+          crossAxisAlignment: CrossAxisAlignment.start,
           children: [
-            _buildProfileThreadFake(),
-            SizedBox(
-              height: 5,
-            ),
+            _buildProfileThreadFake(bookmark.thread!),
             Container(
-              margin: EdgeInsets.only(left: 16, right: 270),
-              decoration: BoxDecoration(
-                color: Color(0xffececec),
-                borderRadius: BorderRadius.circular(50),
-              ),
+              margin: spacing16Top,
               padding: EdgeInsets.only(top: 5, bottom: 5, left: 12, right: 12),
-              child: Text(
-                'Education',
-                textAlign: TextAlign.center,
-                style: TextStyle(color: Colors.grey),
+              decoration: BoxDecoration(
+                color: AppColors.kcDarkerWhite,
+                borderRadius: BorderRadius.all(Radius.circular(50)),
+              ),
+              child: BoxText.caption(
+                bookmark.thread!.topic!.topic! ?? "",
+                color: AppColors.kcLighterBlack,
               ),
             ),
-            _buildThread(),
+            _buildThread(index),
           ],
         ),
       ),
     );
   }
 
-  ListTile _buildProfileThreadFake() {
-    return ListTile(
-      title: Text('Tom Cruise'),
-      subtitle: Text('1h ago'),
-      leading: Image.asset('assets/account_default.png'),
-      trailing: Image.asset(
-        'assets/icon_more.png',
-        height: 24,
-        width: 24,
-      ),
+  Row _buildProfileThreadFake(Thread thread) {
+    final date = DateTime.parse(thread.createdAt!).toLocal();
+    final now = DateTime.now();
+    final diff = between(date, now);
+    return Row(
+      mainAxisAlignment: MainAxisAlignment.spaceBetween,
+      children: [
+        Container(
+          child: Row(
+            children: [
+              CircleAvatar(
+                backgroundColor: AppColors.kcPrimaryColor,
+              ),
+              Container(
+                margin: spacing8Left,
+                child: Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
+                    Row(
+                      children: [
+                        BoxText.captionSemi(thread.creator!.displayName!),
+                        Container(
+                          margin: spacing8Horizontal,
+                          width: 4,
+                          height: 4,
+                          decoration: BoxDecoration(
+                            color: AppColors.kcDarkestWhite,
+                            shape: BoxShape.circle,
+                          ),
+                        ),
+                        thread.isFollowed!
+                            ? GestureDetector(
+                                child: Text(
+                                  "Followed",
+                                  style: captionSemi.copyWith(
+                                    color: AppColors.kcLightestBlack,
+                                  ),
+                                ),
+                              )
+                            : GestureDetector(
+                                child: Text(
+                                  "Follow",
+                                  style: captionSemi.copyWith(
+                                    color: AppColors.kcInfoColor,
+                                  ),
+                                ),
+                              )
+                      ],
+                    ),
+                    BoxText.body3(
+                      diff.toString(),
+                      color: AppColors.kcLightestBlack,
+                    )
+                  ],
+                ),
+              ),
+            ],
+          ),
+        ),
+        Container(
+          child: GestureDetector(
+            child: ImageIcon(AssetImage('assets/icon_more.png')),
+            onTap: () {
+              other(thread);
+            },
+          ),
+        ),
+      ],
     );
   }
 
-  Container _buildThread() {
+  Widget _buildThread(int index) {
+    var provider = Provider.of<BookmarkViewModel>(context, listen: false);
+    var thread = provider.bookmarks[index].thread;
     return Container(
-      padding: EdgeInsets.all(20),
       child: Column(
         mainAxisAlignment: MainAxisAlignment.center,
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
-          Text(
-            'Is it grammatically correct to say, “I am going to go”?',
-            style: body1Bold,
+          SizedBox(
+            height: 4,
           ),
-          Text(
-              'It is technically correct but it is ambiguous. The infinitive ‘to go\' is hanging. It may be clear from the context but not as written. Consider, does it mean ‘go now\' or ‘go to the event\''),
+          BoxText.subtitle2Semi(thread!.title!),
+          Container(
+            margin: spacing8Top,
+            child: BoxText.caption(thread.description!),
+          ),
           SizedBox(
             height: 10,
           ),
           Row(
             children: [
-              GestureDetector(
-                  onTap: () {
-                    setState(() {
-                      actionLike = !actionLike;
-                    });
-                  },
-                  child: actionLike
-                      ? Row(
-                          children: [
-                            Image.asset('assets/icon_like1.png',
-                                height: 24, width: 24),
-                            Text('592'),
-                          ],
-                        )
-                      : Row(
-                          children: [
-                            Image.asset('assets/icon_like2.png',
-                                height: 24, width: 24),
-                            Text(
-                              '592',
-                              style: TextStyle(color: AppColors.kcInfoColor),
-                            ),
-                          ],
-                        )),
-              SizedBox(
-                width: 10,
+              Container(
+                child: thread.isLiked!
+                    ? GestureDetector(
+                        onTap: () {
+                          provider.unlikeThread(index);
+                          // provider.getBookmark();
+                        },
+                        child: Row(children: [
+                          ImageIcon(
+                            AssetImage('assets/icon_like2.png'),
+                            color: AppColors.kcInfoColor,
+                          ),
+                          SizedBox(
+                            width: 8,
+                          ),
+                          BoxText.captionSemi(
+                            thread.totalLike.toString(),
+                            color: AppColors.kcInfoColor,
+                          )
+                        ]),
+                      )
+                    : GestureDetector(
+                        onTap: () {
+                          provider.likeThread(index);
+                          // provider.getBookmark();
+                        },
+                        child: Row(children: [
+                          ImageIcon(
+                            AssetImage('assets/icon_like1.png'),
+                            color: AppColors.kcLightestBlack,
+                          ),
+                          SizedBox(
+                            width: 8,
+                          ),
+                          BoxText.captionSemi(
+                            thread.totalLike.toString(),
+                            color: AppColors.kcLightestBlack,
+                          )
+                        ]),
+                      ),
               ),
-              Row(
-                children: [
-                  Image.asset('assets/icon_comment.png', height: 24, width: 24),
-                  Text('108'),
-                ],
+              SizedBox(
+                width: 12,
+              ),
+              Container(
+                child: GestureDetector(
+                  onTap: () {
+                    showModalBottomSheet(
+                        isScrollControlled: true,
+                        context: context,
+                        backgroundColor: Colors.transparent,
+                        shape: RoundedRectangleBorder(
+                          borderRadius: BorderRadius.only(
+                            topLeft: Radius.circular(30),
+                            topRight: Radius.circular(30),
+                          ),
+                        ),
+                        builder: (context) {
+                          return CommentScreen(
+                            threadId: thread.sId ?? "",
+                          );
+                        });
+                  },
+                  child: Row(
+                    children: [
+                      ImageIcon(
+                        AssetImage('assets/icon_comment.png'),
+                        color: AppColors.kcLightestBlack,
+                      ),
+                      SizedBox(
+                        width: 8,
+                      ),
+                      BoxText.captionSemi(
+                        thread.totalComment.toString(),
+                        color: AppColors.kcLightestBlack,
+                      )
+                    ],
+                  ),
+                ),
               ),
             ],
-          )
+          ),
         ],
       ),
     );
@@ -400,6 +558,160 @@ class _BookmarkScreenState extends State<BookmarkScreen> {
         })
       },
     );
+  }
+
+  void other(Thread thread) {
+    var provider = Provider.of<BookmarkViewModel>(context, listen: false);
+    showModalBottomSheet(
+        context: context,
+        isScrollControlled: true,
+        shape: RoundedRectangleBorder(
+          borderRadius: BorderRadius.only(
+            topLeft: Radius.circular(30),
+            topRight: Radius.circular(30),
+          ),
+        ),
+        backgroundColor: AppColors.kcBaseWhite,
+        builder: (BuildContext context) {
+          return Container(
+            height: 300,
+            padding: spacing20All,
+            child: Column(
+              children: [
+                Center(
+                  child: Image.asset(
+                    'assets/pony_bottom_sheet.png',
+                    width: 38,
+                  ),
+                ),
+                SizedBox(
+                  height: 30,
+                ),
+                Container(
+                  child: thread.isFollowed!
+                      ? InkWell(
+                          onTap: () {
+                            provider.unfollowThread(thread.sId!);
+                            Navigator.pop(context);
+                          },
+                          child: Row(
+                            children: [
+                              ImageIcon(
+                                  AssetImage('assets/unfollow-thread.png')),
+                              SizedBox(
+                                width: 10,
+                              ),
+                              Text(
+                                "Unfollow Thread",
+                                style: button,
+                              ),
+                            ],
+                          ),
+                        )
+                      : InkWell(
+                          onTap: () {
+                            provider.followThread(thread.sId!);
+                            Navigator.pop(context);
+                          },
+                          child: Row(
+                            children: [
+                              ImageIcon(
+                                  AssetImage('assets/icon_follow_thread.png')),
+                              SizedBox(
+                                width: 10,
+                              ),
+                              Text(
+                                "Follow Thread",
+                                style: button,
+                              ),
+                            ],
+                          ),
+                        ),
+                ),
+                SizedBox(
+                  height: 20,
+                ),
+                Container(
+                  child: thread.isBookmarked!
+                      ? InkWell(
+                          onTap: () {
+                            provider.unbookmarkThread(thread.sId!);
+                            Navigator.pop(context);
+                          },
+                          child: Row(
+                            children: [
+                              ImageIcon(AssetImage(
+                                  'assets/icon_remove_bookmark.png')),
+                              SizedBox(
+                                width: 10,
+                              ),
+                              Text(
+                                "Remove Bookmark",
+                                style: button,
+                              ),
+                            ],
+                          ),
+                        )
+                      : InkWell(
+                          onTap: () {
+                            provider.bookmarkThread(thread.sId!);
+                            Navigator.pop(context);
+                          },
+                          child: Row(
+                            children: [
+                              ImageIcon(
+                                  AssetImage('assets/icon_bookmark1.png')),
+                              SizedBox(
+                                width: 10,
+                              ),
+                              Text(
+                                "Bookmark",
+                                style: button,
+                              ),
+                            ],
+                          ),
+                        ),
+                ),
+                SizedBox(
+                  height: 20,
+                ),
+                GestureDetector(
+                  child: Row(
+                    children: [
+                      ImageIcon(
+                          AssetImage('assets/icon_share_bottom_sheet.png')),
+                      SizedBox(
+                        width: 10,
+                      ),
+                      Text(
+                        "Share",
+                        style: button,
+                      ),
+                    ],
+                  ),
+                ),
+                SizedBox(
+                  height: 20,
+                ),
+                GestureDetector(
+                  child: Row(
+                    children: [
+                      ImageIcon(
+                          AssetImage('assets/icon_report_bottom_sheet.png')),
+                      SizedBox(
+                        width: 10,
+                      ),
+                      Text(
+                        "Report Thread",
+                        style: button,
+                      ),
+                    ],
+                  ),
+                ),
+              ],
+            ),
+          );
+        });
   }
 
 // Build Bottom Sheets
@@ -576,6 +888,212 @@ class _BookmarkScreenState extends State<BookmarkScreen> {
           ),
         );
       },
+    );
+  }
+
+  Widget loadingThread() {
+    return Column(
+      children: [
+        Expanded(
+          child: Container(
+            margin: spacing16All,
+            child: ListView.builder(
+              scrollDirection: Axis.vertical,
+              shrinkWrap: true,
+              itemCount: 5,
+              itemBuilder: (context, index) {
+                return Container(
+                  margin: spacing8Bottom,
+                  padding: spacing16All,
+                  decoration: BoxDecoration(
+                    borderRadius: BorderRadius.all(
+                      Radius.circular(10),
+                    ),
+                    color: AppColors.kcBaseWhite,
+                  ),
+                  child: Shimmer.fromColors(
+                    baseColor: AppColors.kcDarkestWhite,
+                    highlightColor: AppColors.kcDarkWhite,
+                    child: Column(
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      children: [
+                        Row(
+                          mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                          children: [
+                            Container(
+                              child: Row(
+                                children: [
+                                  CircleAvatar(
+                                    backgroundColor: AppColors.kcPrimaryColor,
+                                  ),
+                                  Container(
+                                    margin: spacing8Left,
+                                    child: Column(
+                                      crossAxisAlignment:
+                                          CrossAxisAlignment.start,
+                                      children: [
+                                        Row(
+                                          children: [
+                                            Container(
+                                              width: 50,
+                                              height: 10,
+                                              decoration: BoxDecoration(
+                                                color: AppColors.kcDarkestWhite,
+                                                borderRadius: BorderRadius.all(
+                                                  Radius.circular(10),
+                                                ),
+                                              ),
+                                            ),
+                                            Container(
+                                              margin: spacing8Horizontal,
+                                              width: 4,
+                                              height: 4,
+                                              decoration: BoxDecoration(
+                                                color: AppColors.kcDarkestWhite,
+                                                shape: BoxShape.circle,
+                                              ),
+                                            ),
+                                            Container(
+                                              width: 50,
+                                              height: 10,
+                                              decoration: BoxDecoration(
+                                                color: AppColors.kcDarkestWhite,
+                                                borderRadius: BorderRadius.all(
+                                                  Radius.circular(10),
+                                                ),
+                                              ),
+                                            ),
+                                          ],
+                                        ),
+                                        SizedBox(
+                                          height: 10,
+                                        ),
+                                        Container(
+                                          width: 50,
+                                          height: 10,
+                                          decoration: BoxDecoration(
+                                            color: AppColors.kcDarkestWhite,
+                                            borderRadius: BorderRadius.all(
+                                              Radius.circular(10),
+                                            ),
+                                          ),
+                                        ),
+                                      ],
+                                    ),
+                                  ),
+                                ],
+                              ),
+                            ),
+                            Container(
+                              child: GestureDetector(
+                                child: ImageIcon(
+                                    AssetImage('assets/icon_more.png')),
+                              ),
+                            ),
+                          ],
+                        ),
+                        Container(
+                          margin: spacing16Top,
+                          padding: EdgeInsets.only(
+                            top: 5,
+                            bottom: 5,
+                            left: 12,
+                            right: 12,
+                          ),
+                          width: 50,
+                          decoration: BoxDecoration(
+                            color: AppColors.kcDarkerWhite,
+                            borderRadius: BorderRadius.all(Radius.circular(50)),
+                          ),
+                        ),
+                        SizedBox(
+                          height: 4,
+                        ),
+                        Container(
+                          width: 200,
+                          height: 10,
+                          decoration: BoxDecoration(
+                            color: AppColors.kcDarkestWhite,
+                            borderRadius: BorderRadius.all(
+                              Radius.circular(10),
+                            ),
+                          ),
+                        ),
+                        SizedBox(
+                          height: 10,
+                        ),
+                        Container(
+                          height: 10,
+                          decoration: BoxDecoration(
+                            color: AppColors.kcDarkestWhite,
+                            borderRadius: BorderRadius.all(
+                              Radius.circular(10),
+                            ),
+                          ),
+                        ),
+                        SizedBox(
+                          height: 5,
+                        ),
+                        Container(
+                          height: 10,
+                          decoration: BoxDecoration(
+                            color: AppColors.kcDarkestWhite,
+                            borderRadius: BorderRadius.all(
+                              Radius.circular(10),
+                            ),
+                          ),
+                        ),
+                        SizedBox(
+                          height: 5,
+                        ),
+                        Container(
+                          height: 10,
+                          decoration: BoxDecoration(
+                            color: AppColors.kcDarkestWhite,
+                            borderRadius: BorderRadius.all(
+                              Radius.circular(10),
+                            ),
+                          ),
+                        ),
+                        SizedBox(
+                          height: 10,
+                        ),
+                        Row(
+                          children: [
+                            Container(
+                              width: 50,
+                              height: 10,
+                              decoration: BoxDecoration(
+                                color: AppColors.kcDarkestWhite,
+                                borderRadius: BorderRadius.all(
+                                  Radius.circular(10),
+                                ),
+                              ),
+                            ),
+                            SizedBox(
+                              width: 12,
+                            ),
+                            Container(
+                              width: 50,
+                              height: 10,
+                              decoration: BoxDecoration(
+                                color: AppColors.kcDarkestWhite,
+                                borderRadius: BorderRadius.all(
+                                  Radius.circular(10),
+                                ),
+                              ),
+                            ),
+                          ],
+                        ),
+                      ],
+                    ),
+                  ),
+                );
+              },
+            ),
+          ),
+        ),
+      ],
     );
   }
 }
