@@ -28,7 +28,7 @@ void main() {
         ChangeNotifierProvider(create: (context) => LoginViewModel()),
         ChangeNotifierProvider(create: (context) => RegisterViewModel()),
         ChangeNotifierProvider(create: (context) => SearchThreadViewModel()),
-        ChangeNotifierProvider(create: (context) => UserViewModel())
+        // ChangeNotifierProvider(create: (context) => UserViewModel())
       ],
       child: MyApp(),
     ),
