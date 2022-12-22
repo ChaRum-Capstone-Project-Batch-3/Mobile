@@ -1,7 +1,7 @@
 import 'package:fgd_flutter/providers/bookmark_view_model.dart';
 import 'package:fgd_flutter/providers/comment_view_model.dart';
 import 'package:fgd_flutter/providers/get_alltopics_view_model.dart';
-import 'package:fgd_flutter/providers/get_thread_user_view_model.dart';
+import 'package:fgd_flutter/providers/get_user_view_model.dart';
 import 'package:fgd_flutter/providers/create_thread_view_model.dart';
 import 'package:fgd_flutter/providers/search_thread_view_model.dart';
 import 'package:fgd_flutter/providers/thread_detail_view_model.dart';
@@ -31,7 +31,7 @@ void main() {
         ChangeNotifierProvider(create: (context) => GetUserViewModel()),
         ChangeNotifierProvider(create: (context) => UpdateUserViewModel()),
         ChangeNotifierProvider(create: (context) => CommentViewModel()),
-        ChangeNotifierProvider(create: (context) => GetThreadUserViewModel()),
+        ChangeNotifierProvider(create: (context) => GetUserViewModel()),
         ChangeNotifierProvider(create: (context) => BookmarkViewModel()),
         ChangeNotifierProvider(create: (context) => ThreadDetailViewModel()),
         ChangeNotifierProvider(create: (context) => AllTopicsViewModel()),

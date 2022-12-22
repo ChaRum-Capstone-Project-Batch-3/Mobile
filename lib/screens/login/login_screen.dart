@@ -37,9 +37,9 @@ class _LoginScreenState extends State<LoginScreen> {
     return Consumer<LoginViewModel>(builder: (context, provider, child) {
       return Scaffold(
         appBar: AppBar(
-          shadowColor: Colors.transparent,
-          backgroundColor: Colors.transparent,
+          backgroundColor: AppColors.kcBaseWhite,
           foregroundColor: AppColors.kcBaseBlack,
+          elevation: 0,
         ),
         body: SingleChildScrollView(
           child: Padding(

@@ -151,31 +151,28 @@ class _BookmarkScreenState extends State<BookmarkScreen> {
   Widget body(BookmarkViewModel provider) {
     switch (provider.state) {
       case BookmarkState.loaded:
-        return SingleChildScrollView(
-          padding: EdgeInsets.only(bottom: 10),
-          child: Container(
-            color: AppColors.kcDarkWhite,
-            child: Column(
-              crossAxisAlignment: CrossAxisAlignment.stretch,
-              mainAxisSize: MainAxisSize.min,
-              children: [
-                // Expanded(
-                ListView.builder(
+        return Container(
+          color: AppColors.kcDarkWhite,
+          child: Column(
+            crossAxisAlignment: CrossAxisAlignment.stretch,
+            mainAxisSize: MainAxisSize.min,
+            children: [
+              Expanded(
+                child: ListView.builder(
                   scrollDirection: Axis.vertical,
                   shrinkWrap: true,
                   itemCount: provider.bookmarks.length,
                   itemBuilder: (context, index) {
                     return GestureDetector(
-                        // onTap: () {
-                        //   Navigator.pushNamed(context, detailThread,
-                        //       arguments: provider.bookmarks[index].thread!.sId);
-                        // },
+                        onTap: () {
+                          Navigator.pushNamed(context, detailThread,
+                              arguments: provider.bookmarks[index].thread!.sId);
+                        },
                         child: _buildPostThread(index));
                   },
                 ),
-                // )
-              ],
-            ),
+              ),
+            ],
           ),
         );
       case BookmarkState.loading:
@@ -213,7 +210,7 @@ class _BookmarkScreenState extends State<BookmarkScreen> {
                 borderRadius: BorderRadius.all(Radius.circular(50)),
               ),
               child: BoxText.caption(
-                bookmark.thread!.topic!.topic! ?? "",
+                bookmark.thread!.topic!.topic ?? "",
                 color: AppColors.kcLighterBlack,
               ),
             ),
@@ -307,6 +304,13 @@ class _BookmarkScreenState extends State<BookmarkScreen> {
             height: 4,
           ),
           BoxText.subtitle2Semi(thread!.title!),
+          if (thread.imageURL != "")
+            Container(
+                margin: spacing8Top,
+                decoration: BoxDecoration(
+                  borderRadius: BorderRadius.circular(10),
+                ),
+                child: Image.network('${thread.imageURL}')),
           Container(
             margin: spacing8Top,
             child: BoxText.caption(thread.description!),

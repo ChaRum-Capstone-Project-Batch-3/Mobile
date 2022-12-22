@@ -149,7 +149,7 @@ class _SpaceScreenState extends State<SpaceScreen> {
                       childAspectRatio: 2 / 3.2,
                     ),
                     itemCount: value.topics.length,
-                    itemBuilder: (BuildContext context, int index) {
+                    itemBuilder: (context, index) {
                       return GestureDetector(
                         onTap: () {
                           Navigator.pushNamed(context, detailSpace,
@@ -162,6 +162,7 @@ class _SpaceScreenState extends State<SpaceScreen> {
                               color: Colors.white,
                               borderRadius: BorderRadius.circular(10)),
                           child: Column(
+                            mainAxisSize: MainAxisSize.min,
                             children: [
                               Container(
                                   margin: EdgeInsets.all(20),
@@ -182,22 +183,6 @@ class _SpaceScreenState extends State<SpaceScreen> {
                                     color: Colors.grey,
                                     fontWeight: FontWeight.bold),
                               ),
-                              // Align(
-                              //   alignment: Alignment.centerLeft,
-                              //   child: Container(
-                              //     decoration: BoxDecoration(
-                              //         borderRadius: BorderRadius.circular(8),
-                              //         color: Color(0xfff1f3f5)),
-                              //     padding: EdgeInsets.only(
-                              //         top: 8, right: 12, bottom: 8, left: 12),
-                              //     child: Text(
-                              //       '${spaces[index].sumThread}',
-                              //       style: body1.copyWith(
-                              //           color: Colors.grey,
-                              //           fontWeight: FontWeight.bold),
-                              //     ),
-                              //   ),
-                              // )
                             ],
                           ),
                         ),
