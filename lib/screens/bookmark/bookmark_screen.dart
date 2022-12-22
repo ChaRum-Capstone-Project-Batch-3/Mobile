@@ -164,10 +164,10 @@ class _BookmarkScreenState extends State<BookmarkScreen> {
                   itemCount: provider.bookmarks.length,
                   itemBuilder: (context, index) {
                     return GestureDetector(
-                        // onTap: () {
-                        //   Navigator.pushNamed(context, detailThread,
-                        //       arguments: provider.bookmarks[index].thread!.sId);
-                        // },
+                        onTap: () {
+                          Navigator.pushNamed(context, detailThread,
+                              arguments: provider.bookmarks[index].thread!.sId);
+                        },
                         child: _buildPostThread(index));
                   },
                 ),
@@ -304,6 +304,13 @@ class _BookmarkScreenState extends State<BookmarkScreen> {
             height: 4,
           ),
           BoxText.subtitle2Semi(thread!.title!),
+          if (thread.imageURL != "")
+            Container(
+                margin: spacing8Top,
+                decoration: BoxDecoration(
+                  borderRadius: BorderRadius.circular(10),
+                ),
+                child: Image.network('${thread.imageURL}')),
           Container(
             margin: spacing8Top,
             child: BoxText.caption(thread.description!),
