@@ -71,7 +71,7 @@ class _ThreadDetailScreenState extends State<ThreadDetailScreen> {
                           width: 25,
                           height: 25,
                           child: Image.asset(
-                            "assets/icon_bookmark2.png",
+                            "assets/icon_remove_bookmark.png",
                             scale: 1,
                           ),
                         )
