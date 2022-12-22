@@ -1,9 +1,11 @@
 import 'package:bubble_tab_indicator/bubble_tab_indicator.dart';
 import 'package:fgd_flutter/shared/router.dart';
+import 'package:provider/provider.dart';
 import '/shared/app_colors.dart';
 import '/shared/styles.dart';
 import 'package:fgd_flutter/shared/charum_ui.dart';
 import 'package:flutter/material.dart';
+import 'package:fgd_flutter/providers/home_thread_view_model.dart';
 
 class HomeScreen extends StatefulWidget {
   const HomeScreen({super.key});
@@ -13,159 +15,171 @@ class HomeScreen extends StatefulWidget {
 }
 
 class _HomeScreenState extends State<HomeScreen> {
+  @override
+  void didChangeDependencies() {
+    // TODO: implement didChangeDependencies
+    Provider.of<HomeThreadViewModel>(context, listen: false).getAllThread();
+    super.didChangeDependencies();
+  }
+
   bool actionLike = true;
   @override
   Widget build(BuildContext context) {
-    return DefaultTabController(
-      length: 3,
-      child: Scaffold(
-        appBar: PreferredSize(
-          preferredSize: Size.fromHeight(120),
-          child: AppBar(
-            elevation: 0.0,
-            backgroundColor: Colors.white,
-            actions: [
-              Row(
-                children: [
-                  InkWell(child: Image.asset("assets/notification.png")),
-                  SizedBox(width: 15),
-                  InkWell(
-                    onTap: () {
-                      Navigator.pushNamed(context, search);
-                    },
-                    child: Image.asset(
-                      "assets/search-normal.png",
-                    ),
+    return Consumer<HomeThreadViewModel>(builder: (context, provider, child) {
+        return DefaultTabController(
+          length: 3,
+          child: Scaffold(
+            appBar: PreferredSize(
+              preferredSize: Size.fromHeight(120),
+              child: AppBar(
+                elevation: 0.0,
+                backgroundColor: Colors.white,
+                actions: [
+                  Row(
+                    children: [
+                      InkWell(child: Image.asset("assets/notification.png")),
+                      SizedBox(width: 15),
+                      InkWell(
+                        onTap: () {
+                          Navigator.pushNamed(context, search);
+                        },
+                        child: Image.asset(
+                          "assets/search-normal.png",
+                        ),
+                      ),
+                      SizedBox(
+                        width: 10,
+                      )
+                    ],
                   ),
-                  SizedBox(
-                    width: 10,
-                  )
                 ],
-              ),
-            ],
-            bottom: TabBar(
-              padding: EdgeInsets.only(left: 18, right: 18, top: 8, bottom: 8),
-              indicator: BoxDecoration(
-                borderRadius: BorderRadius.all(
-                  Radius.circular(6),
+                bottom: TabBar(
+                  padding: EdgeInsets.only(left: 18, right: 18, top: 8, bottom: 8),
+                  indicator: BoxDecoration(
+                    borderRadius: BorderRadius.all(
+                      Radius.circular(6),
+                    ),
+                    color: AppColors.kcPrimaryColor!.shade200,
+                  ),
+                  indicatorColor: AppColors.kcPrimaryColor,
+                  isScrollable: true,
+                  labelColor: AppColors.kcPrimaryColor,
+                  unselectedLabelColor: AppColors.kcDarkestWhite,
+                  indicatorSize: TabBarIndicatorSize.tab,
+                  tabs: [
+                    Tab(
+                      child: Row(
+                        children: [
+                          ImageIcon(AssetImage("assets/threads.png")),
+                          SizedBox(
+                            width: 10,
+                          ),
+                          Text(
+                            "Threads",
+                            style: body1.copyWith(fontWeight: FontWeight.bold),
+                          ),
+                        ],
+                      ),
+                    ),
+                    Tab(
+                      child: Row(
+                        children: [
+                          ImageIcon(AssetImage("assets/star.png")),
+                          SizedBox(
+                            width: 10,
+                          ),
+                          Text(
+                            "Popular",
+                            style: body1.copyWith(fontWeight: FontWeight.bold),
+                          ),
+                        ],
+                      ),
+                    ),
+                    Tab(
+                      child: Row(
+                        children: [
+                          ImageIcon(AssetImage("assets/followed.png")),
+                          SizedBox(
+                            width: 10,
+                          ),
+                          Text(
+                            "Followed",
+                            style: body1.copyWith(fontWeight: FontWeight.bold),
+                          ),
+                        ],
+                      ),
+                    ),
+                  ],
                 ),
-                color: AppColors.kcPrimaryColor!.shade200,
+                title: Row(
+                  children: [
+                    Image.asset("assets/logocharum.png"),
+                    SizedBox(width: 5),
+                    Text(
+                      'Charum',
+                      style: heading3Bold.copyWith(color: AppColors.kcPrimaryColor),
+                    ),
+                  ],
+                ),
               ),
-              indicatorColor: AppColors.kcPrimaryColor,
-              isScrollable: true,
-              labelColor: AppColors.kcPrimaryColor,
-              unselectedLabelColor: AppColors.kcDarkestWhite,
-              indicatorSize: TabBarIndicatorSize.tab,
-              tabs: [
-                Tab(
-                  child: Row(
+            ),
+            body: TabBarView(
+              children: [
+                SingleChildScrollView(
+                  child: Column(
+                    crossAxisAlignment: CrossAxisAlignment.stretch,
+                    mainAxisAlignment: MainAxisAlignment.center,
+                    mainAxisSize: MainAxisSize.min,
                     children: [
-                      ImageIcon(AssetImage("assets/threads.png")),
-                      SizedBox(
-                        width: 10,
-                      ),
-                      Text(
-                        "Threads",
-                        style: body1.copyWith(fontWeight: FontWeight.bold),
-                      ),
+                      _buildPostThread(),
+                      _buildPostThreadWithImage(),
+                      _buildPostThread(),
+                      _buildPostThreadWithImage(),
                     ],
                   ),
                 ),
-                Tab(
-                  child: Row(
+                SingleChildScrollView(
+                  child: Column(
+                    crossAxisAlignment: CrossAxisAlignment.stretch,
+                    mainAxisAlignment: MainAxisAlignment.center,
+                    mainAxisSize: MainAxisSize.min,
                     children: [
-                      ImageIcon(AssetImage("assets/star.png")),
-                      SizedBox(
-                        width: 10,
-                      ),
-                      Text(
-                        "Popular",
-                        style: body1.copyWith(fontWeight: FontWeight.bold),
-                      ),
+                      _buildPostThread(),
+                      _buildPostThreadWithImage(),
+                      _buildPostThread(),
+                      _buildPostThreadWithImage(),
                     ],
                   ),
                 ),
-                Tab(
-                  child: Row(
+                SingleChildScrollView(
+                  child: Column(
+                    crossAxisAlignment: CrossAxisAlignment.stretch,
+                    mainAxisAlignment: MainAxisAlignment.center,
+                    mainAxisSize: MainAxisSize.min,
                     children: [
-                      ImageIcon(AssetImage("assets/followed.png")),
-                      SizedBox(
-                        width: 10,
-                      ),
-                      Text(
-                        "Followed",
-                        style: body1.copyWith(fontWeight: FontWeight.bold),
-                      ),
+                      _buildPostThread(),
+                      _buildPostThreadWithImage(),
+                      _buildPostThread(),
+                      _buildPostThreadWithImage(),
                     ],
                   ),
                 ),
               ],
             ),
-            title: Row(
-              children: [
-                Image.asset("assets/logocharum.png"),
-                SizedBox(width: 5),
-                Text(
-                  'Charum',
-                  style: heading3Bold.copyWith(color: AppColors.kcPrimaryColor),
-                ),
-              ],
+            floatingActionButton: FloatingActionButton(
+              backgroundColor: AppColors.kcPrimaryColor,
+              onPressed: () {
+                Navigator.pushNamed(context, createThread);
+              },
+              child: const Icon(Icons.add),
             ),
           ),
-        ),
-        body: TabBarView(
-          children: [
-            SingleChildScrollView(
-              child: Column(
-                crossAxisAlignment: CrossAxisAlignment.stretch,
-                mainAxisAlignment: MainAxisAlignment.center,
-                mainAxisSize: MainAxisSize.min,
-                children: [
-                  _buildPostThread(),
-                  _buildPostThreadWithImage(),
-                  _buildPostThread(),
-                  _buildPostThreadWithImage(),
-                ],
-              ),
-            ),
-            SingleChildScrollView(
-              child: Column(
-                crossAxisAlignment: CrossAxisAlignment.stretch,
-                mainAxisAlignment: MainAxisAlignment.center,
-                mainAxisSize: MainAxisSize.min,
-                children: [
-                  _buildPostThread(),
-                  _buildPostThreadWithImage(),
-                  _buildPostThread(),
-                  _buildPostThreadWithImage(),
-                ],
-              ),
-            ),
-            SingleChildScrollView(
-              child: Column(
-                crossAxisAlignment: CrossAxisAlignment.stretch,
-                mainAxisAlignment: MainAxisAlignment.center,
-                mainAxisSize: MainAxisSize.min,
-                children: [
-                  _buildPostThread(),
-                  _buildPostThreadWithImage(),
-                  _buildPostThread(),
-                  _buildPostThreadWithImage(),
-                ],
-              ),
-            ),
-          ],
-        ),
-        floatingActionButton: FloatingActionButton(
-          backgroundColor: AppColors.kcPrimaryColor,
-          onPressed: () {
-            Navigator.pushNamed(context, createThread);
-          },
-          child: const Icon(Icons.add),
-        ),
-      ),
+        );
+      },
     );
   }
+
+
 }
 
 Container _buildPostThread() {
@@ -365,4 +379,6 @@ Container _buildThreadWithImage() {
       ],
     ),
   );
+
+  
 }
