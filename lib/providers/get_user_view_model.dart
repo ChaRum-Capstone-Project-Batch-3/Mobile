@@ -1,4 +1,6 @@
-import 'package:fgd_flutter/models/account/get_user_response.dart';
+import 'package:fgd_flutter/models/user/user.dart';
+import 'package:fgd_flutter/models/home/home_thread_response.dart';
+import 'package:fgd_flutter/models/thread/thread.dart';
 import 'package:flutter/material.dart';
 
 import '../models/account/get_thread_user_response.dart';
@@ -12,8 +14,8 @@ class GetUserViewModel with ChangeNotifier {
   User get user => _user;
   UserState _state = UserState.loaded;
   UserState get state => _state;
-  List<Threads> _threads = [];
-  List<Threads> get threads => _threads;
+  List<Thread> _threads = [];
+  List<Thread> get threads => _threads;
 
   changeState(UserState s) {
     this._state = s;
@@ -70,6 +72,25 @@ class GetUserViewModel with ChangeNotifier {
       changeState(UserState.error);
       notifyListeners();
     }
+  }
+
+  Future<bool> logout() async {
+    var removeToken = mPreferences.remove("token");
+    var removeStatus = mPreferences.remove("isLogin");
+    await removeToken.whenComplete(() async {
+      await removeToken.then((value) async {
+        if (value) {
+          await removeStatus.whenComplete(() async {
+            await removeStatus.then((val) {
+              if (val) {
+                return true;
+              }
+            });
+          });
+        }
+      });
+    });
+    return false;
   }
 
   deleteThread(int index) async {
@@ -133,24 +154,5 @@ class GetUserViewModel with ChangeNotifier {
         notifyListeners();
       });
     });
-  }
-
-  Future<bool> logout() async {
-    var removeToken = mPreferences.remove("token");
-    var removeStatus = mPreferences.remove("isLogin");
-    await removeToken.whenComplete(() async {
-      await removeToken.then((value) async {
-        if (value) {
-          await removeStatus.whenComplete(() async {
-            await removeStatus.then((val) {
-              if (val) {
-                return true;
-              }
-            });
-          });
-        }
-      });
-    });
-    return false;
   }
 }

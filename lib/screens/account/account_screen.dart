@@ -814,6 +814,7 @@ class _AccountScreenState extends State<AccountScreen> {
   }
 
   void _buildMoreAccount() {
+    var provider = Provider.of<GetUserViewModel>(context, listen: false);
     showModalBottomSheet(
       shape: const RoundedRectangleBorder(
         borderRadius: BorderRadius.only(
