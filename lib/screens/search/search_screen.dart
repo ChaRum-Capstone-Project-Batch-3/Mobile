@@ -470,6 +470,80 @@ class _SearchScreenState extends State<SearchScreen> {
                                   color: AppColors.kcDarkerWhite,
                                   borderRadius:
                                       BorderRadius.all(Radius.circular(50)),
+                            ),
+                            SizedBox(
+                              height: 4,
+                            ),
+                            BoxText.subtitle2Semi(threads[index].title!),
+                            Container(
+                              height: 200,
+                              decoration: BoxDecoration(
+                                borderRadius:
+                                    BorderRadius.all(Radius.circular(10)),
+                                image: DecorationImage(
+                                  image: NetworkImage(threads[index].imageURL!),
+                                  fit: BoxFit.fill,
+                                ),
+                              ),
+                            ),
+                            Container(
+                              margin: spacing8Top,
+                              child:
+                                  BoxText.caption(threads[index].description!),
+                            ),
+                            SizedBox(
+                              height: 10,
+                            ),
+                            Row(
+                              children: [
+                                Container(
+                                  child: threads[index].isLiked!
+                                      ? GestureDetector(
+                                          onTap: () {
+                                            provider.unlikeThread(
+                                                index, "thread");
+                                            // provider.getBookmark();
+                                          },
+                                          child: Row(children: [
+                                            ImageIcon(
+                                              AssetImage(
+                                                  'assets/icon_like2.png'),
+                                              color: AppColors.kcInfoColor,
+                                            ),
+                                            SizedBox(
+                                              width: 8,
+                                            ),
+                                            BoxText.captionSemi(
+                                              threads[index]
+                                                  .totalLike
+                                                  .toString(),
+                                              color: AppColors.kcInfoColor,
+                                            )
+                                          ]),
+                                        )
+                                      : GestureDetector(
+                                          onTap: () {
+                                            provider.likeThread(
+                                                index, "thread");
+                                            // provider.getBookmark();
+                                          },
+                                          child: Row(children: [
+                                            ImageIcon(
+                                              AssetImage(
+                                                  'assets/icon_like1.png'),
+                                              color: AppColors.kcLightestBlack,
+                                            ),
+                                            SizedBox(
+                                              width: 8,
+                                            ),
+                                            BoxText.captionSemi(
+                                              threads[index]
+                                                  .totalLike
+                                                  .toString(),
+                                              color: AppColors.kcLightestBlack,
+                                            )
+                                          ]),
+                                        ),
                                 ),
                                 child: BoxText.caption(
                                   threads[index].topic!.topic!,

@@ -151,16 +151,14 @@ class _BookmarkScreenState extends State<BookmarkScreen> {
   Widget body(BookmarkViewModel provider) {
     switch (provider.state) {
       case BookmarkState.loaded:
-        return SingleChildScrollView(
-          padding: EdgeInsets.only(bottom: 10),
-          child: Container(
-            color: AppColors.kcDarkWhite,
-            child: Column(
-              crossAxisAlignment: CrossAxisAlignment.stretch,
-              mainAxisSize: MainAxisSize.min,
-              children: [
-                // Expanded(
-                ListView.builder(
+        return Container(
+          color: AppColors.kcDarkWhite,
+          child: Column(
+            crossAxisAlignment: CrossAxisAlignment.stretch,
+            mainAxisSize: MainAxisSize.min,
+            children: [
+              Expanded(
+                child: ListView.builder(
                   scrollDirection: Axis.vertical,
                   shrinkWrap: true,
                   itemCount: provider.bookmarks.length,
@@ -173,9 +171,8 @@ class _BookmarkScreenState extends State<BookmarkScreen> {
                         child: _buildPostThread(index));
                   },
                 ),
-                // )
-              ],
-            ),
+              ),
+            ],
           ),
         );
       case BookmarkState.loading:
@@ -213,7 +210,7 @@ class _BookmarkScreenState extends State<BookmarkScreen> {
                 borderRadius: BorderRadius.all(Radius.circular(50)),
               ),
               child: BoxText.caption(
-                bookmark.thread!.topic!.topic! ?? "",
+                bookmark.thread!.topic!.topic ?? "",
                 color: AppColors.kcLighterBlack,
               ),
             ),

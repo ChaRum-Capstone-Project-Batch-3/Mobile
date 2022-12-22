@@ -1,5 +1,9 @@
 import 'package:fgd_flutter/models/space/space.dart';
+import 'package:fgd_flutter/providers/get_alltopics_view_model.dart';
+
+import 'package:fgd_flutter/shared/router.dart';
 import 'package:flutter/material.dart';
+import 'package:provider/provider.dart';
 
 import '../../shared/app_colors.dart';
 import '../../shared/styles.dart';
@@ -12,6 +16,19 @@ class SpaceScreen extends StatefulWidget {
 }
 
 class _SpaceScreenState extends State<SpaceScreen> {
+  @override
+  void initState() {
+    print("test");
+    Provider.of<AllTopicsViewModel>(context, listen: false).getAllTopics(
+      "createdAt",
+      "desc",
+      "",
+      "",
+    );
+    // TODO: implement initState
+    super.initState();
+  }
+
   bool actionSort = true;
   List<bool> _topicStatus = [
     false,
@@ -36,131 +53,143 @@ class _SpaceScreenState extends State<SpaceScreen> {
     false
   ];
 
+  TextEditingController searchSp = TextEditingController();
+  @override
+  void dispose() {
+    searchSp.dispose();
+    // TODO: implement dispose
+    super.dispose();
+  }
+
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
-      appBar: AppBar(
-        toolbarHeight: 120,
-        elevation: 0.0,
-        backgroundColor: Colors.white,
-        title: Column(
-          children: [
-            Container(
-              alignment: Alignment.centerLeft,
-              margin: EdgeInsets.only(top: 12.5, bottom: 12.5),
-              child: Text(
-                'Space',
-                style: heading3Bold.copyWith(color: AppColors.kcPrimaryColor),
-              ),
-            ),
-            Row(
+    return Consumer<AllTopicsViewModel>(
+      builder: (context, value, child) {
+        return Scaffold(
+          appBar: AppBar(
+            toolbarHeight: 120,
+            elevation: 0.0,
+            backgroundColor: Colors.white,
+            title: Column(
               children: [
-                Flexible(
-                  child: TextFormField(
-                    decoration: InputDecoration(
-                      filled: true,
-                      fillColor: AppColors.kcDarkWhite,
-                      hintText: "Search space",
-                      prefixIcon: Container(
-                        padding: const EdgeInsets.only(
-                            top: 10, bottom: 10, left: 20, right: 10),
+                Container(
+                  alignment: Alignment.centerLeft,
+                  margin: EdgeInsets.only(top: 12.5, bottom: 12.5),
+                  child: Text(
+                    'Space',
+                    style:
+                        heading3Bold.copyWith(color: AppColors.kcPrimaryColor),
+                  ),
+                ),
+                Row(
+                  children: [
+                    Flexible(
+                      child: TextFormField(
+                        controller: searchSp,
+                        onEditingComplete: () {
+                          value.searchTopic(searchSp.text);
+                          FocusScope.of(context).unfocus();
+                        },
+                        decoration: InputDecoration(
+                          filled: true,
+                          fillColor: AppColors.kcDarkWhite,
+                          hintText: "Search space",
+                          prefixIcon: Container(
+                            padding: const EdgeInsets.only(
+                                top: 10, bottom: 10, left: 20, right: 10),
+                            child: Image.asset(
+                              height: 24,
+                              width: 24,
+                              'assets/icon_search_normal.png',
+                            ),
+                          ),
+                          hintStyle: TextStyle(
+                            fontWeight: FontWeight.w600,
+                            fontSize: 14,
+                          ),
+                          border: OutlineInputBorder(
+                            borderRadius: BorderRadius.all(
+                              Radius.circular(50),
+                            ),
+                          ),
+                          contentPadding: EdgeInsets.symmetric(
+                              vertical: 12, horizontal: 12),
+                        ),
+                      ),
+                    ),
+                    GestureDetector(
+                      onTap: () {
+                        buildeFilterSpace();
+                      },
+                      child: Container(
+                        margin: EdgeInsets.only(left: 8, right: 8),
                         child: Image.asset(
                           height: 24,
                           width: 24,
-                          'assets/icon_search_normal.png',
+                          'assets/icon_filter_search.png',
                         ),
                       ),
-                      hintStyle: TextStyle(
-                        fontWeight: FontWeight.w600,
-                        fontSize: 14,
-                      ),
-                      border: OutlineInputBorder(
-                        borderRadius: BorderRadius.all(
-                          Radius.circular(50),
-                        ),
-                      ),
-                      contentPadding:
-                          EdgeInsets.symmetric(vertical: 12, horizontal: 12),
                     ),
-                  ),
-                ),
-                GestureDetector(
-                  onTap: () {
-                    buildeFilterSpace();
-                  },
-                  child: Container(
-                    margin: EdgeInsets.only(left: 8, right: 8),
-                    child: Image.asset(
-                      height: 24,
-                      width: 24,
-                      'assets/icon_filter_search.png',
-                    ),
-                  ),
+                  ],
                 ),
               ],
             ),
-          ],
-        ),
-      ),
-      body: SingleChildScrollView(
-        child: Container(
-          color: Color(0xfff1f3f5),
-          child: GridView.builder(
-              physics: NeverScrollableScrollPhysics(),
-              shrinkWrap: true,
-              // scrollDirection: Axis.vertical,
-              gridDelegate: const SliverGridDelegateWithMaxCrossAxisExtent(
-                maxCrossAxisExtent: 410,
-                childAspectRatio: 2 / 3.2,
-              ),
-              itemCount: spaces.length,
-              itemBuilder: (BuildContext context, int index) {
-                return Container(
-                  margin: EdgeInsets.all(16),
-                  padding: EdgeInsets.all(10),
-                  decoration: BoxDecoration(
-                      color: Colors.white,
-                      borderRadius: BorderRadius.circular(10)),
-                  child: Column(
-                    children: [
-                      Container(
-                          margin: EdgeInsets.all(20),
-                          child: spaces[index].image),
-                      Align(
-                        alignment: Alignment.centerLeft,
-                        child: Text(
-                          '${spaces[index].title}',
-                          style: body1.copyWith(
-                              color: Colors.black, fontWeight: FontWeight.bold),
-                        ),
-                      ),
-                      Text(
-                        '${spaces[index].description}',
-                        style: body1.copyWith(
-                            color: Colors.grey, fontWeight: FontWeight.bold),
-                      ),
-                      Align(
-                        alignment: Alignment.centerLeft,
+          ),
+          body: SingleChildScrollView(
+            child: Container(
+              color: Color(0xfff1f3f5),
+              child: InkWell(
+                child: GridView.builder(
+                    physics: NeverScrollableScrollPhysics(),
+                    shrinkWrap: true,
+                    // scrollDirection: Axis.vertical,
+                    gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
+                        crossAxisCount: 1),
+                    itemCount: value.topics.length,
+                    itemBuilder: (context, index) {
+                      return GestureDetector(
+                        onTap: () {
+                          Navigator.pushNamed(context, detailSpace,
+                              arguments: value.topics[index].sId);
+                        },
                         child: Container(
+                          margin: EdgeInsets.all(16),
+                          padding: EdgeInsets.all(10),
                           decoration: BoxDecoration(
-                              borderRadius: BorderRadius.circular(8),
-                              color: Color(0xfff1f3f5)),
-                          padding: EdgeInsets.only(
-                              top: 8, right: 12, bottom: 8, left: 12),
-                          child: Text(
-                            '${spaces[index].sumThread}',
-                            style: body1.copyWith(
-                                color: Colors.grey,
-                                fontWeight: FontWeight.bold),
+                              color: Colors.white,
+                              borderRadius: BorderRadius.circular(10)),
+                          child: Column(
+                            mainAxisSize: MainAxisSize.min,
+                            children: [
+                              Container(
+                                  margin: EdgeInsets.all(20),
+                                  child: Image.network(
+                                      value.topics[index].imageURL ?? "")),
+                              Align(
+                                alignment: Alignment.centerLeft,
+                                child: Text(
+                                  '${value.topics[index].topic}',
+                                  style: body1.copyWith(
+                                      color: Colors.black,
+                                      fontWeight: FontWeight.bold),
+                                ),
+                              ),
+                              Text(
+                                '${value.topics[index].description}',
+                                style: body1.copyWith(
+                                    color: Colors.grey,
+                                    fontWeight: FontWeight.bold),
+                              ),
+                            ],
                           ),
                         ),
-                      )
-                    ],
-                  ),
-                );
-              }),
-        ),
-      ),
+                      );
+                    }),
+              ),
+            ),
+          ),
+        );
+      },
     );
   }
 
