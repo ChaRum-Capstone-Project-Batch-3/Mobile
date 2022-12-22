@@ -12,6 +12,7 @@ class TopicBottomModal extends StatefulWidget {
 }
 
 class _TopicBottomModal extends State<TopicBottomModal> {
+  String? topicId;
   @override
   Widget build(BuildContext context) {
     return Consumer<CreateThreadViewModel>(
@@ -74,6 +75,10 @@ class _TopicBottomModal extends State<TopicBottomModal> {
                         ),
                         onPressed: () {
                           provider.setTopic(i);
+
+                          setState(() {
+                            topicId = provider.topics[i].sId;
+                          });
                         },
                       ),
                     ),

@@ -13,7 +13,7 @@ class CreateThreadViewModel extends ChangeNotifier {
   List<Topics> _topics = [];
   List<Topics> get topics => _topics;
 
-  Future<bool> CreateThread(CreateThreadBody threadBody) async {
+  Future<bool> createThread(CreateThreadBody threadBody) async {
     var token = mPreference.getString('token');
     await token.whenComplete(() async {
       await token.then((value) async {
@@ -28,7 +28,6 @@ class CreateThreadViewModel extends ChangeNotifier {
         });
       });
     });
-
     notifyListeners();
     return true;
   }
@@ -57,4 +56,5 @@ class CreateThreadViewModel extends ChangeNotifier {
     print(this._topicID);
     notifyListeners();
   }
+
 }

@@ -207,15 +207,11 @@ class _AccountScreenState extends State<AccountScreen> {
             ),
             body: TabBarView(
               children: [
-                Container(
-                  color: AppColors.kcDarkWhite,
-                  child: SingleChildScrollView(
-                    child: Consumer<GetThreadUserViewModel>(
-                      builder: (context, provider, child) {
-                        return body(provider);
-                      },
-                    ),
-                  ),
+                Consumer<GetThreadUserViewModel>(
+                  builder: (context, provider, child) {
+                    return Container(
+                        color: AppColors.kcDarkWhite, child: body(provider));
+                  },
                 ),
                 Container(
                   color: Color(0xffeeeeee),
@@ -291,57 +287,37 @@ class _AccountScreenState extends State<AccountScreen> {
   }
 
   Widget body(GetThreadUserViewModel provider) {
-    switch (provider.state) {
-      case UserState.loaded:
-        return SingleChildScrollView(
-          padding: EdgeInsets.only(bottom: 10),
-          child: Container(
-            color: AppColors.kcDarkWhite,
-            child: provider.threads.length > 0
-                ? Column(
-                    crossAxisAlignment: CrossAxisAlignment.stretch,
-                    mainAxisSize: MainAxisSize.min,
-                    children: [
-                      // Expanded(
-                      ListView.builder(
-                        scrollDirection: Axis.vertical,
-                        shrinkWrap: true,
-                        itemCount: provider.threads.length,
-                        itemBuilder: (context, index) {
-                          return GestureDetector(
-                              onTap: () {
-                                Navigator.pushNamed(context, detailThread,
-                                    arguments: provider.threads[index].sId);
-                              },
-                              child: _buildPostThread(index));
-                        },
-                      ),
-                      // )
-                    ],
-                  )
-                : Center(
-                    child: Container(
-                      margin: EdgeInsets.all(100),
-                      child: Column(
-                        mainAxisAlignment: MainAxisAlignment.center,
-                        children: [
-                          Image.asset('assets/not_found.png'),
-                          Text(
-                            "We can’t find any what you search.",
-                            style: subtitle1Semi.copyWith(
-                              color: AppColors.kcLightestBlack,
-                            ),
-                          ),
-                        ],
-                      ),
+    return Container(
+      child: provider.threads.length > 0
+          ? Container(
+              color: AppColors.kcDarkWhite,
+              child: Column(
+                children: [
+                  Expanded(
+                    child: ListView.builder(
+                      scrollDirection: Axis.vertical,
+                      shrinkWrap: true,
+                      itemCount: provider.threads.length,
+                      itemBuilder: (context, index) {
+                        return GestureDetector(
+                            onTap: () {
+                              Navigator.pushNamed(context, detailThread,
+                                  arguments: provider.threads[index].sId);
+                            },
+                            child: _buildPostThread(index));
+                      },
                     ),
                   ),
-          ),
-        );
-      case UserState.loading:
-        return loadingThread();
-    }
-    return Center();
+                ],
+              ),
+            )
+          : Center(
+              child: Container(
+                margin: EdgeInsets.all(100),
+                child: Text('haven\'t created a thread yet'),
+              ),
+            ),
+    );
   }
 
   Container _buildPostThread(int index) {
@@ -438,7 +414,7 @@ class _AccountScreenState extends State<AccountScreen> {
             decoration: BoxDecoration(
               borderRadius: BorderRadius.all(Radius.circular(10)),
               image: DecorationImage(
-                image: NetworkImage(thread.topic!.imageURL!),
+                image: NetworkImage(thread.imageURL ?? ''),
                 fit: BoxFit.fill,
               ),
             ),

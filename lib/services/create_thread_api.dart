@@ -9,9 +9,17 @@ class CreadThreadApi extends ApiUtils {
   //make a post request to send create thread
   Future<CreateThreadResponse> createThread(
       String token, CreateThreadBody thread) async {
+         FormData formValidation = FormData.fromMap({
+      "topicID": thread.topicID,
+      "title": thread.title,
+      "description": thread.description,
+      "image": thread.imageURL != ''
+          ? await MultipartFile.fromFile(thread.imageURL!)
+          : null,
+    });
     var response = await ApiUtils().dio.post('/thread',
         options: Options(headers: {'Authorization': token}),
-        data: thread.toJson());
+        data:  formValidation);
     print(response.data.toString());
     return CreateThreadResponse.fromJson(response.data);
   }

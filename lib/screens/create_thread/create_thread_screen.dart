@@ -1,3 +1,6 @@
+import 'dart:io';
+
+import 'package:fgd_flutter/models/create_thread/create_thread.dart';
 import 'package:fgd_flutter/providers/create_thread_view_model.dart';
 import 'package:fgd_flutter/screens/create_thread/widgets/thread_label_modal.dart';
 import 'package:fgd_flutter/shared/router.dart';
@@ -6,16 +9,6 @@ import 'package:fgd_flutter/shared/charum_ui.dart';
 
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
-
-class Topic {
-  Topic({
-    required this.id,
-    required this.name,
-  });
-
-  final int id;
-  final String name;
-}
 
 class CreateThread extends StatefulWidget {
   const CreateThread({super.key});
@@ -35,35 +28,11 @@ class _CreateThreadState extends State<CreateThread> {
     // TODO: implement initState
     Provider.of<CreateThreadViewModel>(context, listen: false).getTopic();
     super.initState();
-  }
-
-  int countBoolList(List<bool> _topicStatus) {
-    int count = 0;
-    for (int i = 0; i < _topicStatus.length; i++) {
-      if (_topicStatus.elementAt(i) == true) {
-        count++;
-      }
-    }
-    return count;
-  }
-
-  List<bool> _topicStatus = [
-    false,
-    false,
-    false,
-    false,
-    false,
-    false,
-    false,
-    false,
-    false,
-    false,
-    false,
-    false,
-    false
-  ];
+  } 
 
   final ImagePicker _picker = ImagePicker();
+  File? image;
+  String? topicId;
 
   @override
   void dispose() {
@@ -98,8 +67,28 @@ class _CreateThreadState extends State<CreateThread> {
                 hoverColor: Colors.transparent,
                 focusColor: Colors.transparent,
                 highlightColor: Colors.transparent,
-                onTap: () {
-                  Navigator.pushNamed(context, home);
+                onTap: () async {
+                  var providerThread = Provider.of<CreateThreadViewModel>(
+                      context,
+                      listen: false);
+                  CreateThreadBody thread = CreateThreadBody(
+                    title: _titleController.text,
+                    description: _contentController.text,
+                    topicID: topicId,
+                    imageURL: image != null ? image!.path : '',
+                  );
+                  var result = providerThread.createThread(thread);
+                  await result.whenComplete(
+                    () async {
+                      await result.then((value) {
+                        ScaffoldMessenger.of(context).showSnackBar(
+                          const SnackBar(
+                            content: Text('Create Thread Success'),
+                          ),
+                        );
+                      });
+                    },
+                  );
                 },
                 child: const Padding(
                   padding: EdgeInsets.only(right: 20, left: 20),
@@ -133,11 +122,11 @@ class _CreateThreadState extends State<CreateThread> {
                     height: 40,
                     child: TextFormField(
                       controller: _titleController,
-                      style: TextStyle(
+                      style: const TextStyle(
                         fontSize: 16,
                         fontWeight: FontWeight.bold,
                       ),
-                      decoration: InputDecoration(
+                      decoration: const InputDecoration(
                         border: InputBorder.none,
                         hintText: 'Add an interesting title',
                         hintStyle: TextStyle(
@@ -158,7 +147,7 @@ class _CreateThreadState extends State<CreateThread> {
                       height: 474,
                       child: TextFormField(
                         controller: _contentController,
-                        decoration: InputDecoration(
+                        decoration: const InputDecoration(
                           border: InputBorder.none,
                           hintText: 'Write something...',
                           hintStyle: TextStyle(
@@ -171,12 +160,12 @@ class _CreateThreadState extends State<CreateThread> {
                       ),
                     ),
                   ),
-                  SizedBox(
+                  const SizedBox(
                     height: 36,
                   ),
                   Container(
                     padding: const EdgeInsets.only(top: 12),
-                    child: Align(
+                    child: const Align(
                       alignment: Alignment.topLeft,
                       child: Text(
                         'Choose a topic',
@@ -189,24 +178,24 @@ class _CreateThreadState extends State<CreateThread> {
                       ),
                     ),
                   ),
-                  SizedBox(
+                  const SizedBox(
                     height: 8,
                   ),
                   Flexible(
                     child: Row(
-                      mainAxisAlignment: MainAxisAlignment.start,
-                      mainAxisSize: MainAxisSize.min,
+                      // mainAxisAlignment: MainAxisAlignment.start,
+                      // mainAxisSize: MainAxisSize.min,
                       children: [
                         Container(
                           child: ElevatedButton(
-                            child: Text(
-                              'All',
+                            child: const Text(
+                              'See all',
                               style: TextStyle(color: AppColors.kcPrimaryColor),
                             ),
                             style: ElevatedButton.styleFrom(
                               padding: spacing16All,
-                              side: BorderSide(
-                                color: const Color(0XFF178066),
+                              side: const BorderSide(
+                                color: Color(0XFF178066),
                                 width: 1,
                               ),
                               backgroundColor: Colors.white,
@@ -222,7 +211,6 @@ class _CreateThreadState extends State<CreateThread> {
                                 )),
                                 context: context,
                                 builder: (context) {
-                                  List<bool> topicStatus = _topicStatus;
                                   return TopicBottomModal();
                                 },
                               )
@@ -231,48 +219,52 @@ class _CreateThreadState extends State<CreateThread> {
                         ),
                         Flexible(
                           child: ListView.builder(
-                              scrollDirection: Axis.horizontal,
-                              itemCount: 3,
-                              itemBuilder: (context, index) {
-                                return Row(
-                                  mainAxisAlignment: MainAxisAlignment.start,
-                                  mainAxisSize: MainAxisSize.min,
-                                  children: [
-                                    Container(
-                                      margin: spacing8Left,
-                                      child: ElevatedButton(
-                                        child: Text(
-                                          provider.topics[index].topic ?? "",
-                                          style: TextStyle(
-                                            color: provider
-                                                    .topics[index].isSelected
-                                                ? AppColors.kcBaseWhite
-                                                : AppColors.kcPrimaryColor,
-                                          ),
-                                        ),
-                                        style: ElevatedButton.styleFrom(
-                                          padding: spacing16All,
-                                          side: BorderSide(
-                                            color: Colors.grey,
-                                            width: 1,
-                                          ),
-                                          backgroundColor:
+                            scrollDirection: Axis.horizontal,
+                            itemCount: provider.topics.length,
+                            itemBuilder: (context, index) {
+                              return Row(
+                                mainAxisAlignment: MainAxisAlignment.start,
+                                mainAxisSize: MainAxisSize.min,
+                                children: [
+                                  Container(
+                                    margin: spacing8Left,
+                                    child: ElevatedButton(
+                                      child: Text(
+                                        provider.topics[index].topic ?? "",
+                                        style: TextStyle(
+                                          color:
                                               provider.topics[index].isSelected
-                                                  ? AppColors.kcPrimaryColor
-                                                  : AppColors.kcBaseWhite,
-                                          shape: RoundedRectangleBorder(
-                                            borderRadius:
-                                                BorderRadius.circular(12.0),
-                                          ),
+                                                  ? AppColors.kcBaseWhite
+                                                  : AppColors.kcPrimaryColor,
                                         ),
-                                        onPressed: () {
-                                          provider.setTopic(index);
-                                        },
                                       ),
+                                      style: ElevatedButton.styleFrom(
+                                        padding: spacing16All,
+                                        side: BorderSide(
+                                          color: Colors.grey,
+                                          width: 1,
+                                        ),
+                                        backgroundColor:
+                                            provider.topics[index].isSelected
+                                                ? AppColors.kcPrimaryColor
+                                                : AppColors.kcBaseWhite,
+                                        shape: RoundedRectangleBorder(
+                                          borderRadius:
+                                              BorderRadius.circular(12.0),
+                                        ),
+                                      ),
+                                      onPressed: () {
+                                        provider.setTopic(index);
+                                        setState(() {
+                                          topicId = provider.topics[index].sId;
+                                        });
+                                      },
                                     ),
-                                  ],
-                                );
-                              }),
+                                  ),
+                                ],
+                              );
+                            },
+                          ),
                         ),
                       ],
                     ),
@@ -298,29 +290,46 @@ class _CreateThreadState extends State<CreateThread> {
                   SizedBox(
                     height: 8,
                   ),
-                  Expanded(
-                    child: Container(
-                      height: 100,
-                      width: 100,
-                      child: ElevatedButton(
-                        style: ElevatedButton.styleFrom(
-                          primary: Colors.white,
-                          side: const BorderSide(
-                            color: Colors.grey,
-                            style: BorderStyle.solid,
-                            width: 1,
+                  image != null
+                      ? GestureDetector(
+                          onTap: () {
+                            getImage();
+                          },
+                          child: Container(
+                            height: 100,
+                            width: 100,
+                            decoration: BoxDecoration(
+                              border: Border.all(
+                                color: Colors.grey,
+                                width: 1,
+                              ),
+                              borderRadius: BorderRadius.circular(12.0),
+                            ),
+                            child: Image.file(image!),
                           ),
-                          shape: RoundedRectangleBorder(
-                            borderRadius: BorderRadius.circular(12.0),
-                          ),
+                        )
+                      : Container(
+                          height: 100,
+                          width: 100,
+                          child: ElevatedButton(
+                              style: ElevatedButton.styleFrom(
+                                primary: Colors.white,
+                                side: const BorderSide(
+                                  color: Colors.grey,
+                                  style: BorderStyle.solid,
+                                  width: 1,
+                                ),
+                                shape: RoundedRectangleBorder(
+                                  borderRadius: BorderRadius.circular(12.0),
+                                ),
+                              ),
+                              onPressed: () {
+                                getImage();
+                              },
+                              child: Image(
+                                image: AssetImage('assets/Upload.png'),
+                              )),
                         ),
-                        onPressed: () async {},
-                        child: const Image(
-                          image: AssetImage('assets/Upload.png'),
-                        ),
-                      ),
-                    ),
-                  ),
                   SizedBox(
                     height: 60,
                   ),
@@ -333,50 +342,12 @@ class _CreateThreadState extends State<CreateThread> {
     );
   }
 
-  // _getFromGallery() async {
-  //   PickedFile? pickedFile = await ImagePicker().getImage(
-  //     source: ImageSource.gallery,
-  //     maxWidth: 1800,
-  //     maxHeight: 1800,
-  //   );
-  //   if (pickedFile != null) {
-  //     setState(() {
-  //       imageFile = File(pickedFile.path);
-  //     });
-  //   }
-  // }
-
-  Row ChipButton(name, iter) {
-    return Row(
-      children: [
-        ElevatedButton(
-          child: Text(
-            '$name',
-            style: TextStyle(
-              color: _topicStatus[iter] ? Colors.white : Colors.grey,
-            ),
-          ),
-          style: ElevatedButton.styleFrom(
-            side: BorderSide(
-              color: _topicStatus[iter] ? const Color(0XFF178066) : Colors.grey,
-              width: 1,
-            ),
-            backgroundColor:
-                _topicStatus[iter] ? const Color(0XFF178066) : Colors.white,
-            shape: RoundedRectangleBorder(
-              borderRadius: BorderRadius.circular(12.0),
-            ),
-          ),
-          onPressed: () => {
-            setState(() {
-              _topicStatus[iter] = !_topicStatus[iter];
-            })
-          },
-        ),
-        const SizedBox(
-          width: 8,
-        ),
-      ],
-    );
+  void getImage() async {
+    final pickedFile = await _picker.pickImage(source: ImageSource.gallery);
+    setState(() {
+      if (pickedFile != null) {
+        image = File(pickedFile.path);
+      }
+    });
   }
 }
