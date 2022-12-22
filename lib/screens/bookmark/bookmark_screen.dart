@@ -304,13 +304,14 @@ class _BookmarkScreenState extends State<BookmarkScreen> {
             height: 4,
           ),
           BoxText.subtitle2Semi(thread!.title!),
+          SizedBox(height: 12,),
           if (thread.imageURL != "")
-            Container(
-                margin: spacing8Top,
-                decoration: BoxDecoration(
-                  borderRadius: BorderRadius.circular(10),
-                ),
-                child: Image.network('${thread.imageURL}')),
+            ClipRRect(
+            borderRadius: BorderRadius.all(Radius.circular(10)),
+            child: Container(
+                child: Image.network('${thread.imageURL}')
+              ),
+          ),
           Container(
             margin: spacing8Top,
             child: BoxText.caption(thread.description!),

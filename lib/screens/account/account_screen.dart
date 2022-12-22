@@ -428,15 +428,13 @@ class _AccountScreenState extends State<AccountScreen> {
             height: 4,
           ),
           BoxText.subtitle2Semi(thread.title ?? ''),
-          Container(
-            height: 200,
-            decoration: BoxDecoration(
-              borderRadius: BorderRadius.all(Radius.circular(10)),
-              image: DecorationImage(
-                image: NetworkImage(thread.imageURL ?? ''),
-                fit: BoxFit.fill,
+          SizedBox(height: 12),
+          if (thread.imageURL != "")
+            ClipRRect(
+            borderRadius: BorderRadius.all(Radius.circular(10)),
+            child: Container(
+                child: Image.network('${thread.imageURL}')
               ),
-            ),
           ),
           Container(
             margin: spacing8Top,

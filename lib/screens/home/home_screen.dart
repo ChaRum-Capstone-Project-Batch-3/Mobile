@@ -214,211 +214,218 @@ class _HomeScreenState extends State<HomeScreen> {
                           DateTime.parse(threads[index].createdAt!).toLocal();
                       final now = DateTime.now();
                       final diff = between(date, now);
-                      return Container(
-                        margin: spacing8Bottom,
-                        padding: spacing16All,
-                        decoration: BoxDecoration(
-                          borderRadius: BorderRadius.all(
-                            Radius.circular(10),
+                      return GestureDetector(
+                        onTap: () {
+                          Navigator.pushNamed(context, detailThread,
+                              arguments: threads[index].sId);
+                        },
+                        child: Container(
+                          margin: spacing8Bottom,
+                          padding: spacing16All,
+                          decoration: BoxDecoration(
+                            borderRadius: BorderRadius.all(
+                              Radius.circular(10),
+                            ),
+                            color: AppColors.kcBaseWhite,
                           ),
-                          color: AppColors.kcBaseWhite,
-                        ),
-                        child: Column(
-                          crossAxisAlignment: CrossAxisAlignment.start,
-                          children: [
-                            Row(
-                              mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                              children: [
-                                Container(
-                                  child: Row(
-                                    children: [
-                                      CircleAvatar(
-                                        backgroundImage: NetworkImage(
-                                            threads[index]
-                                                .creator!
-                                                .profilePictureURL!),
-                                      ),
-                                      Container(
-                                        margin: spacing8Left,
-                                        child: Column(
-                                          crossAxisAlignment:
-                                              CrossAxisAlignment.start,
-                                          children: [
-                                            Row(
-                                              children: [
-                                                BoxText.captionSemi(
-                                                    threads[index]
-                                                        .creator!
-                                                        .displayName!),
-                                                Container(
-                                                  margin: spacing8Horizontal,
-                                                  width: 4,
-                                                  height: 4,
-                                                  decoration: BoxDecoration(
-                                                    color: AppColors
-                                                        .kcDarkestWhite,
-                                                    shape: BoxShape.circle,
-                                                  ),
-                                                ),
-                                                GestureDetector(
-                                                  child: BoxText.captionSemi(
-                                                    "Follow",
-                                                    color:
-                                                        AppColors.kcInfoColor,
-                                                  ),
-                                                ),
-                                              ],
-                                            ),
-                                            BoxText.body3(
-                                              diff.toString(),
-                                              color: AppColors.kcLightestBlack,
-                                            )
-                                          ],
-                                        ),
-                                      ),
-                                    ],
-                                  ),
-                                ),
-                                Container(
-                                  child: GestureDetector(
-                                    onTap: () {
-                                      other(provider.allThread[index]);
-                                    },
-                                    child: ImageIcon(
-                                        AssetImage('assets/icon_more.png')),
-                                  ),
-                                ),
-                              ],
-                            ),
-                            Container(
-                              margin: spacing16Top,
-                              padding: EdgeInsets.only(
-                                  top: 5, bottom: 5, left: 12, right: 12),
-                              decoration: BoxDecoration(
-                                color: AppColors.kcDarkerWhite,
-                                borderRadius:
-                                    BorderRadius.all(Radius.circular(50)),
-                              ),
-                              child: BoxText.caption(
-                                threads[index].topic!.topic!,
-                                color: AppColors.kcLighterBlack,
-                              ),
-                            ),
-                            SizedBox(
-                              height: 4,
-                            ),
-                            BoxText.subtitle2Semi(threads[index].title!),
-                            if (threads[index].imageURL != "")
-                              Container(
-                                  margin: spacing8Top,
-                                  decoration: BoxDecoration(
-                                    borderRadius: BorderRadius.circular(10),
-                                  ),
-                                  child: Image.network('${threads[index].imageURL}')),
-                            Container(
-                              margin: spacing8Top,
-                              child:
-                                  BoxText.caption(threads[index].description!),
-                            ),
-                            SizedBox(
-                              height: 10,
-                            ),
-                            Row(
-                              children: [
-                                Container(
-                                  child: threads[index].isLiked!
-                                      ? GestureDetector(
-                                          onTap: () {
-                                            provider.unlikeThread(
-                                                index, "thread");
-                                            // provider.getBookmark();
-                                          },
-                                          child: Row(children: [
-                                            ImageIcon(
-                                              AssetImage(
-                                                  'assets/icon_like2.png'),
-                                              color: AppColors.kcInfoColor,
-                                            ),
-                                            SizedBox(
-                                              width: 8,
-                                            ),
-                                            BoxText.captionSemi(
-                                              threads[index]
-                                                  .totalLike
-                                                  .toString(),
-                                              color: AppColors.kcInfoColor,
-                                            )
-                                          ]),
-                                        )
-                                      : GestureDetector(
-                                          onTap: () {
-                                            provider.likeThread(
-                                                index, "thread");
-                                            // provider.getBookmark();
-                                          },
-                                          child: Row(children: [
-                                            ImageIcon(
-                                              AssetImage(
-                                                  'assets/icon_like1.png'),
-                                              color: AppColors.kcLightestBlack,
-                                            ),
-                                            SizedBox(
-                                              width: 8,
-                                            ),
-                                            BoxText.captionSemi(
-                                              threads[index]
-                                                  .totalLike
-                                                  .toString(),
-                                              color: AppColors.kcLightestBlack,
-                                            )
-                                          ]),
-                                        ),
-                                ),
-                                SizedBox(
-                                  width: 12,
-                                ),
-                                Container(
-                                  child: GestureDetector(
-                                    onTap: () {
-                                      showModalBottomSheet(
-                                          isScrollControlled: true,
-                                          context: context,
-                                          backgroundColor: Colors.transparent,
-                                          shape: RoundedRectangleBorder(
-                                            borderRadius: BorderRadius.only(
-                                              topLeft: Radius.circular(30),
-                                              topRight: Radius.circular(30),
-                                            ),
-                                          ),
-                                          builder: (context) {
-                                            return CommentScreen(
-                                              threadId:
-                                                  threads[index].sId ?? "",
-                                            );
-                                          });
-                                    },
+                          child: Column(
+                            crossAxisAlignment: CrossAxisAlignment.start,
+                            children: [
+                              Row(
+                                mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                                children: [
+                                  Container(
                                     child: Row(
                                       children: [
-                                        ImageIcon(
-                                          AssetImage('assets/icon_comment.png'),
-                                          color: AppColors.kcLightestBlack,
+                                        CircleAvatar(
+                                          backgroundImage: NetworkImage(
+                                              threads[index]
+                                                  .creator!
+                                                  .profilePictureURL!),
                                         ),
-                                        SizedBox(
-                                          width: 8,
+                                        Container(
+                                          margin: spacing8Left,
+                                          child: Column(
+                                            crossAxisAlignment:
+                                                CrossAxisAlignment.start,
+                                            children: [
+                                              Row(
+                                                children: [
+                                                  BoxText.captionSemi(
+                                                      threads[index]
+                                                          .creator!
+                                                          .displayName!),
+                                                  Container(
+                                                    margin: spacing8Horizontal,
+                                                    width: 4,
+                                                    height: 4,
+                                                    decoration: BoxDecoration(
+                                                      color: AppColors
+                                                          .kcDarkestWhite,
+                                                      shape: BoxShape.circle,
+                                                    ),
+                                                  ),
+                                                  GestureDetector(
+                                                    child: BoxText.captionSemi(
+                                                      "Follow",
+                                                      color:
+                                                          AppColors.kcInfoColor,
+                                                    ),
+                                                  ),
+                                                ],
+                                              ),
+                                              BoxText.body3(
+                                                diff.toString(),
+                                                color: AppColors.kcLightestBlack,
+                                              )
+                                            ],
+                                          ),
                                         ),
-                                        BoxText.captionSemi(
-                                          threads[index]
-                                              .totalComment
-                                              .toString(),
-                                          color: AppColors.kcLightestBlack,
-                                        )
                                       ],
                                     ),
                                   ),
+                                  Container(
+                                    child: GestureDetector(
+                                      onTap: () {
+                                        other(provider.allThread[index]);
+                                      },
+                                      child: ImageIcon(
+                                          AssetImage('assets/icon_more.png')),
+                                    ),
+                                  ),
+                                ],
+                              ),
+                              Container(
+                                margin: spacing16Top,
+                                padding: EdgeInsets.only(
+                                    top: 5, bottom: 5, left: 12, right: 12),
+                                decoration: BoxDecoration(
+                                  color: AppColors.kcDarkerWhite,
+                                  borderRadius:
+                                      BorderRadius.all(Radius.circular(50)),
                                 ),
-                              ],
-                            ),
-                          ],
+                                child: BoxText.caption(
+                                  threads[index].topic!.topic!,
+                                  color: AppColors.kcLighterBlack,
+                                ),
+                              ),
+                              SizedBox(
+                                height: 4,
+                              ),
+                              BoxText.subtitle2Semi(threads[index].title!),
+                              SizedBox(height: 8,),
+                              if (threads[index].imageURL != "")
+                                ClipRRect(
+                                  borderRadius: BorderRadius.all(Radius.circular(10)),
+                                  child: Container(
+                                      child: Image.network('${threads[index].imageURL}')
+                                    ),
+                                ),
+                              Container(
+                                margin: spacing8Top,
+                                child:
+                                    BoxText.caption(threads[index].description!),
+                              ),
+                              SizedBox(
+                                height: 10,
+                              ),
+                              Row(
+                                children: [
+                                  Container(
+                                    child: threads[index].isLiked!
+                                        ? GestureDetector(
+                                            onTap: () {
+                                              provider.unlikeThread(
+                                                  index, "thread");
+                                              // provider.getBookmark();
+                                            },
+                                            child: Row(children: [
+                                              ImageIcon(
+                                                AssetImage(
+                                                    'assets/icon_like2.png'),
+                                                color: AppColors.kcInfoColor,
+                                              ),
+                                              SizedBox(
+                                                width: 8,
+                                              ),
+                                              BoxText.captionSemi(
+                                                threads[index]
+                                                    .totalLike
+                                                    .toString(),
+                                                color: AppColors.kcInfoColor,
+                                              )
+                                            ]),
+                                          )
+                                        : GestureDetector(
+                                            onTap: () {
+                                              provider.likeThread(
+                                                  index, "thread");
+                                              // provider.getBookmark();
+                                            },
+                                            child: Row(children: [
+                                              ImageIcon(
+                                                AssetImage(
+                                                    'assets/icon_like1.png'),
+                                                color: AppColors.kcLightestBlack,
+                                              ),
+                                              SizedBox(
+                                                width: 8,
+                                              ),
+                                              BoxText.captionSemi(
+                                                threads[index]
+                                                    .totalLike
+                                                    .toString(),
+                                                color: AppColors.kcLightestBlack,
+                                              )
+                                            ]),
+                                          ),
+                                  ),
+                                  SizedBox(
+                                    width: 12,
+                                  ),
+                                  Container(
+                                    child: GestureDetector(
+                                      onTap: () {
+                                        showModalBottomSheet(
+                                            isScrollControlled: true,
+                                            context: context,
+                                            backgroundColor: Colors.transparent,
+                                            shape: RoundedRectangleBorder(
+                                              borderRadius: BorderRadius.only(
+                                                topLeft: Radius.circular(30),
+                                                topRight: Radius.circular(30),
+                                              ),
+                                            ),
+                                            builder: (context) {
+                                              return CommentScreen(
+                                                threadId:
+                                                    threads[index].sId ?? "",
+                                              );
+                                            });
+                                      },
+                                      child: Row(
+                                        children: [
+                                          ImageIcon(
+                                            AssetImage('assets/icon_comment.png'),
+                                            color: AppColors.kcLightestBlack,
+                                          ),
+                                          SizedBox(
+                                            width: 8,
+                                          ),
+                                          BoxText.captionSemi(
+                                            threads[index]
+                                                .totalComment
+                                                .toString(),
+                                            color: AppColors.kcLightestBlack,
+                                          )
+                                        ],
+                                      ),
+                                    ),
+                                  ),
+                                ],
+                              ),
+                            ],
+                          ),
                         ),
                       );
                     },
@@ -449,211 +456,218 @@ class _HomeScreenState extends State<HomeScreen> {
                           DateTime.parse(threads[index].createdAt!).toLocal();
                       final now = DateTime.now();
                       final diff = between(date, now);
-                      return Container(
-                        margin: spacing8Bottom,
-                        padding: spacing16All,
-                        decoration: BoxDecoration(
-                          borderRadius: BorderRadius.all(
-                            Radius.circular(10),
+                      return GestureDetector(
+                        onTap: () {
+                          Navigator.pushNamed(context, detailThread,
+                              arguments: threads[index].sId);
+                        },
+                        child: Container(
+                          margin: spacing8Bottom,
+                          padding: spacing16All,
+                          decoration: BoxDecoration(
+                            borderRadius: BorderRadius.all(
+                              Radius.circular(10),
+                            ),
+                            color: AppColors.kcBaseWhite,
                           ),
-                          color: AppColors.kcBaseWhite,
-                        ),
-                        child: Column(
-                          crossAxisAlignment: CrossAxisAlignment.start,
-                          children: [
-                            Row(
-                              mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                              children: [
-                                Container(
-                                  child: Row(
-                                    children: [
-                                      CircleAvatar(
-                                        backgroundImage: NetworkImage(
-                                            threads[index]
-                                                .creator!
-                                                .profilePictureURL!),
-                                      ),
-                                      Container(
-                                        margin: spacing8Left,
-                                        child: Column(
-                                          crossAxisAlignment:
-                                              CrossAxisAlignment.start,
-                                          children: [
-                                            Row(
-                                              children: [
-                                                BoxText.captionSemi(
-                                                    threads[index]
-                                                        .creator!
-                                                        .displayName!),
-                                                Container(
-                                                  margin: spacing8Horizontal,
-                                                  width: 4,
-                                                  height: 4,
-                                                  decoration: BoxDecoration(
-                                                    color: AppColors
-                                                        .kcDarkestWhite,
-                                                    shape: BoxShape.circle,
-                                                  ),
-                                                ),
-                                                GestureDetector(
-                                                  child: BoxText.captionSemi(
-                                                    "Follow",
-                                                    color:
-                                                        AppColors.kcInfoColor,
-                                                  ),
-                                                ),
-                                              ],
-                                            ),
-                                            BoxText.body3(
-                                              diff.toString(),
-                                              color: AppColors.kcLightestBlack,
-                                            )
-                                          ],
-                                        ),
-                                      ),
-                                    ],
-                                  ),
-                                ),
-                                Container(
-                                  child: GestureDetector(
-                                    onTap: () {
-                                      other(provider.popularThread[index]);
-                                    },
-                                    child: ImageIcon(
-                                        AssetImage('assets/icon_more.png')),
-                                  ),
-                                ),
-                              ],
-                            ),
-                            Container(
-                              margin: spacing16Top,
-                              padding: EdgeInsets.only(
-                                  top: 5, bottom: 5, left: 12, right: 12),
-                              decoration: BoxDecoration(
-                                color: AppColors.kcDarkerWhite,
-                                borderRadius:
-                                    BorderRadius.all(Radius.circular(50)),
-                              ),
-                              child: BoxText.caption(
-                                threads[index].topic!.topic!,
-                                color: AppColors.kcLighterBlack,
-                              ),
-                            ),
-                            SizedBox(
-                              height: 4,
-                            ),
-                            BoxText.subtitle2Semi(threads[index].title!),
-                            if (threads[index].imageURL != "")
-                              Container(
-                                  margin: spacing8Top,
-                                  decoration: BoxDecoration(
-                                    borderRadius: BorderRadius.circular(10),
-                                  ),
-                                  child: Image.network('${threads[index].imageURL}')),
-                            Container(
-                              margin: spacing8Top,
-                              child:
-                                  BoxText.caption(threads[index].description!),
-                            ),
-                            SizedBox(
-                              height: 10,
-                            ),
-                            Row(
-                              children: [
-                                Container(
-                                  child: threads[index].isLiked!
-                                      ? GestureDetector(
-                                          onTap: () {
-                                            provider.unlikeThread(
-                                                index, "thread");
-                                            // provider.getBookmark();
-                                          },
-                                          child: Row(children: [
-                                            ImageIcon(
-                                              AssetImage(
-                                                  'assets/icon_like2.png'),
-                                              color: AppColors.kcInfoColor,
-                                            ),
-                                            SizedBox(
-                                              width: 8,
-                                            ),
-                                            BoxText.captionSemi(
-                                              threads[index]
-                                                  .totalLike
-                                                  .toString(),
-                                              color: AppColors.kcInfoColor,
-                                            )
-                                          ]),
-                                        )
-                                      : GestureDetector(
-                                          onTap: () {
-                                            provider.likeThread(
-                                                index, "thread");
-                                            // provider.getBookmark();
-                                          },
-                                          child: Row(children: [
-                                            ImageIcon(
-                                              AssetImage(
-                                                  'assets/icon_like1.png'),
-                                              color: AppColors.kcLightestBlack,
-                                            ),
-                                            SizedBox(
-                                              width: 8,
-                                            ),
-                                            BoxText.captionSemi(
-                                              threads[index]
-                                                  .totalLike
-                                                  .toString(),
-                                              color: AppColors.kcLightestBlack,
-                                            )
-                                          ]),
-                                        ),
-                                ),
-                                SizedBox(
-                                  width: 12,
-                                ),
-                                Container(
-                                  child: GestureDetector(
-                                    onTap: () {
-                                      showModalBottomSheet(
-                                          isScrollControlled: true,
-                                          context: context,
-                                          backgroundColor: Colors.transparent,
-                                          shape: RoundedRectangleBorder(
-                                            borderRadius: BorderRadius.only(
-                                              topLeft: Radius.circular(30),
-                                              topRight: Radius.circular(30),
-                                            ),
-                                          ),
-                                          builder: (context) {
-                                            return CommentScreen(
-                                              threadId:
-                                                  threads[index].sId ?? "",
-                                            );
-                                          });
-                                    },
+                          child: Column(
+                            crossAxisAlignment: CrossAxisAlignment.start,
+                            children: [
+                              Row(
+                                mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                                children: [
+                                  Container(
                                     child: Row(
                                       children: [
-                                        ImageIcon(
-                                          AssetImage('assets/icon_comment.png'),
-                                          color: AppColors.kcLightestBlack,
+                                        CircleAvatar(
+                                          backgroundImage: NetworkImage(
+                                              threads[index]
+                                                  .creator!
+                                                  .profilePictureURL!),
                                         ),
-                                        SizedBox(
-                                          width: 8,
+                                        Container(
+                                          margin: spacing8Left,
+                                          child: Column(
+                                            crossAxisAlignment:
+                                                CrossAxisAlignment.start,
+                                            children: [
+                                              Row(
+                                                children: [
+                                                  BoxText.captionSemi(
+                                                      threads[index]
+                                                          .creator!
+                                                          .displayName!),
+                                                  Container(
+                                                    margin: spacing8Horizontal,
+                                                    width: 4,
+                                                    height: 4,
+                                                    decoration: BoxDecoration(
+                                                      color: AppColors
+                                                          .kcDarkestWhite,
+                                                      shape: BoxShape.circle,
+                                                    ),
+                                                  ),
+                                                  GestureDetector(
+                                                    child: BoxText.captionSemi(
+                                                      "Follow",
+                                                      color:
+                                                          AppColors.kcInfoColor,
+                                                    ),
+                                                  ),
+                                                ],
+                                              ),
+                                              BoxText.body3(
+                                                diff.toString(),
+                                                color: AppColors.kcLightestBlack,
+                                              )
+                                            ],
+                                          ),
                                         ),
-                                        BoxText.captionSemi(
-                                          threads[index]
-                                              .totalComment
-                                              .toString(),
-                                          color: AppColors.kcLightestBlack,
-                                        )
                                       ],
                                     ),
                                   ),
+                                  Container(
+                                    child: GestureDetector(
+                                      onTap: () {
+                                        other(provider.popularThread[index]);
+                                      },
+                                      child: ImageIcon(
+                                          AssetImage('assets/icon_more.png')),
+                                    ),
+                                  ),
+                                ],
+                              ),
+                              Container(
+                                margin: spacing16Top,
+                                padding: EdgeInsets.only(
+                                    top: 5, bottom: 5, left: 12, right: 12),
+                                decoration: BoxDecoration(
+                                  color: AppColors.kcDarkerWhite,
+                                  borderRadius:
+                                      BorderRadius.all(Radius.circular(50)),
                                 ),
-                              ],
-                            ),
-                          ],
+                                child: BoxText.caption(
+                                  threads[index].topic!.topic!,
+                                  color: AppColors.kcLighterBlack,
+                                ),
+                              ),
+                              SizedBox(
+                                height: 4,
+                              ),
+                              BoxText.subtitle2Semi(threads[index].title!),
+                              SizedBox(height: 8,),
+                              if (threads[index].imageURL != "")
+                                ClipRRect(
+                                  borderRadius: BorderRadius.all(Radius.circular(10)),
+                                  child: Container(
+                                      child: Image.network('${threads[index].imageURL}')
+                                    ),
+                                ),
+                              Container(
+                                margin: spacing8Top,
+                                child:
+                                    BoxText.caption(threads[index].description!),
+                              ),
+                              SizedBox(
+                                height: 10,
+                              ),
+                              Row(
+                                children: [
+                                  Container(
+                                    child: threads[index].isLiked!
+                                        ? GestureDetector(
+                                            onTap: () {
+                                              provider.unlikeThread(
+                                                  index, "thread");
+                                              // provider.getBookmark();
+                                            },
+                                            child: Row(children: [
+                                              ImageIcon(
+                                                AssetImage(
+                                                    'assets/icon_like2.png'),
+                                                color: AppColors.kcInfoColor,
+                                              ),
+                                              SizedBox(
+                                                width: 8,
+                                              ),
+                                              BoxText.captionSemi(
+                                                threads[index]
+                                                    .totalLike
+                                                    .toString(),
+                                                color: AppColors.kcInfoColor,
+                                              )
+                                            ]),
+                                          )
+                                        : GestureDetector(
+                                            onTap: () {
+                                              provider.likeThread(
+                                                  index, "thread");
+                                              // provider.getBookmark();
+                                            },
+                                            child: Row(children: [
+                                              ImageIcon(
+                                                AssetImage(
+                                                    'assets/icon_like1.png'),
+                                                color: AppColors.kcLightestBlack,
+                                              ),
+                                              SizedBox(
+                                                width: 8,
+                                              ),
+                                              BoxText.captionSemi(
+                                                threads[index]
+                                                    .totalLike
+                                                    .toString(),
+                                                color: AppColors.kcLightestBlack,
+                                              )
+                                            ]),
+                                          ),
+                                  ),
+                                  SizedBox(
+                                    width: 12,
+                                  ),
+                                  Container(
+                                    child: GestureDetector(
+                                      onTap: () {
+                                        showModalBottomSheet(
+                                            isScrollControlled: true,
+                                            context: context,
+                                            backgroundColor: Colors.transparent,
+                                            shape: RoundedRectangleBorder(
+                                              borderRadius: BorderRadius.only(
+                                                topLeft: Radius.circular(30),
+                                                topRight: Radius.circular(30),
+                                              ),
+                                            ),
+                                            builder: (context) {
+                                              return CommentScreen(
+                                                threadId:
+                                                    threads[index].sId ?? "",
+                                              );
+                                            });
+                                      },
+                                      child: Row(
+                                        children: [
+                                          ImageIcon(
+                                            AssetImage('assets/icon_comment.png'),
+                                            color: AppColors.kcLightestBlack,
+                                          ),
+                                          SizedBox(
+                                            width: 8,
+                                          ),
+                                          BoxText.captionSemi(
+                                            threads[index]
+                                                .totalComment
+                                                .toString(),
+                                            color: AppColors.kcLightestBlack,
+                                          )
+                                        ],
+                                      ),
+                                    ),
+                                  ),
+                                ],
+                              ),
+                            ],
+                          ),
                         ),
                       );
                     },
@@ -683,219 +697,226 @@ class _HomeScreenState extends State<HomeScreen> {
                           DateTime.parse(threads[index].createdAt!).toLocal();
                       final now = DateTime.now();
                       final diff = between(date, now);
-                      return Container(
-                        margin: spacing8Bottom,
-                        padding: spacing16All,
-                        decoration: BoxDecoration(
-                          borderRadius: BorderRadius.all(
-                            Radius.circular(10),
+                      return GestureDetector(
+                        onTap: () {
+                          Navigator.pushNamed(context, detailThread,
+                              arguments: threads[index].thread!.sId);
+                        },
+                        child: Container(
+                          margin: spacing8Bottom,
+                          padding: spacing16All,
+                          decoration: BoxDecoration(
+                            borderRadius: BorderRadius.all(
+                              Radius.circular(10),
+                            ),
+                            color: AppColors.kcBaseWhite,
                           ),
-                          color: AppColors.kcBaseWhite,
-                        ),
-                        child: Column(
-                          crossAxisAlignment: CrossAxisAlignment.start,
-                          children: [
-                            Row(
-                              mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                              children: [
-                                Container(
-                                  child: Row(
-                                    children: [
-                                      CircleAvatar(
-                                        backgroundImage: NetworkImage(
-                                            threads[index]
-                                                .thread!
-                                                .creator!
-                                                .profilePictureURL!),
-                                      ),
-                                      Container(
-                                        margin: spacing8Left,
-                                        child: Column(
-                                          crossAxisAlignment:
-                                              CrossAxisAlignment.start,
-                                          children: [
-                                            Row(
-                                              children: [
-                                                BoxText.captionSemi(
-                                                    threads[index]
-                                                        .thread!
-                                                        .creator!
-                                                        .displayName!),
-                                                Container(
-                                                  margin: spacing8Horizontal,
-                                                  width: 4,
-                                                  height: 4,
-                                                  decoration: BoxDecoration(
-                                                    color: AppColors
-                                                        .kcDarkestWhite,
-                                                    shape: BoxShape.circle,
-                                                  ),
-                                                ),
-                                                GestureDetector(
-                                                  child: BoxText.captionSemi(
-                                                    "Follow",
-                                                    color:
-                                                        AppColors.kcInfoColor,
-                                                  ),
-                                                ),
-                                              ],
-                                            ),
-                                            BoxText.body3(
-                                              diff.toString(),
-                                              color: AppColors.kcLightestBlack,
-                                            )
-                                          ],
-                                        ),
-                                      ),
-                                    ],
-                                  ),
-                                ),
-                                Container(
-                                  child: GestureDetector(
-                                    onTap: () {
-                                      other(provider
-                                          .followedThread[index].thread!);
-                                    },
-                                    child: ImageIcon(
-                                        AssetImage('assets/icon_more.png')),
-                                  ),
-                                ),
-                              ],
-                            ),
-                            Container(
-                              margin: spacing16Top,
-                              padding: EdgeInsets.only(
-                                  top: 5, bottom: 5, left: 12, right: 12),
-                              decoration: BoxDecoration(
-                                color: AppColors.kcDarkerWhite,
-                                borderRadius:
-                                    BorderRadius.all(Radius.circular(50)),
-                              ),
-                              child: BoxText.caption(
-                                threads[index].thread!.topic!.topic!,
-                                color: AppColors.kcLighterBlack,
-                              ),
-                            ),
-                            SizedBox(
-                              height: 4,
-                            ),
-                            BoxText.subtitle2Semi(
-                                threads[index].thread!.title!),
-                                if (threads[index].thread!.imageURL != "")
+                          child: Column(
+                            crossAxisAlignment: CrossAxisAlignment.start,
+                            children: [
+                              Row(
+                                mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                                children: [
                                   Container(
-                                      margin: spacing8Top,
-                                      decoration: BoxDecoration(
-                                        borderRadius: BorderRadius.circular(10),
-                                      ),
-                                      child: Image.network('${threads[index].thread!.imageURL}')),
-                            Container(
-                              margin: spacing8Top,
-                              child: BoxText.caption(
-                                  threads[index].thread!.description!),
-                            ),
-                            SizedBox(
-                              height: 10,
-                            ),
-                            Row(
-                              children: [
-                                Container(
-                                  child: threads[index].thread!.isLiked!
-                                      ? GestureDetector(
-                                          onTap: () {
-                                            provider.unlikeThread(
-                                                index, "followed");
-                                            // provider.getBookmark();
-                                          },
-                                          child: Row(children: [
-                                            ImageIcon(
-                                              AssetImage(
-                                                  'assets/icon_like2.png'),
-                                              color: AppColors.kcInfoColor,
-                                            ),
-                                            SizedBox(
-                                              width: 8,
-                                            ),
-                                            BoxText.captionSemi(
-                                              threads[index]
-                                                  .thread!
-                                                  .totalLike
-                                                  .toString(),
-                                              color: AppColors.kcInfoColor,
-                                            )
-                                          ]),
-                                        )
-                                      : GestureDetector(
-                                          onTap: () {
-                                            provider.likeThread(
-                                                index, "followed");
-                                            // provider.getBookmark();
-                                          },
-                                          child: Row(children: [
-                                            ImageIcon(
-                                              AssetImage(
-                                                  'assets/icon_like1.png'),
-                                              color: AppColors.kcLightestBlack,
-                                            ),
-                                            SizedBox(
-                                              width: 8,
-                                            ),
-                                            BoxText.captionSemi(
-                                              threads[index]
-                                                  .thread!
-                                                  .totalLike
-                                                  .toString(),
-                                              color: AppColors.kcLightestBlack,
-                                            )
-                                          ]),
-                                        ),
-                                ),
-                                SizedBox(
-                                  width: 12,
-                                ),
-                                Container(
-                                  child: GestureDetector(
-                                    onTap: () {
-                                      showModalBottomSheet(
-                                          isScrollControlled: true,
-                                          context: context,
-                                          backgroundColor: Colors.transparent,
-                                          shape: RoundedRectangleBorder(
-                                            borderRadius: BorderRadius.only(
-                                              topLeft: Radius.circular(30),
-                                              topRight: Radius.circular(30),
-                                            ),
-                                          ),
-                                          builder: (context) {
-                                            return CommentScreen(
-                                              threadId:
-                                                  threads[index].thread!.sId ??
-                                                      "",
-                                            );
-                                          });
-                                    },
                                     child: Row(
                                       children: [
-                                        ImageIcon(
-                                          AssetImage('assets/icon_comment.png'),
-                                          color: AppColors.kcLightestBlack,
+                                        CircleAvatar(
+                                          backgroundImage: NetworkImage(
+                                              threads[index]
+                                                  .thread!
+                                                  .creator!
+                                                  .profilePictureURL!),
                                         ),
-                                        SizedBox(
-                                          width: 8,
+                                        Container(
+                                          margin: spacing8Left,
+                                          child: Column(
+                                            crossAxisAlignment:
+                                                CrossAxisAlignment.start,
+                                            children: [
+                                              Row(
+                                                children: [
+                                                  BoxText.captionSemi(
+                                                      threads[index]
+                                                          .thread!
+                                                          .creator!
+                                                          .displayName!),
+                                                  Container(
+                                                    margin: spacing8Horizontal,
+                                                    width: 4,
+                                                    height: 4,
+                                                    decoration: BoxDecoration(
+                                                      color: AppColors
+                                                          .kcDarkestWhite,
+                                                      shape: BoxShape.circle,
+                                                    ),
+                                                  ),
+                                                  GestureDetector(
+                                                    child: BoxText.captionSemi(
+                                                      "Follow",
+                                                      color:
+                                                          AppColors.kcInfoColor,
+                                                    ),
+                                                  ),
+                                                ],
+                                              ),
+                                              BoxText.body3(
+                                                diff.toString(),
+                                                color: AppColors.kcLightestBlack,
+                                              )
+                                            ],
+                                          ),
                                         ),
-                                        BoxText.captionSemi(
-                                          threads[index]
-                                              .thread!
-                                              .totalComment
-                                              .toString(),
-                                          color: AppColors.kcLightestBlack,
-                                        )
                                       ],
                                     ),
                                   ),
+                                  Container(
+                                    child: GestureDetector(
+                                      onTap: () {
+                                        other(provider
+                                            .followedThread[index].thread!);
+                                      },
+                                      child: ImageIcon(
+                                          AssetImage('assets/icon_more.png')),
+                                    ),
+                                  ),
+                                ],
+                              ),
+                              Container(
+                                margin: spacing16Top,
+                                padding: EdgeInsets.only(
+                                    top: 5, bottom: 5, left: 12, right: 12),
+                                decoration: BoxDecoration(
+                                  color: AppColors.kcDarkerWhite,
+                                  borderRadius:
+                                      BorderRadius.all(Radius.circular(50)),
                                 ),
-                              ],
-                            ),
-                          ],
+                                child: BoxText.caption(
+                                  threads[index].thread!.topic!.topic!,
+                                  color: AppColors.kcLighterBlack,
+                                ),
+                              ),
+                              SizedBox(
+                                height: 4,
+                              ),
+                              BoxText.subtitle2Semi(
+                                  threads[index].thread!.title!),
+                                  SizedBox(height: 8,),
+                                  if (threads[index].thread!.imageURL != "")
+                                    ClipRRect(
+                                      borderRadius: BorderRadius.all(Radius.circular(10)),
+                                      child: Container(
+                                          child: Image.network('${threads[index].thread!.imageURL}')
+                                        ),
+                                    ),
+                              Container(
+                                margin: spacing8Top,
+                                child: BoxText.caption(
+                                    threads[index].thread!.description!),
+                              ),
+                              SizedBox(
+                                height: 10,
+                              ),
+                              Row(
+                                children: [
+                                  Container(
+                                    child: threads[index].thread!.isLiked!
+                                        ? GestureDetector(
+                                            onTap: () {
+                                              provider.unlikeThread(
+                                                  index, "followed");
+                                              // provider.getBookmark();
+                                            },
+                                            child: Row(children: [
+                                              ImageIcon(
+                                                AssetImage(
+                                                    'assets/icon_like2.png'),
+                                                color: AppColors.kcInfoColor,
+                                              ),
+                                              SizedBox(
+                                                width: 8,
+                                              ),
+                                              BoxText.captionSemi(
+                                                threads[index]
+                                                    .thread!
+                                                    .totalLike
+                                                    .toString(),
+                                                color: AppColors.kcInfoColor,
+                                              )
+                                            ]),
+                                          )
+                                        : GestureDetector(
+                                            onTap: () {
+                                              provider.likeThread(
+                                                  index, "followed");
+                                              // provider.getBookmark();
+                                            },
+                                            child: Row(children: [
+                                              ImageIcon(
+                                                AssetImage(
+                                                    'assets/icon_like1.png'),
+                                                color: AppColors.kcLightestBlack,
+                                              ),
+                                              SizedBox(
+                                                width: 8,
+                                              ),
+                                              BoxText.captionSemi(
+                                                threads[index]
+                                                    .thread!
+                                                    .totalLike
+                                                    .toString(),
+                                                color: AppColors.kcLightestBlack,
+                                              )
+                                            ]),
+                                          ),
+                                  ),
+                                  SizedBox(
+                                    width: 12,
+                                  ),
+                                  Container(
+                                    child: GestureDetector(
+                                      onTap: () {
+                                        showModalBottomSheet(
+                                            isScrollControlled: true,
+                                            context: context,
+                                            backgroundColor: Colors.transparent,
+                                            shape: RoundedRectangleBorder(
+                                              borderRadius: BorderRadius.only(
+                                                topLeft: Radius.circular(30),
+                                                topRight: Radius.circular(30),
+                                              ),
+                                            ),
+                                            builder: (context) {
+                                              return CommentScreen(
+                                                threadId:
+                                                    threads[index].thread!.sId ??
+                                                        "",
+                                              );
+                                            });
+                                      },
+                                      child: Row(
+                                        children: [
+                                          ImageIcon(
+                                            AssetImage('assets/icon_comment.png'),
+                                            color: AppColors.kcLightestBlack,
+                                          ),
+                                          SizedBox(
+                                            width: 8,
+                                          ),
+                                          BoxText.captionSemi(
+                                            threads[index]
+                                                .thread!
+                                                .totalComment
+                                                .toString(),
+                                            color: AppColors.kcLightestBlack,
+                                          )
+                                        ],
+                                      ),
+                                    ),
+                                  ),
+                                ],
+                              ),
+                            ],
+                          ),
                         ),
                       );
                     },

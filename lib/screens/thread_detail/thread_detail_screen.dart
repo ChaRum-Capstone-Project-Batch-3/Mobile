@@ -404,17 +404,13 @@ class _ThreadDetailScreenState extends State<ThreadDetailScreen> {
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
           if (thread.imageURL != "")
-            Container(
-              height: 500,
-                decoration: BoxDecoration(
-                  borderRadius: BorderRadius.circular(10),
-                  image: DecorationImage(
-                    image: NetworkImage('${provider.thread.imageURL}'),
-                    fit: BoxFit.fill,
-                  ),
-                ),
-                // child: Image.network('${provider.thread.imageURL}')
-                ),
+            ClipRRect(
+            borderRadius: BorderRadius.all(Radius.circular(10)),
+            child: Container(
+                child: Image.network('${provider.thread.imageURL}')
+              ),
+          ),
+          SizedBox(height: 12),
           Text(
             '${provider.thread.description}',
             style: caption,
