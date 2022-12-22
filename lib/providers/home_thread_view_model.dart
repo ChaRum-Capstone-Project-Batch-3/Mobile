@@ -2,6 +2,7 @@ import 'package:fgd_flutter/models/home/home_thread_response.dart';
 import 'package:fgd_flutter/services/home_thread_api.dart';
 import 'package:fgd_flutter/shared/local_storage.dart';
 import 'package:flutter/material.dart';
+import 'package:fgd_flutter/models/thread/thread.dart';
 
 class HomeThreadViewModel with ChangeNotifier {
   var mPreferences = LocalStorage();
@@ -64,7 +65,7 @@ class HomeThreadViewModel with ChangeNotifier {
   likeThread(int index, String type) async {
     var token = mPreferences.getString('token');
     if (type == "thread") {
-      this._allThread[index] = "liked"; = !this._allThread[index].isliked!;
+      this._allThread[index].isLiked = "liked"; = !this._allThread[index].isliked!;
       await token.whenComplete(() async {
         await token.then((value) async {
           var data = HomeThreadAPI().likeThread(this._allThread[index].id, value);
