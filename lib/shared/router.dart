@@ -10,3 +10,4 @@ const String detailThread = "/thread_detail";
 const String account = "/account";
 const String following = "/following";
 const String detailSpace = "/detailSpace";
+const String notif = "/notif";

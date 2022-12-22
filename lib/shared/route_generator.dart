@@ -3,6 +3,8 @@ import 'package:fgd_flutter/screens/detail_space/detail_space.dart';
 import 'package:fgd_flutter/screens/edit_account/edit_account_screen.dart';
 import 'package:fgd_flutter/screens/home/home_screen.dart';
 import 'package:fgd_flutter/screens/main_screen/main_screen.dart';
+import 'package:fgd_flutter/screens/notification/widget/notification_card.dart';
+import 'package:fgd_flutter/screens/notification/widget/notification_empty.dart';
 import 'package:fgd_flutter/screens/onboarding/onboarding_screen.dart';
 import 'package:fgd_flutter/screens/register/regiester_screen.dart';
 import 'package:fgd_flutter/screens/search/search_screen.dart';
@@ -43,6 +45,9 @@ class RouteGenerator {
       case editAccount:
         final args = settings.arguments;
         return MaterialPageRoute(builder: (context) => EditAccountScreen());
+      case notif:
+        final args = settings.arguments;
+        return MaterialPageRoute(builder: (context) => NotificationEmpty());
 
       case detailSpace:
         final args = settings.arguments as String;

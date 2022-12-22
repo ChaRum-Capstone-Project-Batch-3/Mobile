@@ -53,7 +53,12 @@ class _HomeScreenState extends State<HomeScreen> {
                 actions: [
                   Row(
                     children: [
-                      InkWell(child: Image.asset("assets/notification.png")),
+                      InkWell(
+                        onTap: () {
+                          Navigator.pushNamed(context, notif);
+                        },
+                        child: Image.asset("assets/notification.png")
+                      ),
                       SizedBox(width: 15),
                       InkWell(
                         onTap: () {

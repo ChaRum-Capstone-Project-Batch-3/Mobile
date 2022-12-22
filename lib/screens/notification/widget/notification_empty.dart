@@ -8,7 +8,9 @@ class NotificationEmpty extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
+      backgroundColor: Colors.grey.shade200,
       appBar: AppBar(
+        elevation: 0,
         iconTheme: IconThemeData(color: Colors.black),
         backgroundColor: Colors.white,
         title: Text("Notification",style: TextStyle(fontWeight: FontWeight.bold,fontSize: 20),),
