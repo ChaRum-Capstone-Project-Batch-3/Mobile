@@ -35,4 +35,10 @@ class LocalStorage {
     bool data = mPreferences!.getBool(key) ?? false;
     return data;
   }
+
+  Future<bool> remove(String key) async {
+    mPreferences = await SharedPreferences.getInstance();
+    mPreferences!.remove(key);
+    return true;
+  }
 }

@@ -850,8 +850,14 @@ class _AccountScreenState extends State<AccountScreen> {
                 color: Color(0xffDFDFDF),
               ),
               GestureDetector(
-                onTap: () {
-                  Navigator.popAndPushNamed(context, login);
+                onTap: () async {
+                  var logout = Provider.of<GetUserViewModel>(context, listen: false).logout();
+                  await logout.whenComplete(() async {
+                    await logout.then((value) {
+                      Navigator.pushNamedAndRemoveUntil(
+                          context, login, (route) => false);
+                    });
+                  });
                 },
                 child: Row(children: [
                   Image.asset('assets/icon_logout.png', height: 24, width: 24),

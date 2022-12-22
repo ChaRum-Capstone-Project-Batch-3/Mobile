@@ -134,4 +134,23 @@ class GetUserViewModel with ChangeNotifier {
       });
     });
   }
+
+  Future<bool> logout() async {
+    var removeToken = mPreferences.remove("token");
+    var removeStatus = mPreferences.remove("isLogin");
+    await removeToken.whenComplete(() async {
+      await removeToken.then((value) async {
+        if (value) {
+          await removeStatus.whenComplete(() async {
+            await removeStatus.then((val) {
+              if (val) {
+                return true;
+              }
+            });
+          });
+        }
+      });
+    });
+    return false;
+  }
 }
