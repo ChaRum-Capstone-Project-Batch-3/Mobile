@@ -1,18 +1,17 @@
 import 'package:json_annotation/json_annotation.dart';
-import 'package:fgd_flutter/models/thread/thread.dart';
 
-part 'thread_response.g.dart';
+part 'topic_response.g.dart';
 
 @JsonSerializable()
-class ThreadResponse {
+class TopicResponse {
   int? status;
   String? message;
   Data? data;
   Pagination? pagination;
 
-  ThreadResponse({this.status, this.message, this.data, this.pagination});
+  TopicResponse({this.status, this.message, this.data, this.pagination});
 
-  ThreadResponse.fromJson(Map<String, dynamic> json) {
+  TopicResponse.fromJson(Map<String, dynamic> json) {
     status = json['status'];
     message = json['message'];
     data = json['data'] != null ? new Data.fromJson(json['data']) : null;
@@ -36,24 +35,62 @@ class ThreadResponse {
 }
 
 class Data {
-  List<Thread>? threads;
+  List<Topics>? topics;
 
-  Data({this.threads});
+  Data({this.topics});
 
   Data.fromJson(Map<String, dynamic> json) {
-    if (json['threads'] != null) {
-      threads = <Thread>[];
-      json['threads'].forEach((v) {
-        threads!.add(new Thread.fromJson(v));
+    if (json['topics'] != null) {
+      topics = <Topics>[];
+      json['topics'].forEach((v) {
+        topics!.add(new Topics.fromJson(v));
       });
     }
   }
 
   Map<String, dynamic> toJson() {
     final Map<String, dynamic> data = new Map<String, dynamic>();
-    if (this.threads != null) {
-      data['threads'] = this.threads!.map((v) => v.toJson()).toList();
+    if (this.topics != null) {
+      data['topics'] = this.topics!.map((v) => v.toJson()).toList();
     }
+    return data;
+  }
+}
+
+class Topics {
+  String? sId;
+  String? topic;
+  String? description;
+  String? imageURL;
+  String? createdAt;
+  String? updatedAt;
+  bool isSelected = false;
+
+  Topics(
+      {this.sId,
+      this.topic,
+      this.description,
+      this.imageURL,
+      this.createdAt,
+      this.updatedAt});
+
+  Topics.fromJson(Map<String, dynamic> json) {
+    sId = json['_id'];
+    topic = json['topic'];
+    description = json['description'];
+    imageURL = json['imageURL'];
+    createdAt = json['createdAt'];
+    updatedAt = json['updatedAt'];
+  }
+
+  Map<String, dynamic> toJson() {
+    final Map<String, dynamic> data = new Map<String, dynamic>();
+    data['_id'] = this.sId;
+    data['topic'] = this.topic;
+    data['description'] = this.description;
+    data['imageURL'] = this.imageURL;
+    data['createdAt'] = this.createdAt;
+    data['updatedAt'] = this.updatedAt;
     return data;
   }
 }

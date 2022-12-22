@@ -1,18 +1,18 @@
+import 'package:fgd_flutter/models/topic/topic.dart';
 import 'package:json_annotation/json_annotation.dart';
-import 'package:fgd_flutter/models/thread/thread.dart';
 
-part 'thread_response.g.dart';
+part 'get_all_topics.g.dart';
 
 @JsonSerializable()
-class ThreadResponse {
+class GetTopics {
   int? status;
   String? message;
   Data? data;
   Pagination? pagination;
 
-  ThreadResponse({this.status, this.message, this.data, this.pagination});
+  GetTopics({this.status, this.message, this.data, this.pagination});
 
-  ThreadResponse.fromJson(Map<String, dynamic> json) {
+  GetTopics.fromJson(Map<String, dynamic> json) {
     status = json['status'];
     message = json['message'];
     data = json['data'] != null ? new Data.fromJson(json['data']) : null;
@@ -36,27 +36,29 @@ class ThreadResponse {
 }
 
 class Data {
-  List<Thread>? threads;
+  List<Topic>? topics;
 
-  Data({this.threads});
+  Data({this.topics});
 
   Data.fromJson(Map<String, dynamic> json) {
-    if (json['threads'] != null) {
-      threads = <Thread>[];
-      json['threads'].forEach((v) {
-        threads!.add(new Thread.fromJson(v));
+    if (json['topics'] != null) {
+      topics = <Topic>[];
+      json['topics'].forEach((v) {
+        topics!.add(new Topic.fromJson(v));
       });
     }
   }
 
   Map<String, dynamic> toJson() {
     final Map<String, dynamic> data = new Map<String, dynamic>();
-    if (this.threads != null) {
-      data['threads'] = this.threads!.map((v) => v.toJson()).toList();
+    if (this.topics != null) {
+      data['topics'] = this.topics!.map((v) => v.toJson()).toList();
     }
     return data;
   }
 }
+
+
 
 class Pagination {
   int? size;

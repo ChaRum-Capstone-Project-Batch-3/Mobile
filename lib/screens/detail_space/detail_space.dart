@@ -1,3 +1,9 @@
+import 'package:fgd_flutter/models/thread/thread.dart';
+import 'package:fgd_flutter/providers/get_alltopics_view_model.dart';
+import 'package:fgd_flutter/shared/helper.dart';
+import 'package:fgd_flutter/shared/router.dart';
+import 'package:provider/provider.dart';
+
 import '/shared/styles.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/src/widgets/container.dart';
@@ -6,7 +12,8 @@ import 'package:flutter/src/widgets/framework.dart';
 import '/shared/app_colors.dart';
 
 class DetailSpace extends StatefulWidget {
-  const DetailSpace({super.key});
+  const DetailSpace({super.key, required this.topicId});
+  final String topicId;
 
   @override
   State<DetailSpace> createState() => _DetailSpaceState();
@@ -14,170 +21,269 @@ class DetailSpace extends StatefulWidget {
 
 class _DetailSpaceState extends State<DetailSpace> {
   @override
+  void initState() {
+    Provider.of<AllTopicsViewModel>(context, listen: false)
+        .topicDetail(widget.topicId);
+    // TODO: implement initState
+    super.initState();
+  }
+
+  @override
   Widget build(BuildContext context) {
     return DefaultTabController(
       length: 2,
-      child: Scaffold(
-          appBar: AppBar(
-            toolbarHeight: 100,
-            iconTheme: IconThemeData(color: Colors.black),
-            elevation: 0,
-            backgroundColor: Colors.white,
-            actions: [
-              InkWell(
-                onTap: () {},
-                child: Image.asset(
-                  "assets/search-normal.png",
-                ),
-              ),
-            ],
-            bottom: PreferredSize(
-              preferredSize: const Size(100, 100),
-              child: Column(
-                crossAxisAlignment: CrossAxisAlignment.start,
-                children: [
-                  Container(
-                    color: Colors.white,
-                    padding: EdgeInsets.all(16),
-                    child: Column(
-                      crossAxisAlignment: CrossAxisAlignment.start,
-                      children: [
-                        Text(
-                          "Business",
-                          style: TextStyle(
-                              fontWeight: FontWeight.bold, fontSize: 20),
-                        ),
-                        SizedBox(height: 5),
-                        Text(
-                            "Question, advice, and articles to do with running and growing business"),
-                        SizedBox(
-                          height: 8,
-                        ),
-                      ],
+      child: Consumer<AllTopicsViewModel>(
+        builder: (context, provider, child) {
+          return Scaffold(
+              appBar: AppBar(
+                toolbarHeight: 100,
+                iconTheme: IconThemeData(color: Colors.black),
+                elevation: 0,
+                backgroundColor: Colors.white,
+                actions: [
+                  InkWell(
+                    onTap: () {},
+                    child: Image.asset(
+                      "assets/search-normal.png",
                     ),
                   ),
-                  TabBar(
-                    indicator: BoxDecoration(
-                      borderRadius: BorderRadius.all(Radius.circular(6)),
-                      color: AppColors.kcPrimaryColor!.shade200,
-                    ),
-                    indicatorColor: AppColors.kcPrimaryColor,
-                    isScrollable: true,
-                    labelColor: AppColors.kcPrimaryColor,
-                    unselectedLabelColor: AppColors.kcDarkestWhite,
-                    indicatorSize: TabBarIndicatorSize.tab,
-                    tabs: [
-                      Tab(
-                        child: Row(
+                ],
+                bottom: PreferredSize(
+                  preferredSize: const Size(100, 100),
+                  child: Column(
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: [
+                      Container(
+                        width: double.infinity,
+                        color: Colors.white,
+                        padding: EdgeInsets.all(16),
+                        child: Column(
+                          crossAxisAlignment: CrossAxisAlignment.start,
                           children: [
-                            Image.asset("assets/threads.png"),
-                            SizedBox(
-                              width: 10,
-                            ),
                             Text(
-                              "Threads",
-                              style: subtitle2Semi,
+                              provider.topic.topic ?? "",
+                              style: TextStyle(
+                                  fontWeight: FontWeight.bold, fontSize: 20),
+                            ),
+                            SizedBox(height: 5),
+                            Text(provider.topic.description ?? ""),
+                            SizedBox(
+                              height: 8,
                             ),
                           ],
                         ),
                       ),
-                      Tab(
-                        child: Row(
-                          children: [
-                            Image.asset("assets/star.png"),
-                            SizedBox(
-                              width: 10,
-                            ),
-                            Text(
-                              "Popular",
-                              style: subtitle2Semi,
-                            ),
-                          ],
+                      TabBar(
+                        indicator: BoxDecoration(
+                          borderRadius: BorderRadius.all(Radius.circular(6)),
+                          color: AppColors.kcPrimaryColor!.shade200,
                         ),
+                        indicatorColor: AppColors.kcPrimaryColor,
+                        isScrollable: true,
+                        labelColor: AppColors.kcPrimaryColor,
+                        unselectedLabelColor: AppColors.kcDarkestWhite,
+                        indicatorSize: TabBarIndicatorSize.tab,
+                        tabs: [
+                          Tab(
+                            child: Row(
+                              children: [
+                                Image.asset("assets/threads.png"),
+                                SizedBox(
+                                  width: 10,
+                                ),
+                                Text(
+                                  "Threads",
+                                  style: subtitle2Semi,
+                                ),
+                              ],
+                            ),
+                          ),
+                          Tab(
+                            child: Row(
+                              children: [
+                                Image.asset("assets/star.png"),
+                                SizedBox(
+                                  width: 10,
+                                ),
+                                Text(
+                                  "Popular",
+                                  style: subtitle2Semi,
+                                ),
+                              ],
+                            ),
+                          ),
+                        ],
                       ),
                     ],
                   ),
-                ],
+                ),
               ),
-            ),
-          ),
-          body: TabBarView(children: [
-            SingleChildScrollView(
-              child: Column(
-                crossAxisAlignment: CrossAxisAlignment.stretch,
-                mainAxisAlignment: MainAxisAlignment.center,
-                mainAxisSize: MainAxisSize.min,
+              body: TabBarView(children: [
+                Column(
+                  crossAxisAlignment: CrossAxisAlignment.stretch,
+                  mainAxisAlignment: MainAxisAlignment.center,
+                  mainAxisSize: MainAxisSize.min,
+                  children: [
+                    Expanded(
+                        child: ListView.builder(
+                      itemBuilder: (context, index) {
+                        return GestureDetector(
+                          child: _buildPostThread(index),
+                          onTap: () {
+                            Navigator.pushNamed(context, detailThread,
+                                arguments: provider.threads[index].sId);
+                          },
+                        );
+                      },
+                      itemCount: provider.threads.length,
+                      shrinkWrap: true,
+                    ))
+                  ],
+                ),
+                // SingleChildScrollView(
+                //   child: Column(
+                //     crossAxisAlignment: CrossAxisAlignment.stretch,
+                //     mainAxisAlignment: MainAxisAlignment.center,
+                //     mainAxisSize: MainAxisSize.min,
+                //     children: [
+                //       // _buildPostThread(),
+                //       // _buildPostThreadWithImage(),
+                //       // _buildPostThread(),
+                //       // _buildPostThreadWithImage(),
+                //     ],
+                //   ),
+                // ),
+                Column(
+                  crossAxisAlignment: CrossAxisAlignment.stretch,
+                  mainAxisAlignment: MainAxisAlignment.center,
+                  mainAxisSize: MainAxisSize.min,
+                  children: [
+                    Expanded(
+                        child: ListView.builder(
+                      itemBuilder: (context, index) {
+                        return GestureDetector(
+                          child: _buildPostThread(index),
+                          onTap: () {
+                            Navigator.pushNamed(context, detailThread,
+                                arguments: provider.threads[index].sId);
+                          },
+                        );
+                      },
+                      itemCount: provider.threads.length,
+                      shrinkWrap: true,
+                    ))
+                  ],
+                ),
+              ]));
+        },
+      ),
+    );
+  }
+
+  Widget _buildPostThread(int index) {
+    var provider = Provider.of<AllTopicsViewModel>(context, listen: false);
+    var thread = provider.threads[index];
+
+    return Container(
+      color: Color(0xffeeeeee),
+      padding: EdgeInsets.only(top: 10, bottom: 10, left: 16, right: 16),
+      child: Container(
+        decoration: BoxDecoration(
+            color: Colors.white, borderRadius: BorderRadius.circular(10)),
+        child: Column(
+          children: [
+            ListTile(
+              title: Row(
                 children: [
-                  _buildPostThread(),
-                  _buildPostThreadWithImage(),
-                  _buildPostThread(),
-                  _buildPostThreadWithImage(),
+                  Text(thread.creator!.displayName ?? ""),
+                  SizedBox(
+                    width: 10,
+                  ),
+                  Container(
+                    width: 20,
+                    height: 20,
+                    decoration: BoxDecoration(
+                        color: AppColors.kcLightestBlack,
+                        shape: BoxShape.circle),
+                  ),
+                  SizedBox(
+                    width: 10,
+                  ),
+                  Text(
+                    "Follow",
+                    style: body1Semi,
+                  ),
                 ],
               ),
-            ),
-            SingleChildScrollView(
-              child: Column(
-                crossAxisAlignment: CrossAxisAlignment.stretch,
-                mainAxisAlignment: MainAxisAlignment.center,
-                mainAxisSize: MainAxisSize.min,
-                children: [
-                  _buildPostThread(),
-                  _buildPostThreadWithImage(),
-                  _buildPostThread(),
-                  _buildPostThreadWithImage(),
-                ],
+              subtitle: Text(between(
+                  DateTime.parse(thread.updatedAt ?? "").toLocal(),
+                  DateTime.now())),
+              leading: Image.asset('assets/Ellipse 43.png'),
+              trailing: Image.asset(
+                'assets/icon_more.png',
+                height: 24,
+                width: 24,
               ),
             ),
-          ])),
+            SizedBox(
+              height: 5,
+            ),
+            Container(
+              margin: EdgeInsets.only(left: 16, right: 270),
+              decoration: BoxDecoration(
+                color: Color(0xffececec),
+                borderRadius: BorderRadius.circular(50),
+              ),
+              padding: EdgeInsets.only(top: 5, bottom: 5, left: 12, right: 12),
+              child: Text(
+                thread.topic!.topic ?? "",
+                textAlign: TextAlign.center,
+                style: TextStyle(color: Colors.grey),
+              ),
+            ),
+            Container(
+                padding: EdgeInsets.all(20),
+                child: Column(
+                  mainAxisAlignment: MainAxisAlignment.center,
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
+                    Text(
+                      thread.title ?? "",
+                      style: body1Bold,
+                    ),
+                    Text(thread.description ?? ""),
+                    SizedBox(
+                      height: 10,
+                    ),
+                    Row(children: [
+                      Row(
+                        children: [
+                          Image.asset('assets/icon_like1.png',
+                              height: 24, width: 24),
+                          Text(thread.totalLike.toString()),
+                        ],
+                      ),
+                      SizedBox(width: 10),
+                      Row(
+                        children: [
+                          Image.asset('assets/icon_comment.png',
+                              height: 24, width: 24),
+                          Text(thread.totalComment.toString()),
+                        ],
+                      ),
+                    ]),
+                  ],
+                )),
+          ],
+        ),
+      ),
     );
   }
 }
 
-Container _buildPostThread() {
-  return Container(
-    color: Color(0xffeeeeee),
-    padding: EdgeInsets.only(top: 10, bottom: 10, left: 16, right: 16),
-    child: Container(
-      decoration: BoxDecoration(
-          color: Colors.white, borderRadius: BorderRadius.circular(10)),
-      child: Column(
-        children: [
-          _buildProfileThreadFake(),
-          SizedBox(
-            height: 5,
-          ),
-          Container(
-            margin: EdgeInsets.only(left: 16, right: 270),
-            decoration: BoxDecoration(
-              color: Color(0xffececec),
-              borderRadius: BorderRadius.circular(50),
-            ),
-            padding: EdgeInsets.only(top: 5, bottom: 5, left: 12, right: 12),
-            child: Text(
-              'Education',
-              textAlign: TextAlign.center,
-              style: TextStyle(color: Colors.grey),
-            ),
-          ),
-          _buildThread(),
-        ],
-      ),
-    ),
-  );
-}
-
-ListTile _buildProfileThreadFake() {
-  return ListTile(
-    title: Text('Muhammad Sumbul * Following'),
-    subtitle: Text('1h ago'),
-    leading: Image.asset('assets/Ellipse 43.png'),
-    trailing: Image.asset(
-      'assets/icon_more.png',
-      height: 24,
-      width: 24,
-    ),
-  );
-}
+// ListTile _buildProfileThreadFake() {
+//   return
+// }
 
 Container _buildThread() {
   return Container(

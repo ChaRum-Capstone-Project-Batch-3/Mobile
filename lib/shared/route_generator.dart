@@ -1,10 +1,12 @@
 import 'package:fgd_flutter/screens/create_thread/create_thread_screen.dart';
+import 'package:fgd_flutter/screens/detail_space/detail_space.dart';
 import 'package:fgd_flutter/screens/edit_account/edit_account_screen.dart';
 import 'package:fgd_flutter/screens/home/home_screen.dart';
 import 'package:fgd_flutter/screens/main_screen/main_screen.dart';
 import 'package:fgd_flutter/screens/onboarding/onboarding_screen.dart';
 import 'package:fgd_flutter/screens/register/regiester_screen.dart';
 import 'package:fgd_flutter/screens/search/search_screen.dart';
+import 'package:fgd_flutter/screens/thread_detail/thread_detail_screen.dart';
 import 'package:flutter/material.dart';
 import 'package:fgd_flutter/shared/router.dart';
 
@@ -41,18 +43,28 @@ class RouteGenerator {
       case editAccount:
         final args = settings.arguments;
         return MaterialPageRoute(builder: (context) => EditAccountScreen());
-        case account:
+
+      case detailSpace:
+        final args = settings.arguments as String;
+        return MaterialPageRoute(
+          builder: (context) => DetailSpace(topicId: args),
+        );
+
+      case detailThread:
+        final args = settings.arguments as String;
+        return MaterialPageRoute(
+            builder: (context) => ThreadDetailScreen(
+                  id: args,
+                ));
+
+      case account:
         final args = settings.arguments;
         return MaterialPageRoute(builder: (context) => AccountScreen());
-        case following:
+      case following:
         final args = settings.arguments;
         return MaterialPageRoute(builder: (context) => FollowingScreen());
-        // case detailThread:
-        // final args = settings.arguments as String;
-        // return MaterialPageRoute(
-        //     builder: (context) => ThreadDetailScreen(
-        //           id: args,
-        //         ));
+     
+
       default:
         return _errorPage();
     }

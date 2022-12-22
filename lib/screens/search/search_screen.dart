@@ -1,11 +1,15 @@
+import 'package:fgd_flutter/models/thread/thread.dart';
+import 'package:fgd_flutter/providers/bookmark_view_model.dart';
+import 'package:fgd_flutter/models/bookmark/bookmark_response.dart';
 import 'package:fgd_flutter/providers/search_thread_view_model.dart';
 import 'package:fgd_flutter/screens/search/widget/recent_search.dart';
+import 'package:fgd_flutter/screens/thread_detail/widgets/comment_screen.dart';
 import 'package:fgd_flutter/state/search_thread_state.dart';
 import 'package:flutter/material.dart';
 import 'package:fgd_flutter/shared/charum_ui.dart';
-import 'package:intl/intl.dart';
 import 'package:provider/provider.dart';
 import 'package:shimmer/shimmer.dart';
+import 'package:fgd_flutter/shared/helper.dart';
 
 class SearchScreen extends StatefulWidget {
   const SearchScreen({super.key});
@@ -441,6 +445,9 @@ class _SearchScreenState extends State<SearchScreen> {
                                 ),
                                 Container(
                                   child: GestureDetector(
+                                    onTap: () {
+                                      other(provider.thread[index]);
+                                    },
                                     child: ImageIcon(
                                         AssetImage('assets/icon_more.png')),
                                   ),
@@ -540,6 +547,24 @@ class _SearchScreenState extends State<SearchScreen> {
                                 ),
                                 Container(
                                   child: GestureDetector(
+                                    onTap: () {
+                                      showModalBottomSheet(
+                                          isScrollControlled: true,
+                                          context: context,
+                                          backgroundColor: Colors.transparent,
+                                          shape: RoundedRectangleBorder(
+                                            borderRadius: BorderRadius.only(
+                                              topLeft: Radius.circular(30),
+                                              topRight: Radius.circular(30),
+                                            ),
+                                          ),
+                                          builder: (context) {
+                                            return CommentScreen(
+                                              threadId:
+                                                  threads[index].sId ?? "",
+                                            );
+                                          });
+                                    },
                                     child: Row(
                                       children: [
                                         ImageIcon(
@@ -784,6 +809,9 @@ class _SearchScreenState extends State<SearchScreen> {
                                   child: GestureDetector(
                                     child: ImageIcon(
                                         AssetImage('assets/icon_more.png')),
+                                    onTap: () {
+                                      other(provider.thread[index]);
+                                    },
                                   ),
                                 ),
                               ],
@@ -870,6 +898,24 @@ class _SearchScreenState extends State<SearchScreen> {
                                 ),
                                 Container(
                                   child: GestureDetector(
+                                    onTap: () {
+                                      showModalBottomSheet(
+                                          isScrollControlled: true,
+                                          context: context,
+                                          backgroundColor: Colors.transparent,
+                                          shape: RoundedRectangleBorder(
+                                            borderRadius: BorderRadius.only(
+                                              topLeft: Radius.circular(30),
+                                              topRight: Radius.circular(30),
+                                            ),
+                                          ),
+                                          builder: (context) {
+                                            return CommentScreen(
+                                              threadId:
+                                                  threads[index].sId ?? "",
+                                            );
+                                          });
+                                    },
                                     child: Row(
                                       children: [
                                         ImageIcon(
@@ -922,25 +968,175 @@ class _SearchScreenState extends State<SearchScreen> {
     );
   }
 
-  String between(DateTime from, DateTime to) {
-    String diff = "";
-    from = DateTime(
-        from.year, from.month, from.day, from.hour, from.minute, from.second);
-    to = DateTime(to.year, to.month, to.day, to.hour, to.minute, to.second);
-    if (to.difference(from).inDays > 0 && to.difference(from).inDays <= 3) {
-      diff = to.difference(from).inDays.toString() + "d ago";
-    } else if (to.difference(from).inHours > 0 &&
-        to.difference(from).inHours <= 60) {
-      diff = to.difference(from).inHours.toString() + "h ago";
-    } else if (to.difference(from).inMinutes > 0 &&
-        to.difference(from).inMinutes <= 60) {
-      diff = to.difference(from).inMinutes.toString() + "m ago";
-    } else if (to.difference(from).inSeconds > 0 &&
-        to.difference(from).inSeconds <= 60) {
-      diff = to.difference(from).inSeconds.toString() + "s ago";
-    } else {
-      diff = DateFormat('MMMM d, yyyy').format(from);
-    }
-    return diff;
+  void comment(Thread thread) {
+    showModalBottomSheet(
+        isScrollControlled: true,
+        context: context,
+        backgroundColor: Colors.transparent,
+        shape: RoundedRectangleBorder(
+          borderRadius: BorderRadius.only(
+            topLeft: Radius.circular(30),
+            topRight: Radius.circular(30),
+          ),
+        ),
+        builder: (context) {
+          return CommentScreen(
+            threadId: thread.sId ?? "",
+          );
+        });
+  }
+
+  void other(Thread thread) {
+    var provider = Provider.of<SearchThreadViewModel>(context, listen: false);
+    showModalBottomSheet(
+        context: context,
+        isScrollControlled: true,
+        shape: RoundedRectangleBorder(
+          borderRadius: BorderRadius.only(
+            topLeft: Radius.circular(30),
+            topRight: Radius.circular(30),
+          ),
+        ),
+        backgroundColor: AppColors.kcBaseWhite,
+        builder: (BuildContext context) {
+          return Container(
+            height: 300,
+            padding: spacing20All,
+            child: Column(
+              children: [
+                Center(
+                  child: Image.asset(
+                    'assets/pony_bottom_sheet.png',
+                    width: 38,
+                  ),
+                ),
+                SizedBox(
+                  height: 30,
+                ),
+                Container(
+                  child: thread.isFollowed!
+                      ? InkWell(
+                          onTap: () {
+                            provider.unfollowThread(thread.sId!);
+                            Navigator.pop(context);
+                          },
+                          child: Row(
+                            children: [
+                              ImageIcon(
+                                  AssetImage('assets/unfollow-thread.png')),
+                              SizedBox(
+                                width: 10,
+                              ),
+                              Text(
+                                "Unfollow Thread",
+                                style: button,
+                              ),
+                            ],
+                          ),
+                        )
+                      : InkWell(
+                          onTap: () {
+                            provider.followThread(thread.sId!);
+                            Navigator.pop(context);
+                          },
+                          child: Row(
+                            children: [
+                              ImageIcon(
+                                  AssetImage('assets/icon_follow_thread.png')),
+                              SizedBox(
+                                width: 10,
+                              ),
+                              Text(
+                                "Follow Thread",
+                                style: button,
+                              ),
+                            ],
+                          ),
+                        ),
+                ),
+                SizedBox(
+                  height: 20,
+                ),
+                Container(
+                  child: thread.isBookmarked!
+                      ? InkWell(
+                          onTap: () {
+                            provider.unbookmarkThread(thread.sId!);
+                            Navigator.pop(context);
+                          },
+                          child: Row(
+                            children: [
+                              ImageIcon(AssetImage(
+                                  'assets/icon_remove_bookmark.png')),
+                              SizedBox(
+                                width: 10,
+                              ),
+                              Text(
+                                "Remove Bookmark",
+                                style: button,
+                              ),
+                            ],
+                          ),
+                        )
+                      : InkWell(
+                          onTap: () {
+                            provider.bookmarkThread(thread.sId!);
+                            Navigator.pop(context);
+                          },
+                          child: Row(
+                            children: [
+                              ImageIcon(
+                                  AssetImage('assets/icon_bookmark1.png')),
+                              SizedBox(
+                                width: 10,
+                              ),
+                              Text(
+                                "Bookmark",
+                                style: button,
+                              ),
+                            ],
+                          ),
+                        ),
+                ),
+                SizedBox(
+                  height: 20,
+                ),
+                GestureDetector(
+                  child: Row(
+                    children: [
+                      ImageIcon(
+                          AssetImage('assets/icon_share_bottom_sheet.png')),
+                      SizedBox(
+                        width: 10,
+                      ),
+                      Text(
+                        "Share",
+                        style: button,
+                      ),
+                    ],
+                  ),
+                ),
+                SizedBox(
+                  height: 20,
+                ),
+                GestureDetector(
+                  child: Row(
+                    children: [
+                      ImageIcon(
+                          AssetImage('assets/icon_report_bottom_sheet.png')),
+                      SizedBox(
+                        width: 10,
+                      ),
+                      Text(
+                        "Report Thread",
+                        style: button,
+                      ),
+                    ],
+                  ),
+                ),
+              ],
+            ),
+          );
+        });
   }
 }
