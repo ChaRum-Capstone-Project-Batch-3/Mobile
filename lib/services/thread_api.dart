@@ -34,6 +34,14 @@ class ThreadApi extends ApiUtils {
     }
   }
 
+  Future<ThreadResponse> getFollowThread(String token) async {
+    var response = await dio.get('/thread/follow',
+        options: Options(headers: {"Authorization": token}));
+    ThreadResponse result = ThreadResponse.fromJson(response.data);
+    print("get Follow Thread by Token" + response.data.toString());
+    return result;
+  }
+
   Future<BaseResponse> likeThread(String id, String token) async {
     var response = await dio.post('/thread/like/id/$id',
         options: Options(headers: {"Authorization": token}));
@@ -79,12 +87,6 @@ class ThreadApi extends ApiUtils {
     return result;
   }
 
-  // Future<DetailThreadResponse> detailThread(String id, String token) async {
-  //   var response = await dio.get('/thread/id/$id',
-  //       options: Options(headers: {"Authorization": token}));
-  //   DetailThreadResponse result = DetailThreadResponse.fromJson(response.data);
-  //   return result;
-  // }
   Future<ThreadResponse> detailThread(String id, String token) async {
     var response = await dio.get('/thread/id/$id',
         options: Options(headers: {"Authorization": token}));
@@ -109,4 +111,6 @@ class ThreadApi extends ApiUtils {
     BaseResponse result = BaseResponse.fromJson(response.data);
     return result;
   }
+
+
 }
