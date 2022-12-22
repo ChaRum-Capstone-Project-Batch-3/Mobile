@@ -303,6 +303,13 @@ class _HomeScreenState extends State<HomeScreen> {
                               height: 4,
                             ),
                             BoxText.subtitle2Semi(threads[index].title!),
+                            if (threads[index].imageURL != "")
+                              Container(
+                                  margin: spacing8Top,
+                                  decoration: BoxDecoration(
+                                    borderRadius: BorderRadius.circular(10),
+                                  ),
+                                  child: Image.network('${threads[index].imageURL}')),
                             Container(
                               margin: spacing8Top,
                               child:
@@ -531,6 +538,13 @@ class _HomeScreenState extends State<HomeScreen> {
                               height: 4,
                             ),
                             BoxText.subtitle2Semi(threads[index].title!),
+                            if (threads[index].imageURL != "")
+                              Container(
+                                  margin: spacing8Top,
+                                  decoration: BoxDecoration(
+                                    borderRadius: BorderRadius.circular(10),
+                                  ),
+                                  child: Image.network('${threads[index].imageURL}')),
                             Container(
                               margin: spacing8Top,
                               child:
@@ -762,6 +776,13 @@ class _HomeScreenState extends State<HomeScreen> {
                             ),
                             BoxText.subtitle2Semi(
                                 threads[index].thread!.title!),
+                                if (threads[index].thread!.imageURL != "")
+                                  Container(
+                                      margin: spacing8Top,
+                                      decoration: BoxDecoration(
+                                        borderRadius: BorderRadius.circular(10),
+                                      ),
+                                      child: Image.network('${threads[index].thread!.imageURL}')),
                             Container(
                               margin: spacing8Top,
                               child: BoxText.caption(
