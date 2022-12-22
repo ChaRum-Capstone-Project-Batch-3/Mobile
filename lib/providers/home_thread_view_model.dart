@@ -1,70 +1,229 @@
+import 'package:fgd_flutter/models/home/followed_thread_response.dart';
 import 'package:fgd_flutter/models/home/home_thread_response.dart';
 import 'package:fgd_flutter/services/home_thread_api.dart';
 import 'package:fgd_flutter/shared/local_storage.dart';
 import 'package:flutter/material.dart';
+import 'package:fgd_flutter/models/thread/thread.dart';
+
+import '../services/thread_api.dart';
+import '../state/home_thread_state.dart';
 
 class HomeThreadViewModel with ChangeNotifier {
   var mPreferences = LocalStorage();
-  List<String> _allThread = [];
-  List<String> get allThread => _allThread;
-  List<Threads> _popularThread = [];
-  List<Threads> get popularThread => _popularThread;
-  List<Threads> _followedThread = [];
-  List<Threads> get followedThread => _followedThread;
+  HomeThreadState _state = HomeThreadState.loaded;
+  HomeThreadState get state => _state;
+  List<Thread> _allThread = [];
+  List<Thread> get allThread => _allThread;
+  List<Thread> _popularThread = [];
+  List<Thread> get popularThread => _popularThread;
+  List<FollowThreads> _followedThread = [];
+  List<FollowThreads> get followedThread => _followedThread;
 
-  // changeState(HomeThreadState s) {
-  //   _state = s;
-  //   notifyListeners();
-  // }
+  changeState(HomeThreadState s) {
+    _state = s;
+  }
 
-  showAllThread() async {
-    var token = mPreferences.getString('token');
+  init() async {
+    changeState(HomeThreadState.loading);
+    try {
+      await getThread();
+      await getPopular();
+      await getFollow();
+      changeState(HomeThreadState.loaded);
+      notifyListeners();
+    } catch (e) {
+      print(e.toString());
+      changeState(HomeThreadState.error);
+      notifyListeners();
+    }
+  }
+
+  getThread() async {
+    try {
+      var token = mPreferences.getString("token");
+      await token.whenComplete(() async {
+        await token.then((value) async {
+          var result = ThreadApi().search("createdAt", "desc", "", "", value);
+          await result.whenComplete(() async {
+            await result.then((val) {
+              if (val!.status == 200) {
+                this._allThread = val.data!.threads ?? [];
+                notifyListeners();
+              }
+            });
+          });
+        });
+      });
+    } catch (e) {
+      print(e.toString());
+      changeState(HomeThreadState.error);
+      notifyListeners();
+    }
+  }
+
+  getPopular() async {
+    try {
+      var token = mPreferences.getString("token");
+      await token.whenComplete(() async {
+        await token.then((value) async {
+          var result = ThreadApi().search("likes", "desc", "", "", value);
+          await result.whenComplete(() async {
+            await result.then((val) {
+              if (val!.status == 200) {
+                this._popularThread = val.data!.threads ?? [];
+                print(this._popularThread[0].title);
+                notifyListeners();
+              }
+            });
+          });
+        });
+      });
+    } catch (e) {
+      print(e.toString());
+      changeState(HomeThreadState.error);
+      notifyListeners();
+    }
+  }
+
+  getFollow() async {
+    try {
+      var token = mPreferences.getString("token");
+      await token.whenComplete(() async {
+        await token.then((value) async {
+          var result = ThreadApi().getFollowThread(value);
+          await result.whenComplete(() async {
+            await result.then((value) {
+              if (value.status == 200) {
+                this._followedThread = value.data!.followThreads ?? [];
+                notifyListeners();
+              }
+            });
+          });
+        });
+      });
+    } catch (e) {
+      print(e.toString());
+      changeState(HomeThreadState.error);
+      notifyListeners();
+    }
+  }
+
+  likeThread(int index, String type) async {
+    var token = mPreferences.getString("token");
+    if (type == "thread") {
+      this._allThread[index].isLiked = !this._allThread[index].isLiked!;
+      notifyListeners();
+      await token.whenComplete(() async {
+        await token.then((value) async {
+          await ThreadApi().likeThread(this._allThread[index].sId!, value);
+        });
+      });
+    } else if (type == "followed") {
+      this._followedThread[index].thread!.isLiked = true;
+      notifyListeners();
+      await token.whenComplete(() async {
+        await token.then((value) async {
+          await ThreadApi()
+              .likeThread(this._followedThread[index].thread!.sId!, value);
+        });
+      });
+    } else {
+      this._popularThread[index].isLiked = !this._popularThread[index].isLiked!;
+      notifyListeners();
+      await token.whenComplete(() async {
+        await token.then((value) async {
+          await ThreadApi().likeThread(this._popularThread[index].sId!, value);
+        });
+      });
+    }
+    await getPopular();
+    await getThread();
+    await getFollow();
+    notifyListeners();
+  }
+
+  unlikeThread(int index, String type) async {
+    var token = mPreferences.getString("token");
+    if (type == "thread") {
+      this._allThread[index].isLiked = !this._allThread[index].isLiked!;
+      await token.whenComplete(() async {
+        await token.then((value) async {
+          await ThreadApi().unlikeThread(this._allThread[index].sId!, value);
+        });
+      });
+    } else if (type == "followed") {
+      this._followedThread[index].thread!.isLiked = true;
+      notifyListeners();
+      await token.whenComplete(() async {
+        await token.then((value) async {
+          await ThreadApi()
+              .unlikeThread(this._followedThread[index].thread!.sId!, value);
+        });
+      });
+    } else {
+      this._popularThread[index].isLiked = !this._popularThread[index].isLiked!;
+      await token.whenComplete(() async {
+        await token.then((value) async {
+          await ThreadApi()
+              .unlikeThread(this._popularThread[index].sId!, value);
+        });
+      });
+    }
+    await getPopular();
+    await getThread();
+    await getFollow();
+    notifyListeners();
+  }
+
+  followThread(String id) async {
+    var token = mPreferences.getString("token");
     await token.whenComplete(() async {
       await token.then((value) async {
-        var data = HomeThreadAPI().show("created_at", "desc", "", "", value);
-        await data.whenComplete(() async {
-          await data.then((value) {
-            // _thread = value.threads;
-            // _popular = value.popular;
-            notifyListeners();
-          });
-        });
+        await ThreadApi().followThread(id, value);
+        await getThread();
+        await getPopular();
+        await getFollow();
+        notifyListeners();
       });
     });
   }
 
-  showPopularThread() {
-    var token = mPreferences.getString('token');
-    token.whenComplete(() async {
+  unfollowThread(String id) async {
+    var token = mPreferences.getString("token");
+    await token.whenComplete(() async {
       await token.then((value) async {
-        var data = HomeThreadAPI().show("created_at", "desc", "", "", value);
-        await data.whenComplete(() async {
-          await data.then((value) {
-            // _popular = value.popular;
-            notifyListeners();
-          });
-        });
+        await ThreadApi().unfollowThread(id, value);
+        await getPopular();
+        await getThread();
+        await getFollow();
+        notifyListeners();
       });
     });
   }
 
-  showFollowdedThread() {
-    var token = mPreferences.getString('token');
-    token.whenComplete(() async {
+  bookmarkThread(String id) async {
+    var token = mPreferences.getString("token");
+    await token.whenComplete(() async {
       await token.then((value) async {
-        var data = HomeThreadAPI().show("created_at", "desc", "", "", value);
-        await data.whenComplete(() async {
-          await data.then((value) {
-            // _thread = value.threads;
-            notifyListeners();
-          });
-        });
+        await ThreadApi().bookmarkThread(id, value);
+        await getThread();
+        await getPopular();
+        await getFollow();
+        notifyListeners();
+      });
+    });
+  }
+
+  unbookmarkThread(String id) async {
+    var token = mPreferences.getString("token");
+    await token.whenComplete(() async {
+      await token.then((value) async {
+        await ThreadApi().unbookmarkThread(id, value);
+        await getThread();
+        await getPopular();
+        await getFollow();
+        notifyListeners();
       });
     });
   }
 }
-
-          // var resultThread =
-          //     ThreadApi().search('updatedAt', 'desc', "", search, value);
-          // var resultPopular =
-          //     ThreadApi().search("likes", "desc", "", search, value);

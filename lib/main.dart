@@ -19,6 +19,7 @@ import 'package:fgd_flutter/shared/router.dart';
 import 'package:fgd_flutter/shared/styles.dart';
 
 import 'providers/get_user_view_model.dart';
+import 'providers/home_thread_view_model.dart';
 import 'providers/update_user_view_model.dart';
 
 void main() {
@@ -36,6 +37,7 @@ void main() {
         ChangeNotifierProvider(create: (context) => ThreadDetailViewModel()),
         ChangeNotifierProvider(create: (context) => AllTopicsViewModel()),
         ChangeNotifierProvider(create: (context) => CreateThreadViewModel()),
+        ChangeNotifierProvider(create: (context) => HomeThreadViewModel()),
       ],
       child: MyApp(),
     ),
