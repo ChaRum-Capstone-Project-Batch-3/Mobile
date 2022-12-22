@@ -3,6 +3,7 @@ import 'dart:io';
 import 'package:dio/dio.dart';
 import 'package:fgd_flutter/models/base_response.dart';
 import 'package:fgd_flutter/models/comment/comment_model.dart';
+import 'package:fgd_flutter/models/home/followed_thread_response.dart';
 import 'package:fgd_flutter/models/thread_detail/get_thread_detail_response.dart';
 import 'package:fgd_flutter/models/thread_detail/thread_response.dart';
 import 'package:fgd_flutter/models/thread_detail/thread_response.dart';
@@ -34,10 +35,11 @@ class ThreadApi extends ApiUtils {
     }
   }
 
-  Future<ThreadResponse> getFollowThread(String token) async {
+  Future<FollowedThreadResponse> getFollowThread(String token) async {
     var response = await dio.get('/thread/follow',
         options: Options(headers: {"Authorization": token}));
-    ThreadResponse result = ThreadResponse.fromJson(response.data);
+    FollowedThreadResponse result =
+        FollowedThreadResponse.fromJson(response.data);
     print("get Follow Thread by Token" + response.data.toString());
     return result;
   }
@@ -111,6 +113,4 @@ class ThreadApi extends ApiUtils {
     BaseResponse result = BaseResponse.fromJson(response.data);
     return result;
   }
-
-
 }

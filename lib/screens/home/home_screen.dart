@@ -32,10 +32,7 @@ class _HomeScreenState extends State<HomeScreen> {
 
   @override
   void initState() {
-    
-    Provider.of<HomeThreadViewModel>(context, listen: false).getThread();
-    Provider.of<HomeThreadViewModel>(context, listen: false).getPopular();
-    Provider.of<HomeThreadViewModel>(context, listen: false).getFollow();
+    Provider.of<HomeThreadViewModel>(context, listen: false).init();
     print("Appan tuh");
     super.initState();
   }
@@ -48,7 +45,6 @@ class _HomeScreenState extends State<HomeScreen> {
         return DefaultTabController(
           length: 3,
           child: Scaffold(
-          
             appBar: PreferredSize(
               preferredSize: Size.fromHeight(120),
               child: AppBar(
@@ -145,38 +141,42 @@ class _HomeScreenState extends State<HomeScreen> {
                 ),
               ),
             ),
-            body: Expanded(
-              child: TabBarView(
-                children: [
-                  provider.state == HomeThreadState.loaded
-                      ? Container(
-                          color: AppColors.kcDarkerWhite,
-                          child: threadsWidget(context),
-                        )
-                      : Container(
-                          color: AppColors.kcDarkerWhite,
-                          child: loadingThread(),
-                        ),
-                  provider.state == HomeThreadState.loaded
-                      ? Container(
-                          color: AppColors.kcDarkerWhite,
-                          child: popularsWidget(context),
-                        )
-                      : Container(
-                          color: AppColors.kcDarkerWhite,
-                          child: loadingThread(),
-                        ),
-                  provider.state == HomeThreadState.loaded
-                      ? Container(
-                          color: AppColors.kcDarkerWhite,
-                          child: popularsWidget(context),
-                        )
-                      : Container(
-                          color: AppColors.kcDarkerWhite,
-                          child: loadingThread(),
-                        ),
-                ],
-              ),
+            body: Column(
+              children: [
+                Expanded(
+                  child: TabBarView(
+                    children: [
+                      provider.state == HomeThreadState.loaded
+                          ? Container(
+                              color: AppColors.kcDarkerWhite,
+                              child: threadsWidget(context),
+                            )
+                          : Container(
+                              color: AppColors.kcDarkerWhite,
+                              child: loadingThread(),
+                            ),
+                      provider.state == HomeThreadState.loaded
+                          ? Container(
+                              color: AppColors.kcDarkerWhite,
+                              child: popularsWidget(context),
+                            )
+                          : Container(
+                              color: AppColors.kcDarkerWhite,
+                              child: loadingThread(),
+                            ),
+                      provider.state == HomeThreadState.loaded
+                          ? Container(
+                              color: AppColors.kcDarkerWhite,
+                              child: followedsWidget(context),
+                            )
+                          : Container(
+                              color: AppColors.kcDarkerWhite,
+                              child: loadingThread(),
+                            ),
+                    ],
+                  ),
+                ),
+              ],
             ),
             floatingActionButton: FloatingActionButton(
               backgroundColor: AppColors.kcPrimaryColor,
@@ -421,6 +421,7 @@ class _HomeScreenState extends State<HomeScreen> {
   Widget popularsWidget(BuildContext context) {
     var provider = Provider.of<HomeThreadViewModel>(context, listen: false);
     var threads = provider.popularThread;
+    print(threads.length.toString());
     return threads.length > 0
         ? Column(
             children: [
@@ -684,6 +685,7 @@ class _HomeScreenState extends State<HomeScreen> {
                                       CircleAvatar(
                                         backgroundImage: NetworkImage(
                                             threads[index]
+                                                .thread!
                                                 .creator!
                                                 .profilePictureURL!),
                                       ),
@@ -697,6 +699,7 @@ class _HomeScreenState extends State<HomeScreen> {
                                               children: [
                                                 BoxText.captionSemi(
                                                     threads[index]
+                                                        .thread!
                                                         .creator!
                                                         .displayName!),
                                                 Container(
@@ -731,7 +734,8 @@ class _HomeScreenState extends State<HomeScreen> {
                                 Container(
                                   child: GestureDetector(
                                     onTap: () {
-                                      other(provider.followedThread[index]);
+                                      other(provider
+                                          .followedThread[index].thread!);
                                     },
                                     child: ImageIcon(
                                         AssetImage('assets/icon_more.png')),
@@ -749,18 +753,19 @@ class _HomeScreenState extends State<HomeScreen> {
                                     BorderRadius.all(Radius.circular(50)),
                               ),
                               child: BoxText.caption(
-                                threads[index].topic!.topic!,
+                                threads[index].thread!.topic!.topic!,
                                 color: AppColors.kcLighterBlack,
                               ),
                             ),
                             SizedBox(
                               height: 4,
                             ),
-                            BoxText.subtitle2Semi(threads[index].title!),
+                            BoxText.subtitle2Semi(
+                                threads[index].thread!.title!),
                             Container(
                               margin: spacing8Top,
-                              child:
-                                  BoxText.caption(threads[index].description!),
+                              child: BoxText.caption(
+                                  threads[index].thread!.description!),
                             ),
                             SizedBox(
                               height: 10,
@@ -768,11 +773,11 @@ class _HomeScreenState extends State<HomeScreen> {
                             Row(
                               children: [
                                 Container(
-                                  child: threads[index].isLiked!
+                                  child: threads[index].thread!.isLiked!
                                       ? GestureDetector(
                                           onTap: () {
                                             provider.unlikeThread(
-                                                index, "thread");
+                                                index, "followed");
                                             // provider.getBookmark();
                                           },
                                           child: Row(children: [
@@ -786,6 +791,7 @@ class _HomeScreenState extends State<HomeScreen> {
                                             ),
                                             BoxText.captionSemi(
                                               threads[index]
+                                                  .thread!
                                                   .totalLike
                                                   .toString(),
                                               color: AppColors.kcInfoColor,
@@ -795,7 +801,7 @@ class _HomeScreenState extends State<HomeScreen> {
                                       : GestureDetector(
                                           onTap: () {
                                             provider.likeThread(
-                                                index, "thread");
+                                                index, "followed");
                                             // provider.getBookmark();
                                           },
                                           child: Row(children: [
@@ -809,6 +815,7 @@ class _HomeScreenState extends State<HomeScreen> {
                                             ),
                                             BoxText.captionSemi(
                                               threads[index]
+                                                  .thread!
                                                   .totalLike
                                                   .toString(),
                                               color: AppColors.kcLightestBlack,
@@ -835,7 +842,8 @@ class _HomeScreenState extends State<HomeScreen> {
                                           builder: (context) {
                                             return CommentScreen(
                                               threadId:
-                                                  threads[index].sId ?? "",
+                                                  threads[index].thread!.sId ??
+                                                      "",
                                             );
                                           });
                                     },
@@ -850,6 +858,7 @@ class _HomeScreenState extends State<HomeScreen> {
                                         ),
                                         BoxText.captionSemi(
                                           threads[index]
+                                              .thread!
                                               .totalComment
                                               .toString(),
                                           color: AppColors.kcLightestBlack,

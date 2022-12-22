@@ -1,3 +1,4 @@
+import 'package:fgd_flutter/models/home/followed_thread_response.dart';
 import 'package:fgd_flutter/models/home/home_thread_response.dart';
 import 'package:fgd_flutter/services/home_thread_api.dart';
 import 'package:fgd_flutter/shared/local_storage.dart';
@@ -15,16 +16,29 @@ class HomeThreadViewModel with ChangeNotifier {
   List<Thread> get allThread => _allThread;
   List<Thread> _popularThread = [];
   List<Thread> get popularThread => _popularThread;
-  List<Thread> _followedThread = [];
-  List<Thread> get followedThread => _followedThread;
+  List<FollowThreads> _followedThread = [];
+  List<FollowThreads> get followedThread => _followedThread;
 
   changeState(HomeThreadState s) {
     _state = s;
-    notifyListeners();
+  }
+
+  init() async {
+    changeState(HomeThreadState.loading);
+    try {
+      await getThread();
+      await getPopular();
+      await getFollow();
+      changeState(HomeThreadState.loaded);
+      notifyListeners();
+    } catch (e) {
+      print(e.toString());
+      changeState(HomeThreadState.error);
+      notifyListeners();
+    }
   }
 
   getThread() async {
-    changeState(HomeThreadState.loading);
     try {
       var token = mPreferences.getString("token");
       await token.whenComplete(() async {
@@ -34,7 +48,6 @@ class HomeThreadViewModel with ChangeNotifier {
             await result.then((val) {
               if (val!.status == 200) {
                 this._allThread = val.data!.threads ?? [];
-                changeState(HomeThreadState.loaded);
                 notifyListeners();
               }
             });
@@ -49,7 +62,6 @@ class HomeThreadViewModel with ChangeNotifier {
   }
 
   getPopular() async {
-    changeState(HomeThreadState.loading);
     try {
       var token = mPreferences.getString("token");
       await token.whenComplete(() async {
@@ -59,7 +71,7 @@ class HomeThreadViewModel with ChangeNotifier {
             await result.then((val) {
               if (val!.status == 200) {
                 this._popularThread = val.data!.threads ?? [];
-                changeState(HomeThreadState.loaded);
+                print(this._popularThread[0].title);
                 notifyListeners();
               }
             });
@@ -74,7 +86,6 @@ class HomeThreadViewModel with ChangeNotifier {
   }
 
   getFollow() async {
-    changeState(HomeThreadState.loading);
     try {
       var token = mPreferences.getString("token");
       await token.whenComplete(() async {
@@ -83,8 +94,7 @@ class HomeThreadViewModel with ChangeNotifier {
           await result.whenComplete(() async {
             await result.then((value) {
               if (value.status == 200) {
-                this._popularThread = value.data!.threads ?? [];
-                changeState(HomeThreadState.loaded);
+                this._followedThread = value.data!.followThreads ?? [];
                 notifyListeners();
               }
             });
@@ -102,13 +112,24 @@ class HomeThreadViewModel with ChangeNotifier {
     var token = mPreferences.getString("token");
     if (type == "thread") {
       this._allThread[index].isLiked = !this._allThread[index].isLiked!;
+      notifyListeners();
       await token.whenComplete(() async {
         await token.then((value) async {
           await ThreadApi().likeThread(this._allThread[index].sId!, value);
         });
       });
+    } else if (type == "followed") {
+      this._followedThread[index].thread!.isLiked = true;
+      notifyListeners();
+      await token.whenComplete(() async {
+        await token.then((value) async {
+          await ThreadApi()
+              .likeThread(this._followedThread[index].thread!.sId!, value);
+        });
+      });
     } else {
       this._popularThread[index].isLiked = !this._popularThread[index].isLiked!;
+      notifyListeners();
       await token.whenComplete(() async {
         await token.then((value) async {
           await ThreadApi().likeThread(this._popularThread[index].sId!, value);
@@ -117,6 +138,7 @@ class HomeThreadViewModel with ChangeNotifier {
     }
     await getPopular();
     await getThread();
+    await getFollow();
     notifyListeners();
   }
 
@@ -127,6 +149,15 @@ class HomeThreadViewModel with ChangeNotifier {
       await token.whenComplete(() async {
         await token.then((value) async {
           await ThreadApi().unlikeThread(this._allThread[index].sId!, value);
+        });
+      });
+    } else if (type == "followed") {
+      this._followedThread[index].thread!.isLiked = true;
+      notifyListeners();
+      await token.whenComplete(() async {
+        await token.then((value) async {
+          await ThreadApi()
+              .unlikeThread(this._followedThread[index].thread!.sId!, value);
         });
       });
     } else {
@@ -140,6 +171,7 @@ class HomeThreadViewModel with ChangeNotifier {
     }
     await getPopular();
     await getThread();
+    await getFollow();
     notifyListeners();
   }
 
@@ -150,6 +182,7 @@ class HomeThreadViewModel with ChangeNotifier {
         await ThreadApi().followThread(id, value);
         await getThread();
         await getPopular();
+        await getFollow();
         notifyListeners();
       });
     });
@@ -162,6 +195,7 @@ class HomeThreadViewModel with ChangeNotifier {
         await ThreadApi().unfollowThread(id, value);
         await getPopular();
         await getThread();
+        await getFollow();
         notifyListeners();
       });
     });
@@ -174,6 +208,7 @@ class HomeThreadViewModel with ChangeNotifier {
         await ThreadApi().bookmarkThread(id, value);
         await getThread();
         await getPopular();
+        await getFollow();
         notifyListeners();
       });
     });
@@ -186,6 +221,7 @@ class HomeThreadViewModel with ChangeNotifier {
         await ThreadApi().unbookmarkThread(id, value);
         await getThread();
         await getPopular();
+        await getFollow();
         notifyListeners();
       });
     });
