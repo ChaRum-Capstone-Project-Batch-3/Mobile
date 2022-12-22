@@ -270,7 +270,7 @@ class _LoginScreenState extends State<LoginScreen> {
                         ),
                         children: [
                           TextSpan(
-                            text: 'Sing up here!',
+                            text: 'Sign up here!',
                             style: const TextStyle(
                               fontSize: 14,
                               color: Color(0xFF178066),

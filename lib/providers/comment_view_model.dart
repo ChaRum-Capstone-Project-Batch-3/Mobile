@@ -1,8 +1,11 @@
 import 'package:fgd_flutter/models/comment/comment_model.dart';
+import 'package:fgd_flutter/models/home/home_thread_response.dart';
 import 'package:fgd_flutter/models/thread/comment.dart';
 import 'package:fgd_flutter/models/thread/thread.dart';
 import 'package:fgd_flutter/models/thread_detail/get_thread_detail_response.dart';
+import 'package:fgd_flutter/models/user/user.dart';
 import 'package:fgd_flutter/services/thread_api.dart';
+import 'package:fgd_flutter/services/user_api.dart';
 import 'package:fgd_flutter/shared/local_storage.dart';
 import 'package:fgd_flutter/state/comment_state.dart';
 import 'package:flutter/material.dart';
@@ -19,6 +22,10 @@ class CommentViewModel with ChangeNotifier {
   Comment get reply => _reply;
   Thread _thread = Thread();
   Thread get thread => _thread;
+  TextEditingController _teEditComment = TextEditingController();
+  TextEditingController get teEditComment => _teEditComment;
+  User _user = User();
+  User get user => _user;
 
   changeState(CommentState s) {
     this._state = s;
@@ -30,7 +37,13 @@ class CommentViewModel with ChangeNotifier {
     try {
       await token.whenComplete(() async {
         await token.then((value) async {
+          var resultUser = UserApi().getUser(value);
           var result = ThreadApi().getThreadDetail(threadId, value);
+          await resultUser.whenComplete(() async {
+            await resultUser.then((val) {
+              this._user = val.data!.user ?? User();
+            });
+          });
           await result.whenComplete(() async {
             await result.then((val) {
               if (val.status == 200) {
@@ -107,6 +120,45 @@ class CommentViewModel with ChangeNotifier {
   clearAll() {
     this._reply = Comment();
     this.teComment.text = "";
+    notifyListeners();
+  }
+
+  deleteComment(String commentId, String threadId) async {
+    var token = mPreferences.getString("token");
+    await token.whenComplete(() async {
+      await token.then((value) async {
+        var result = ThreadApi().deleteComment(commentId, value);
+        await result.whenComplete(() async {
+          await result.then((val) async {
+            await getComment(threadId);
+            notifyListeners();
+          });
+        });
+      });
+    });
+  }
+
+  updateComment(String commentId, String threadId) async {
+    var token = mPreferences.getString("token");
+    await token.whenComplete(() async {
+      await token.then((value) async {
+        var comment = CommentModel(comment: this._teEditComment.text);
+        var result = ThreadApi().updateComment(commentId, comment, value);
+        await result.whenComplete(() async {
+          await result.then((val) async {
+            this._teEditComment.text = "";
+            await getComment(threadId);
+            notifyListeners();
+          });
+        });
+      });
+    });
+  }
+
+  onEditComment(String id) {
+    var comment = this._comments.firstWhere((element) => element.sId == id);
+    comment.onEdit = true;
+    this._teEditComment.text = comment.comment ?? "";
     notifyListeners();
   }
 }

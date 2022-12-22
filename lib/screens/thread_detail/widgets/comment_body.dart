@@ -1,3 +1,4 @@
+import 'package:fgd_flutter/models/thread/comment.dart';
 import 'package:fgd_flutter/providers/comment_view_model.dart';
 import 'package:fgd_flutter/screens/thread_detail/widgets/add_comment.dart';
 import 'package:fgd_flutter/shared/charum_ui.dart';
@@ -15,6 +16,15 @@ class CommentBody extends StatefulWidget {
 }
 
 class _CommentBodyState extends State<CommentBody> {
+  @override
+  void dispose() {
+    // TODO: implement dispose
+    Provider.of<CommentViewModel>(context, listen: false)
+        .teEditComment
+        .dispose();
+    super.dispose();
+  }
+
   @override
   Widget build(BuildContext context) {
     var provider = Provider.of<CommentViewModel>(context, listen: false);
@@ -106,56 +116,85 @@ class _CommentBodyState extends State<CommentBody> {
                                           width: 15,
                                         ),
                                         Expanded(
-                                          child: Container(
-                                            decoration: BoxDecoration(
-                                                borderRadius: BorderRadius.all(
-                                                    Radius.circular(15)),
-                                                color: AppColors.kcDarkerWhite),
-                                            child: Column(
-                                              crossAxisAlignment:
-                                                  CrossAxisAlignment.start,
-                                              children: [
-                                                ListTile(
-                                                  title: Row(
+                                          child: provider.comments[index].onEdit
+                                              ? TextFormField(
+                                                  controller:
+                                                      provider.teEditComment,
+                                                  decoration: InputDecoration(
+                                                    contentPadding:
+                                                        spacing16Horizontal,
+                                                    filled: true,
+                                                    fillColor:
+                                                        const Color.fromARGB(
+                                                            255, 232, 230, 230),
+                                                    border: OutlineInputBorder(
+                                                        borderSide:
+                                                            const BorderSide(
+                                                                width: 1),
+                                                        borderRadius:
+                                                            BorderRadius
+                                                                .circular(
+                                                                    15.0)),
+                                                  ),
+                                                )
+                                              : Container(
+                                                  decoration: BoxDecoration(
+                                                      borderRadius:
+                                                          BorderRadius.all(
+                                                              Radius.circular(
+                                                                  15)),
+                                                      color: AppColors
+                                                          .kcDarkerWhite),
+                                                  child: Column(
+                                                    crossAxisAlignment:
+                                                        CrossAxisAlignment
+                                                            .start,
                                                     children: [
-                                                      Text(
-                                                        provider
+                                                      ListTile(
+                                                        title: Row(
+                                                          children: [
+                                                            Text(
+                                                              provider
+                                                                      .comments[
+                                                                          index]
+                                                                      .user!
+                                                                      .displayName ??
+                                                                  "",
+                                                              style:
+                                                                  captionSemi,
+                                                            ),
+                                                            SizedBox(
+                                                              width: 5,
+                                                            ),
+                                                          ],
+                                                        ),
+                                                        subtitle: Text(
+                                                          between(
+                                                              DateTime.parse(provider
+                                                                      .comments[
+                                                                          index]
+                                                                      .createdAt!)
+                                                                  .toLocal(),
+                                                              now),
+                                                          style: body3,
+                                                        ),
+                                                      ),
+                                                      Container(
+                                                        padding:
+                                                            EdgeInsets.only(
+                                                          top: 10,
+                                                          bottom: 16,
+                                                          left: 16,
+                                                          right: 16,
+                                                        ),
+                                                        child: Text(provider
                                                                 .comments[index]
-                                                                .user!
-                                                                .displayName ??
-                                                            "",
-                                                        style: captionSemi,
-                                                      ),
-                                                      SizedBox(
-                                                        width: 5,
-                                                      ),
+                                                                .comment ??
+                                                            ""),
+                                                      )
                                                     ],
                                                   ),
-                                                  subtitle: Text(
-                                                    between(
-                                                        DateTime.parse(provider
-                                                                .comments[index]
-                                                                .createdAt!)
-                                                            .toLocal(),
-                                                        now),
-                                                    style: body3,
-                                                  ),
                                                 ),
-                                                Container(
-                                                  padding: EdgeInsets.only(
-                                                    top: 10,
-                                                    bottom: 16,
-                                                    left: 16,
-                                                    right: 16,
-                                                  ),
-                                                  child: Text(provider
-                                                          .comments[index]
-                                                          .comment ??
-                                                      ""),
-                                                )
-                                              ],
-                                            ),
-                                          ),
                                         ),
                                       ],
                                     ),
@@ -164,21 +203,70 @@ class _CommentBodyState extends State<CommentBody> {
                                     ),
                                     Container(
                                       margin: EdgeInsets.only(
-                                          left: MediaQuery.of(context)
-                                                  .size
-                                                  .width *
-                                              0.21),
-                                      child: InkWell(
-                                        onTap: () {
-                                          provider.replyComment(
-                                              provider.comments[index]);
-                                        },
-                                        child: Text(
-                                          'Reply',
-                                          style: captionSemi.copyWith(
-                                            color: AppColors.kcLightestBlack,
+                                        left:
+                                            MediaQuery.of(context).size.width *
+                                                0.21,
+                                        right:
+                                            MediaQuery.of(context).size.width *
+                                                0.04,
+                                      ),
+                                      child: Row(
+                                        mainAxisAlignment:
+                                            MainAxisAlignment.spaceBetween,
+                                        children: [
+                                          InkWell(
+                                            onTap: () {
+                                              provider.replyComment(
+                                                  provider.comments[index]);
+                                            },
+                                            child: Text(
+                                              'Reply',
+                                              style: captionSemi.copyWith(
+                                                color:
+                                                    AppColors.kcLightestBlack,
+                                              ),
+                                            ),
                                           ),
-                                        ),
+                                          if (provider
+                                                  .comments[index].user!.sId ==
+                                              provider.user.sId)
+                                            provider.comments[index].onEdit
+                                                ? InkWell(
+                                                    onTap: () {
+                                                      provider.updateComment(
+                                                          provider
+                                                                  .comments[
+                                                                      index]
+                                                                  .sId ??
+                                                              "",
+                                                          provider
+                                                                  .comments[
+                                                                      index]
+                                                                  .threadID ??
+                                                              "");
+                                                    },
+                                                    child: Text(
+                                                      "Save",
+                                                      style: button.copyWith(
+                                                        color: AppColors
+                                                            .kcDarkestWhite,
+                                                      ),
+                                                    ),
+                                                  )
+                                                : InkWell(
+                                                    onTap: () {
+                                                      other(provider
+                                                          .comments[index]);
+                                                    },
+                                                    child: ImageIcon(
+                                                      AssetImage(
+                                                          "assets/icon-more-vert.png"),
+                                                      size: 10,
+                                                      color: AppColors
+                                                          .kcLightestBlack,
+                                                    ),
+                                                  ),
+                                        ],
                                       ),
                                     ),
                                   ],
@@ -190,79 +278,161 @@ class _CommentBodyState extends State<CommentBody> {
                                 Container(
                                   padding: spacing16All,
                                   margin: spacing24Left,
-                                  child: Row(
-                                    crossAxisAlignment:
-                                        CrossAxisAlignment.start,
+                                  child: Column(
+                                    crossAxisAlignment: CrossAxisAlignment.end,
                                     children: [
-                                      const SizedBox(
-                                        width: 5,
-                                      ),
-                                      provider.comments[i].user!
-                                                  .profilePictureURL ==
-                                              ""
-                                          ? CircleAvatar(
-                                              radius: 20,
-                                              backgroundImage:
-                                                  AssetImage('assets/2.png'),
-                                            )
-                                          : CircleAvatar(
-                                              radius: 20,
-                                              backgroundImage: NetworkImage(
-                                                  provider.comments[i].user!
-                                                      .profilePictureURL!),
+                                      Container(
+                                        child: Row(
+                                          crossAxisAlignment:
+                                              CrossAxisAlignment.start,
+                                          children: [
+                                            const SizedBox(
+                                              width: 5,
                                             ),
-                                      const SizedBox(
-                                        width: 15,
-                                      ),
-                                      Expanded(
-                                        child: Container(
-                                          decoration: BoxDecoration(
-                                              borderRadius: BorderRadius.all(
-                                                  Radius.circular(15)),
-                                              color: AppColors.kcDarkerWhite),
-                                          child: Column(
-                                            crossAxisAlignment:
-                                                CrossAxisAlignment.start,
-                                            children: [
-                                              ListTile(
-                                                title: Row(
-                                                  children: [
-                                                    Text(
-                                                      provider.comments[i].user!
-                                                              .displayName ??
-                                                          "",
-                                                      style: captionSemi,
+                                            provider.comments[i].user!
+                                                        .profilePictureURL ==
+                                                    ""
+                                                ? CircleAvatar(
+                                                    radius: 20,
+                                                    backgroundImage: AssetImage(
+                                                        'assets/2.png'),
+                                                  )
+                                                : CircleAvatar(
+                                                    radius: 20,
+                                                    backgroundImage:
+                                                        NetworkImage(provider
+                                                            .comments[i]
+                                                            .user!
+                                                            .profilePictureURL!),
+                                                  ),
+                                            const SizedBox(
+                                              width: 15,
+                                            ),
+                                            Expanded(
+                                              child: provider.comments[i].onEdit
+                                                  ? TextFormField(
+                                                      controller: provider
+                                                          .teEditComment,
+                                                      decoration:
+                                                          InputDecoration(
+                                                        contentPadding:
+                                                            spacing16Horizontal,
+                                                        filled: true,
+                                                        fillColor: const Color
+                                                                .fromARGB(
+                                                            255, 232, 230, 230),
+                                                        border: OutlineInputBorder(
+                                                            borderSide:
+                                                                const BorderSide(
+                                                                    width: 1),
+                                                            borderRadius:
+                                                                BorderRadius
+                                                                    .circular(
+                                                                        15.0)),
+                                                      ),
+                                                    )
+                                                  : Container(
+                                                      decoration: BoxDecoration(
+                                                          borderRadius:
+                                                              BorderRadius.all(
+                                                                  Radius
+                                                                      .circular(
+                                                                          15)),
+                                                          color: AppColors
+                                                              .kcDarkerWhite),
+                                                      child: Column(
+                                                        crossAxisAlignment:
+                                                            CrossAxisAlignment
+                                                                .start,
+                                                        children: [
+                                                          ListTile(
+                                                            title: Row(
+                                                              children: [
+                                                                Text(
+                                                                  provider
+                                                                          .comments[
+                                                                              i]
+                                                                          .user!
+                                                                          .displayName ??
+                                                                      "",
+                                                                  style:
+                                                                      captionSemi,
+                                                                ),
+                                                                SizedBox(
+                                                                  width: 5,
+                                                                ),
+                                                              ],
+                                                            ),
+                                                            subtitle: Text(
+                                                              between(
+                                                                  DateTime.parse(provider
+                                                                          .comments[
+                                                                              i]
+                                                                          .createdAt!)
+                                                                      .toLocal(),
+                                                                  now),
+                                                              style: body3,
+                                                            ),
+                                                          ),
+                                                          Container(
+                                                            padding:
+                                                                EdgeInsets.only(
+                                                              top: 10,
+                                                              bottom: 16,
+                                                              left: 16,
+                                                              right: 16,
+                                                            ),
+                                                            child: Text(provider
+                                                                    .comments[i]
+                                                                    .comment ??
+                                                                ""),
+                                                          )
+                                                        ],
+                                                      ),
                                                     ),
-                                                    SizedBox(
-                                                      width: 5,
-                                                    ),
-                                                  ],
-                                                ),
-                                                subtitle: Text(
-                                                  between(
-                                                      DateTime.parse(provider
-                                                              .comments[i]
-                                                              .createdAt!)
-                                                          .toLocal(),
-                                                      now),
-                                                  style: body3,
-                                                ),
-                                              ),
-                                              Container(
-                                                padding: EdgeInsets.only(
-                                                  top: 10,
-                                                  bottom: 16,
-                                                  left: 16,
-                                                  right: 16,
-                                                ),
-                                                child: Text(provider
-                                                        .comments[i].comment ??
-                                                    ""),
-                                              )
-                                            ],
-                                          ),
+                                            ),
+                                          ],
                                         ),
                                       ),
+                                      SizedBox(
+                                        height: 10,
+                                      ),
+                                      if (provider.comments[i].user!.sId ==
+                                          provider.user.sId)
+                                        provider.comments[i].onEdit
+                                            ? InkWell(
+                                                onTap: () {
+                                                  provider.updateComment(
+                                                      provider.comments[i]
+                                                              .sId ??
+                                                          "",
+                                                      provider.comments[i]
+                                                              .threadID ??
+                                                          "");
+                                                },
+                                                child: Text(
+                                                  "Save",
+                                                  style: button.copyWith(
+                                                    color: AppColors
+                                                        .kcDarkestWhite,
+                                                  ),
+                                                ),
+                                              )
+                                            : Container(
+                                                margin: spacing16Right,
+                                                child: InkWell(
+                                                  onTap: () {
+                                                    other(provider.comments[i]);
+                                                  },
+                                                  child: ImageIcon(
+                                                    AssetImage(
+                                                        "assets/icon-more-vert.png"),
+                                                    size: 10,
+                                                    color: AppColors
+                                                        .kcLightestBlack,
+                                                  ),
+                                                ),
+                                              ),
                                     ],
                                   ),
                                 ),
@@ -501,5 +671,88 @@ class _CommentBodyState extends State<CommentBody> {
         ),
       ),
     );
+  }
+
+  void other(Comment comment) {
+    var provider = Provider.of<CommentViewModel>(context, listen: false);
+    showModalBottomSheet(
+        context: context,
+        isScrollControlled: true,
+        shape: RoundedRectangleBorder(
+          borderRadius: BorderRadius.only(
+            topLeft: Radius.circular(30),
+            topRight: Radius.circular(30),
+          ),
+        ),
+        backgroundColor: AppColors.kcBaseWhite,
+        builder: (BuildContext context) {
+          return Container(
+            height: 300,
+            padding: spacing20All,
+            child: Column(
+              children: [
+                Center(
+                  child: Image.asset(
+                    'assets/pony_bottom_sheet.png',
+                    width: 38,
+                  ),
+                ),
+                SizedBox(
+                  height: 30,
+                ),
+                Container(
+                    child: InkWell(
+                  onTap: () {
+                    provider.onEditComment(comment.sId ?? "");
+                    Navigator.pop(context);
+                  },
+                  child: Row(
+                    children: [
+                      ImageIcon(
+                        AssetImage('assets/icon_edit_profile.png'),
+                        size: 25,
+                      ),
+                      SizedBox(
+                        width: 10,
+                      ),
+                      Text(
+                        "Edit Comment",
+                        style: button,
+                      ),
+                    ],
+                  ),
+                )),
+                SizedBox(
+                  height: 20,
+                  child: Divider(
+                    color: AppColors.kcLightestBlack,
+                    thickness: 0.8,
+                  ),
+                ),
+                Container(
+                    child: InkWell(
+                  onTap: () {
+                    provider.deleteComment(
+                        comment.sId ?? "", comment.threadID ?? "");
+                    Navigator.pop(context);
+                  },
+                  child: Row(
+                    children: [
+                      ImageIcon(AssetImage(
+                          'assets/icon_delete_thread_bottom_sheet.png')),
+                      SizedBox(
+                        width: 10,
+                      ),
+                      Text(
+                        "Remove Comment",
+                        style: button,
+                      ),
+                    ],
+                  ),
+                )),
+              ],
+            ),
+          );
+        });
   }
 }

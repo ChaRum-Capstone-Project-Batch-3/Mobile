@@ -795,6 +795,7 @@ class _AccountScreenState extends State<AccountScreen> {
   }
 
   void _buildMoreAccount() {
+    var provider = Provider.of<GetUserViewModel>(context, listen: false);
     showModalBottomSheet(
       shape: const RoundedRectangleBorder(
         borderRadius: BorderRadius.only(
@@ -831,8 +832,14 @@ class _AccountScreenState extends State<AccountScreen> {
                 color: Color(0xffDFDFDF),
               ),
               GestureDetector(
-                onTap: () {
-                  Navigator.popAndPushNamed(context, login);
+                onTap: () async {
+                  var logout = provider.logout();
+                  await logout.whenComplete(() async {
+                    await logout.then((value) {
+                      Navigator.pushNamedAndRemoveUntil(
+                          context, login, (route) => false);
+                    });
+                  });
                 },
                 child: Row(children: [
                   Image.asset('assets/icon_logout.png', height: 24, width: 24),

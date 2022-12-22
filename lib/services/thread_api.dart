@@ -109,4 +109,20 @@ class ThreadApi extends ApiUtils {
     BaseResponse result = BaseResponse.fromJson(response.data);
     return result;
   }
+
+  Future<BaseResponse> deleteComment(String id, String token) async {
+    var response = await dio.delete("/thread/comment/$id",
+        options: Options(headers: {"Authorization": token}));
+    var result = BaseResponse.fromJson(response.data);
+    return result;
+  }
+
+  Future<BaseResponse> updateComment(
+      String id, CommentModel comment, String token) async {
+    var response = await dio.put("/thread/comment/$id",
+        options: Options(headers: {"Authorization": token}),
+        data: comment.toJson());
+    var result = BaseResponse.fromJson(response.data);
+    return result;
+  }
 }

@@ -8,6 +8,7 @@ class Comment {
   String? comment;
   String? createdAt;
   String? updatedAt;
+  bool onEdit = false;
 
   Comment(
       {this.sId,
