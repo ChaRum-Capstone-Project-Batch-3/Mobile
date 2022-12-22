@@ -473,6 +473,17 @@ class _SearchScreenState extends State<SearchScreen> {
                             ),
                             BoxText.subtitle2Semi(threads[index].title!),
                             Container(
+                              height: 200,
+                              decoration: BoxDecoration(
+                                borderRadius:
+                                    BorderRadius.all(Radius.circular(10)),
+                                image: DecorationImage(
+                                  image: NetworkImage(threads[index].imageURL!),
+                                  fit: BoxFit.fill,
+                                ),
+                              ),
+                            ),
+                            Container(
                               margin: spacing8Top,
                               child:
                                   BoxText.caption(threads[index].description!),

@@ -1,6 +1,4 @@
-import 'dart:convert';
 import 'dart:io';
-import 'dart:typed_data';
 
 import 'package:fgd_flutter/providers/get_user_view_model.dart';
 import 'package:fgd_flutter/providers/update_user_view_model.dart';
@@ -10,7 +8,6 @@ import 'package:image_picker/image_picker.dart';
 import 'package:provider/provider.dart';
 
 import '../../models/account/update_user_model.dart';
-import '../../shared/router.dart';
 
 class EditAccountScreen extends StatefulWidget {
   const EditAccountScreen({super.key});
@@ -79,12 +76,10 @@ class _EditAccountScreenState extends State<EditAccountScreen> {
                     onTap: () async {
                       var providerGet =
                           Provider.of<GetUserViewModel>(context, listen: false);
-                      // Uint8List imagebytes = await image!.readAsBytes();
-                      // String base64string = base64.encode(imagebytes);
-                      // var imageFix = image!.split('/').last;
+
                       UpdateUserModel user = UpdateUserModel(
                           email: providerGet.user.email,
-                          profilePictureURL: image!.path.toString(),
+                          profilePictureURL: image != null ? image!.path : "",
                           userName: teUsername.text,
                           displayName: teName.text,
                           biodata: teBio.text,
@@ -93,12 +88,17 @@ class _EditAccountScreenState extends State<EditAccountScreen> {
                       await result.whenComplete(() async {
                         await result.then((value) {
                           if (value) {
+                            Provider.of<GetUserViewModel>(context,
+                                    listen: false)
+                                .getThreads();
+                            Provider.of<GetUserViewModel>(context,
+                                    listen: false)
+                                .getUsers();
                             ScaffoldMessenger.of(context).showSnackBar(
                               const SnackBar(
                                 content: Text('Update Profile Success'),
                               ),
                             );
-                            Navigator.pop(context);
                           }
                         });
                       });

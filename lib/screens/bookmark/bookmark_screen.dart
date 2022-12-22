@@ -213,7 +213,7 @@ class _BookmarkScreenState extends State<BookmarkScreen> {
                 borderRadius: BorderRadius.all(Radius.circular(50)),
               ),
               child: BoxText.caption(
-                bookmark.thread!.topic!.topic! ?? "",
+                bookmark.thread!.topic!.topic ?? "",
                 color: AppColors.kcLighterBlack,
               ),
             ),
