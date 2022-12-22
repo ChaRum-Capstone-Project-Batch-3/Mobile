@@ -143,8 +143,11 @@ class _SpaceScreenState extends State<SpaceScreen> {
                     physics: NeverScrollableScrollPhysics(),
                     shrinkWrap: true,
                     // scrollDirection: Axis.vertical,
-                    gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
-                        crossAxisCount: 1),
+                    gridDelegate:
+                        const SliverGridDelegateWithMaxCrossAxisExtent(
+                      maxCrossAxisExtent: 410,
+                      childAspectRatio: 2 / 3.2,
+                    ),
                     itemCount: value.topics.length,
                     itemBuilder: (context, index) {
                       return GestureDetector(

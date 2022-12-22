@@ -387,7 +387,10 @@ class _ThreadDetailScreenState extends State<ThreadDetailScreen> {
       ),
       subtitle: Text(
           between(DateTime.parse(thread.createdAt!).toLocal(), DateTime.now())),
-      leading: Image.asset('assets/Ellipse 42.png'),
+      leading: CircleAvatar(
+          backgroundImage:
+              NetworkImage('${provider.thread.creator?.profilePictureURL}'),
+        )
     );
   }
 
@@ -402,10 +405,16 @@ class _ThreadDetailScreenState extends State<ThreadDetailScreen> {
         children: [
           if (thread.imageURL != "")
             Container(
+              height: 500,
                 decoration: BoxDecoration(
                   borderRadius: BorderRadius.circular(10),
+                  image: DecorationImage(
+                    image: NetworkImage('${provider.thread.imageURL}'),
+                    fit: BoxFit.fill,
+                  ),
                 ),
-                child: Image.network('${provider.thread.imageURL}')),
+                // child: Image.network('${provider.thread.imageURL}')
+                ),
           Text(
             '${provider.thread.description}',
             style: caption,

@@ -5,6 +5,7 @@ import 'package:fgd_flutter/providers/register_view_model.dart';
 import 'package:fgd_flutter/shared/box_text.dart';
 import 'package:fgd_flutter/shared/router.dart';
 import 'package:fgd_flutter/state/register_state.dart';
+import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
 import 'package:fgd_flutter/shared/charum_ui.dart';
 import 'package:lottie/lottie.dart';
@@ -262,7 +263,7 @@ class _RegisterScreenState extends State<RegisterScreen> {
                                   ),
                                   content: Container(
                                     height: 60,
-                                    child: Text(
+                                    child: const Text(
                                       'Are you sure want to register with credentials that you filled in the register column?',
                                       textAlign: TextAlign.justify,
                                     ),
@@ -464,10 +465,44 @@ class _RegisterScreenState extends State<RegisterScreen> {
                                 ),
                               ],
                             ),
+                            
                           ],
                         ),
                       ),
-                    )
+                    ),
+
+                    const SizedBox(
+                      height: 100,
+                    ),
+                    Align(
+                      alignment: Alignment.center,
+                      child: RichText(
+                        text: TextSpan(
+                          text: 'Have an Account?',
+                          style: const TextStyle(
+                            fontSize: 14,
+                            color: Colors.grey,
+                          ),
+                          children: [
+                            TextSpan(
+                              text: ' Sign in here!',
+                              style: const TextStyle(
+                                fontSize: 14,
+                                color: Color(0xFF178066),
+                                fontWeight: FontWeight.bold,
+                              ),
+                              recognizer: TapGestureRecognizer()
+                                ..onTap = () {
+                                  Navigator.pushNamed(context, login);
+                                },
+                            ),
+                          ],
+                        ),
+                      ),
+                    ),
+                    const SizedBox(
+                      height: 60,
+                    ),
                   ],
                 ),
               ),

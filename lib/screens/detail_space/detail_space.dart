@@ -73,6 +73,7 @@ class _DetailSpaceState extends State<DetailSpace> {
                         ),
                       ),
                       TabBar(
+                        padding: EdgeInsets.only(left: 18, right: 18, top: 8, bottom: 8),
                         indicator: BoxDecoration(
                           borderRadius: BorderRadius.all(Radius.circular(6)),
                           color: AppColors.kcPrimaryColor!.shade200,
@@ -86,7 +87,7 @@ class _DetailSpaceState extends State<DetailSpace> {
                           Tab(
                             child: Row(
                               children: [
-                                Image.asset("assets/threads.png"),
+                                ImageIcon(AssetImage("assets/threads.png")),
                                 SizedBox(
                                   width: 10,
                                 ),
@@ -100,7 +101,7 @@ class _DetailSpaceState extends State<DetailSpace> {
                           Tab(
                             child: Row(
                               children: [
-                                Image.asset("assets/star.png"),
+                                ImageIcon(AssetImage("assets/star.png")),
                                 SizedBox(
                                   width: 10,
                                 ),
@@ -262,11 +263,16 @@ class _DetailSpaceState extends State<DetailSpace> {
                     ),
                     if (thread.imageURL != "")
                       Container(
+                          height: 200,
                           margin: spacing8Top,
                           decoration: BoxDecoration(
                             borderRadius: BorderRadius.circular(10),
+                            image: DecorationImage(
+                              image: NetworkImage('${thread.imageURL}'),
+                              fit: BoxFit.fill,
+                            ),
                           ),
-                          child: Image.network('${thread.imageURL}')),
+                        ),
                     Text(thread.description ?? ""),
                     SizedBox(
                       height: 10,
