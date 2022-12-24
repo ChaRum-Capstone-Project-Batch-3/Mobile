@@ -53,14 +53,16 @@ class _CommentBodyState extends State<CommentBody> {
                 const SizedBox(
                   height: 10,
                 ),
-                Center(
-                  child: Image.asset(
-                    'assets/pony_bottom_sheet.png',
-                    width: 40,
+                Container(
+                  width: 40,
+                  height: 4,
+                  decoration: const BoxDecoration(
+                    color: Colors.grey,
+                    borderRadius: BorderRadius.all(Radius.circular(15)),
                   ),
                 ),
                 const SizedBox(
-                  height: 15,
+                  height: 16,
                 ),
                 Center(
                   child: Text(provider.comments.length.toString() + " Comments",
@@ -76,7 +78,11 @@ class _CommentBodyState extends State<CommentBody> {
                       scrollDirection: Axis.vertical,
                       itemCount: provider.comments.length,
                       itemBuilder: (context, index) {
-                        var now = DateTime.now();
+                        final date =
+                            DateTime.parse(provider.comments[index].createdAt!)
+                                .toLocal();
+                        final now = DateTime.now();
+                        final diff = between(date, now);
                         return Column(
                           mainAxisAlignment: MainAxisAlignment.start,
                           crossAxisAlignment: CrossAxisAlignment.start,
@@ -169,13 +175,7 @@ class _CommentBodyState extends State<CommentBody> {
                                                           ],
                                                         ),
                                                         subtitle: Text(
-                                                          between(
-                                                              DateTime.parse(provider
-                                                                      .comments[
-                                                                          index]
-                                                                      .createdAt!)
-                                                                  .toLocal(),
-                                                              now),
+                                                          diff.toString(),
                                                           style: body3,
                                                         ),
                                                       ),
@@ -364,13 +364,7 @@ class _CommentBodyState extends State<CommentBody> {
                                                               ],
                                                             ),
                                                             subtitle: Text(
-                                                              between(
-                                                                  DateTime.parse(provider
-                                                                          .comments[
-                                                                              i]
-                                                                          .createdAt!)
-                                                                      .toLocal(),
-                                                                  now),
+                                                              diff,
                                                               style: body3,
                                                             ),
                                                           ),
@@ -471,10 +465,15 @@ class _CommentBodyState extends State<CommentBody> {
             const SizedBox(
               height: 10,
             ),
-            Center(
-              child: Image.asset(
-                'assets/pony_bottom_sheet.png',
+            Align(
+              alignment: Alignment.center,
+              child: Container(
                 width: 40,
+                height: 4,
+                decoration: const BoxDecoration(
+                  color: Colors.grey,
+                  borderRadius: BorderRadius.all(Radius.circular(15)),
+                ),
               ),
             ),
             const SizedBox(
@@ -687,18 +686,23 @@ class _CommentBodyState extends State<CommentBody> {
         backgroundColor: AppColors.kcBaseWhite,
         builder: (BuildContext context) {
           return Container(
-            height: 300,
+            height: 130,
             padding: spacing20All,
             child: Column(
               children: [
-                Center(
-                  child: Image.asset(
-                    'assets/pony_bottom_sheet.png',
-                    width: 38,
+                Align(
+                  alignment: Alignment.center,
+                  child: Container(
+                    width: 40,
+                    height: 4,
+                    decoration: const BoxDecoration(
+                      color: Colors.grey,
+                      borderRadius: BorderRadius.all(Radius.circular(15)),
+                    ),
                   ),
                 ),
-                SizedBox(
-                  height: 30,
+                const SizedBox(
+                  height: 16,
                 ),
                 Container(
                     child: InkWell(
@@ -722,12 +726,9 @@ class _CommentBodyState extends State<CommentBody> {
                     ],
                   ),
                 )),
-                SizedBox(
+                const Divider(
                   height: 20,
-                  child: Divider(
-                    color: AppColors.kcLightestBlack,
-                    thickness: 0.8,
-                  ),
+                  color: Color(0xffDFDFDF),
                 ),
                 Container(
                     child: InkWell(

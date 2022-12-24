@@ -3,12 +3,14 @@ import 'package:fgd_flutter/providers/get_alltopics_view_model.dart';
 import 'package:fgd_flutter/screens/thread_detail/widgets/comment_screen.dart';
 import 'package:fgd_flutter/shared/helper.dart';
 import 'package:fgd_flutter/shared/router.dart';
+import 'package:fgd_flutter/state/space_state.dart';
 import 'package:provider/provider.dart';
 
 import 'package:flutter/material.dart';
 import 'package:flutter/src/widgets/container.dart';
 import 'package:flutter/src/widgets/framework.dart';
 import 'package:fgd_flutter/shared/charum_ui.dart';
+import 'package:shimmer/shimmer.dart';
 
 class DetailSpace extends StatefulWidget {
   const DetailSpace({super.key, required this.topicId});
@@ -53,27 +55,30 @@ class _DetailSpaceState extends State<DetailSpace> {
                     crossAxisAlignment: CrossAxisAlignment.start,
                     children: [
                       Container(
-                        width: double.infinity,
-                        color: Colors.white,
-                        padding: EdgeInsets.all(16),
-                        child: Column(
-                          crossAxisAlignment: CrossAxisAlignment.start,
-                          children: [
-                            Text(
-                              provider.topic.topic ?? "",
-                              style: TextStyle(
-                                  fontWeight: FontWeight.bold, fontSize: 20),
-                            ),
-                            SizedBox(height: 5),
-                            Text(provider.topic.description ?? ""),
-                            SizedBox(
-                              height: 8,
-                            ),
-                          ],
-                        ),
-                      ),
+                          width: double.infinity,
+                          color: Colors.white,
+                          padding: EdgeInsets.all(16),
+                          child: provider.state == SpaceState.loading
+                              ? Column(
+                                  crossAxisAlignment: CrossAxisAlignment.start,
+                                  children: [
+                                    Text(
+                                      provider.topic.topic ?? "",
+                                      style: TextStyle(
+                                          fontWeight: FontWeight.bold,
+                                          fontSize: 20),
+                                    ),
+                                    SizedBox(height: 5),
+                                    Text(provider.topic.description ?? ""),
+                                    SizedBox(
+                                      height: 8,
+                                    ),
+                                  ],
+                                )
+                              : loadingTitleSpace()),
                       TabBar(
-                        padding: EdgeInsets.only(left: 18, right: 18, top: 8, bottom: 8),
+                        padding: EdgeInsets.only(
+                            left: 18, right: 18, top: 8, bottom: 8),
                         indicator: BoxDecoration(
                           borderRadius: BorderRadius.all(Radius.circular(6)),
                           color: AppColors.kcPrimaryColor!.shade200,
@@ -128,11 +133,13 @@ class _DetailSpaceState extends State<DetailSpace> {
                         child: ListView.builder(
                       itemBuilder: (context, index) {
                         return GestureDetector(
-                          child: _buildPostThread(index, "thread"),
                           onTap: () {
                             Navigator.pushNamed(context, detailThread,
                                 arguments: provider.threads[index].sId);
                           },
+                          child: provider.state == SpaceState.loading
+                              ? _buildPostThread(index, "thread")
+                              : loadingThread(),
                         );
                       },
                       itemCount: provider.threads.length,
@@ -140,19 +147,6 @@ class _DetailSpaceState extends State<DetailSpace> {
                     ))
                   ],
                 ),
-                // SingleChildScrollView(
-                //   child: Column(
-                //     crossAxisAlignment: CrossAxisAlignment.stretch,
-                //     mainAxisAlignment: MainAxisAlignment.center,
-                //     mainAxisSize: MainAxisSize.min,
-                //     children: [
-                //       // _buildPostThread(),
-                //       // _buildPostThreadWithImage(),
-                //       // _buildPostThread(),
-                //       // _buildPostThreadWithImage(),
-                //     ],
-                //   ),
-                // ),
                 Column(
                   crossAxisAlignment: CrossAxisAlignment.stretch,
                   mainAxisAlignment: MainAxisAlignment.center,
@@ -199,31 +193,39 @@ class _DetailSpaceState extends State<DetailSpace> {
           children: [
             ListTile(
               title: Row(
+                mainAxisAlignment: MainAxisAlignment.start,
                 children: [
                   Text(thread.creator!.displayName ?? ""),
-                  SizedBox(
-                    width: 10,
+                  const SizedBox(
+                    width: 5,
                   ),
-                  Container(
-                    width: 10,
-                    height: 10,
-                    decoration: BoxDecoration(
-                        color: AppColors.kcDarkestWhite,
-                        shape: BoxShape.circle),
-                  ),
-                  SizedBox(
-                    width: 10,
-                  ),
-                  Text(
-                    "Follow",
-                    style: body1Semi,
-                  ),
+                  // Container(
+                  //   width: 10,
+                  //   height: 10,
+                  //   decoration: BoxDecoration(
+                  //       color: AppColors.kcDarkestWhite,
+                  //       shape: BoxShape.circle),
+                  // ),
+                  // SizedBox(
+                  //   width: 10,
+                  // ),
+                  // Text(
+                  //   "Follow",
+                  //   style: body1Semi,
+                  // ),
                 ],
               ),
               subtitle: Text(between(
                   DateTime.parse(thread.updatedAt ?? "").toLocal(),
                   DateTime.now())),
-              leading: Image.asset('assets/Ellipse 43.png'),
+              leading: thread.creator!.profilePictureURL != null
+                  ? CircleAvatar(
+                      backgroundImage: NetworkImage(
+                          thread.creator!.profilePictureURL.toString()),
+                    )
+                  : CircleAvatar(
+                      backgroundImage: AssetImage('assets/account_default.png'),
+                    ),
               trailing: GestureDetector(
                 onTap: () {
                   other(thread);
@@ -235,20 +237,21 @@ class _DetailSpaceState extends State<DetailSpace> {
                 ),
               ),
             ),
-            SizedBox(
-              height: 5,
-            ),
-            Container(
-              margin: EdgeInsets.only(left: 16, right: 270),
-              decoration: BoxDecoration(
-                color: Color(0xffececec),
-                borderRadius: BorderRadius.circular(50),
-              ),
-              padding: EdgeInsets.only(top: 5, bottom: 5, left: 12, right: 12),
-              child: Text(
-                thread.topic!.topic ?? "",
-                textAlign: TextAlign.center,
-                style: TextStyle(color: Colors.grey),
+            Align(
+              alignment: Alignment.centerLeft,
+              child: Container(
+                margin: EdgeInsets.only(bottom: 5, left: 15),
+                decoration: BoxDecoration(
+                  color: Color(0xffececec),
+                  borderRadius: BorderRadius.circular(50),
+                ),
+                padding: const EdgeInsets.only(
+                    top: 5, bottom: 5, left: 15, right: 15),
+                child: Text(
+                  thread.topic!.topic ?? "",
+                  textAlign: TextAlign.center,
+                  style: TextStyle(color: Colors.grey),
+                ),
               ),
             ),
             Container(
@@ -262,18 +265,16 @@ class _DetailSpaceState extends State<DetailSpace> {
                       style: body1Bold,
                     ),
                     if (thread.imageURL != "")
-                      Container(
-                          height: 200,
-                          margin: spacing8Top,
-                          decoration: BoxDecoration(
-                            borderRadius: BorderRadius.circular(10),
-                            image: DecorationImage(
-                              image: NetworkImage('${thread.imageURL}'),
-                              fit: BoxFit.fill,
-                            ),
-                          ),
-                        ),
-                    Text(thread.description ?? ""),
+                      ClipRRect(
+                        borderRadius: BorderRadius.all(Radius.circular(10)),
+                        child: Container(
+                            child: Image.network('${thread.imageURL}')),
+                      ),
+                    SizedBox(height: 12),
+                    Text(
+                      '${thread.description}',
+                      style: caption,
+                    ),
                     SizedBox(
                       height: 10,
                     ),
@@ -359,18 +360,20 @@ class _DetailSpaceState extends State<DetailSpace> {
         backgroundColor: AppColors.kcBaseWhite,
         builder: (BuildContext context) {
           return Container(
-            height: 300,
+            height: 220,
             padding: spacing20All,
             child: Column(
               children: [
-                Center(
-                  child: Image.asset(
-                    'assets/pony_bottom_sheet.png',
-                    width: 38,
+                Container(
+                  width: 40,
+                  height: 4,
+                  decoration: const BoxDecoration(
+                    color: Colors.grey,
+                    borderRadius: BorderRadius.all(Radius.circular(15)),
                   ),
                 ),
-                SizedBox(
-                  height: 30,
+                const SizedBox(
+                  height: 16,
                 ),
                 Container(
                   child: thread.isFollowed!
@@ -414,8 +417,9 @@ class _DetailSpaceState extends State<DetailSpace> {
                           ),
                         ),
                 ),
-                SizedBox(
+                Divider(
                   height: 20,
+                  color: Color(0xffDFDFDF),
                 ),
                 Container(
                   child: thread.isBookmarked!
@@ -447,8 +451,8 @@ class _DetailSpaceState extends State<DetailSpace> {
                           },
                           child: Row(
                             children: [
-                              ImageIcon(
-                                  AssetImage('assets/icon_bookmark1.png')),
+                              ImageIcon(AssetImage(
+                                  'assets/icon_add_bookmark_bottom_sheet.png')),
                               SizedBox(
                                 width: 10,
                               ),
@@ -460,8 +464,9 @@ class _DetailSpaceState extends State<DetailSpace> {
                           ),
                         ),
                 ),
-                SizedBox(
+                Divider(
                   height: 20,
+                  color: Color(0xffDFDFDF),
                 ),
                 GestureDetector(
                   child: Row(
@@ -478,8 +483,9 @@ class _DetailSpaceState extends State<DetailSpace> {
                     ],
                   ),
                 ),
-                SizedBox(
+                Divider(
                   height: 20,
+                  color: Color(0xffDFDFDF),
                 ),
                 GestureDetector(
                   child: Row(
@@ -501,161 +507,254 @@ class _DetailSpaceState extends State<DetailSpace> {
           );
         });
   }
-}
 
-// ListTile _buildProfileThreadFake() {
-//   return
-// }
+  Widget loadingThread() {
+    return Column(
+      children: [
+        Expanded(
+          child: Container(
+            margin: spacing16All,
+            child: ListView.builder(
+              scrollDirection: Axis.vertical,
+              shrinkWrap: true,
+              itemCount: 2,
+              itemBuilder: (context, index) {
+                return Container(
+                  margin: spacing8Bottom,
+                  padding: spacing16All,
+                  decoration: BoxDecoration(
+                    borderRadius: BorderRadius.all(
+                      Radius.circular(10),
+                    ),
+                    color: AppColors.kcBaseWhite,
+                  ),
+                  child: Shimmer.fromColors(
+                    baseColor: AppColors.kcDarkestWhite,
+                    highlightColor: AppColors.kcDarkWhite,
+                    child: Column(
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      children: [
+                        Row(
+                          mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                          children: [
+                            Container(
+                              child: Row(
+                                children: [
+                                  CircleAvatar(
+                                    backgroundColor: AppColors.kcPrimaryColor,
+                                  ),
+                                  Container(
+                                    margin: spacing8Left,
+                                    child: Column(
+                                      crossAxisAlignment:
+                                          CrossAxisAlignment.start,
+                                      children: [
+                                        Row(
+                                          children: [
+                                            Container(
+                                              width: 80,
+                                              height: 10,
+                                              decoration: BoxDecoration(
+                                                color: AppColors.kcDarkestWhite,
+                                                borderRadius: BorderRadius.all(
+                                                  Radius.circular(10),
+                                                ),
+                                              ),
+                                            ),
+                                            // Container(
+                                            //   margin: spacing8Horizontal,
+                                            //   width: 4,
+                                            //   height: 4,
+                                            //   decoration: BoxDecoration(
+                                            //     color: AppColors.kcDarkestWhite,
+                                            //     shape: BoxShape.circle,
+                                            //   ),
+                                            // ),
+                                            // Container(
+                                            //   width: 50,
+                                            //   height: 10,
+                                            //   decoration: BoxDecoration(
+                                            //     color: AppColors.kcDarkestWhite,
+                                            //     borderRadius: BorderRadius.all(
+                                            //       Radius.circular(10),
+                                            //     ),
+                                            //   ),
+                                            // ),
+                                          ],
+                                        ),
+                                        SizedBox(
+                                          height: 10,
+                                        ),
+                                        Container(
+                                          width: 50,
+                                          height: 10,
+                                          decoration: BoxDecoration(
+                                            color: AppColors.kcDarkestWhite,
+                                            borderRadius: BorderRadius.all(
+                                              Radius.circular(10),
+                                            ),
+                                          ),
+                                        ),
+                                      ],
+                                    ),
+                                  ),
+                                ],
+                              ),
+                            ),
+                            Container(
+                              child: GestureDetector(
+                                child: ImageIcon(
+                                    AssetImage('assets/icon_more.png')),
+                              ),
+                            ),
+                          ],
+                        ),
+                        Container(
+                          margin: spacing16Top,
+                          padding: EdgeInsets.only(
+                            top: 5,
+                            bottom: 5,
+                            left: 12,
+                            right: 12,
+                          ),
+                          width: 50,
+                          decoration: BoxDecoration(
+                            color: AppColors.kcDarkerWhite,
+                            borderRadius: BorderRadius.all(Radius.circular(50)),
+                          ),
+                        ),
+                        SizedBox(
+                          height: 4,
+                        ),
+                        Container(
+                          width: 200,
+                          height: 10,
+                          decoration: BoxDecoration(
+                            color: AppColors.kcDarkestWhite,
+                            borderRadius: BorderRadius.all(
+                              Radius.circular(10),
+                            ),
+                          ),
+                        ),
+                        SizedBox(
+                          height: 10,
+                        ),
+                        Container(
+                          height: 10,
+                          decoration: BoxDecoration(
+                            color: AppColors.kcDarkestWhite,
+                            borderRadius: BorderRadius.all(
+                              Radius.circular(10),
+                            ),
+                          ),
+                        ),
+                        SizedBox(
+                          height: 5,
+                        ),
+                        Container(
+                          height: 10,
+                          decoration: BoxDecoration(
+                            color: AppColors.kcDarkestWhite,
+                            borderRadius: BorderRadius.all(
+                              Radius.circular(10),
+                            ),
+                          ),
+                        ),
+                        SizedBox(
+                          height: 5,
+                        ),
+                        Container(
+                          height: 10,
+                          decoration: BoxDecoration(
+                            color: AppColors.kcDarkestWhite,
+                            borderRadius: BorderRadius.all(
+                              Radius.circular(10),
+                            ),
+                          ),
+                        ),
+                        SizedBox(
+                          height: 10,
+                        ),
+                        Row(
+                          children: [
+                            Container(
+                              width: 50,
+                              height: 10,
+                              decoration: BoxDecoration(
+                                color: AppColors.kcDarkestWhite,
+                                borderRadius: BorderRadius.all(
+                                  Radius.circular(10),
+                                ),
+                              ),
+                            ),
+                            SizedBox(
+                              width: 12,
+                            ),
+                            Container(
+                              width: 50,
+                              height: 10,
+                              decoration: BoxDecoration(
+                                color: AppColors.kcDarkestWhite,
+                                borderRadius: BorderRadius.all(
+                                  Radius.circular(10),
+                                ),
+                              ),
+                            ),
+                          ],
+                        ),
+                      ],
+                    ),
+                  ),
+                );
+              },
+            ),
+          ),
+        ),
+      ],
+    );
+  }
 
-Container _buildThread() {
-  return Container(
-      padding: EdgeInsets.all(20),
+  Widget loadingTitleSpace() {
+    return Shimmer.fromColors(
+      baseColor: AppColors.kcDarkestWhite,
+      highlightColor: AppColors.kcDarkWhite,
       child: Column(
-        mainAxisAlignment: MainAxisAlignment.center,
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
-          Text(
-            'Why is Indonesia the only member of G20 from Southeast Asia if some country is better (Malaysia or Singapore)?',
-            style: body1Bold,
-          ),
-          Text(
-              'Because Indonesia’s membership within the G20 isn’t just because of economic reasons. The G20 is practically speaking a regional power forum where regional powers'),
-          SizedBox(
-            height: 10,
-          ),
-          Row(children: [
-            Row(
-              children: [
-                Image.asset('assets/icon_like1.png', height: 24, width: 24),
-                Text('100'),
-              ],
+          Container(
+            width: 70,
+            height: 25,
+            decoration: BoxDecoration(
+              color: AppColors.kcDarkestWhite,
+              borderRadius: BorderRadius.all(
+                Radius.circular(10),
+              ),
             ),
-            SizedBox(width: 10),
-            Row(
-              children: [
-                Image.asset('assets/icon_comment.png', height: 24, width: 24),
-                Text('15'),
-              ],
+          ),
+          SizedBox(height: 5),
+          Container(
+            width: 180,
+            height: 15,
+            decoration: BoxDecoration(
+              color: AppColors.kcDarkestWhite,
+              borderRadius: BorderRadius.all(
+                Radius.circular(10),
+              ),
             ),
-          ]),
+          ),
+          SizedBox(height: 5),
+          Container(
+            width: 150,
+            height: 15,
+            decoration: BoxDecoration(
+              color: AppColors.kcDarkestWhite,
+              borderRadius: BorderRadius.all(
+                Radius.circular(10),
+              ),
+            ),
+          ),
         ],
-      ));
-}
-
-Container _buildPostThreadWithImage() {
-  return Container(
-    color: Color(0xffeeeeee),
-    child: SingleChildScrollView(
-      padding: EdgeInsets.only(top: 10, left: 16, right: 16),
-      child: Container(
-        decoration: BoxDecoration(
-            color: Colors.white, borderRadius: BorderRadius.circular(10)),
-        child: Column(
-          children: [
-            _buildProfileReal(),
-            SizedBox(
-              height: 5,
-            ),
-            Container(
-              margin: EdgeInsets.only(left: 16, right: 270),
-              decoration: BoxDecoration(
-                color: Color(0xffececec),
-                borderRadius: BorderRadius.circular(50),
-              ),
-              padding: EdgeInsets.only(top: 5, bottom: 5, left: 12, right: 12),
-              child: Text(
-                'Histori',
-                textAlign: TextAlign.center,
-                style: TextStyle(color: Colors.grey),
-              ),
-            ),
-            _buildThreadWithImage(),
-          ],
-        ),
       ),
-    ),
-  );
-}
-
-ListTile _buildProfileReal() {
-  return ListTile(
-    title: Row(
-      mainAxisAlignment: MainAxisAlignment.start,
-      children: [
-        GestureDetector(
-            // onTap: () {
-            //   Navigator.push(context,
-            //       MaterialPageRoute(builder: (_) => FollowAccountScreen()));
-            // },
-            child: Text(
-          'Ade Winda',
-          style: TextStyle(fontWeight: FontWeight.bold),
-        )),
-        SizedBox(
-          width: 5,
-        ),
-        Container(
-          margin: EdgeInsets.only(left: 10, right: 10),
-          child: CircleAvatar(
-            backgroundColor: Color(0xffC7C7C7),
-          ),
-          color: Color(0xffC7C7C7),
-          width: 6,
-          height: 6,
-        ),
-        GestureDetector(
-          onTap: () {},
-          child: Text(
-            'Follow',
-            style: TextStyle(color: Colors.blue, fontWeight: FontWeight.bold),
-          ),
-        ),
-      ],
-    ),
-    subtitle: Text('20m ago'),
-    leading: Image.asset('assets/Ellipse 42.png'),
-    trailing: Image.asset(
-      'assets/icon_more.png',
-      height: 24,
-      width: 24,
-    ),
-  );
-}
-
-Container _buildThreadWithImage() {
-  return Container(
-    padding: EdgeInsets.all(20),
-    child: Column(
-      mainAxisAlignment: MainAxisAlignment.center,
-      crossAxisAlignment: CrossAxisAlignment.start,
-      children: [
-        Text(
-          'What are the differences between the ancient Turks, the proto-Turks, and the modern Turks?',
-          style: body1Bold,
-        ),
-        Container(
-          decoration: BoxDecoration(
-            borderRadius: BorderRadius.circular(10),
-          ),
-          child: Image.asset('assets/image 1.png'),
-        ),
-        Text(
-            'Early proto-Turks, Aldy-Bel and Sagly-Uyuk culture in Southern Siberia, Scytho-Siberian. The ANE are also argued to have harbored the genes for blonde hair at high frequenc...'),
-        SizedBox(
-          height: 10,
-        ),
-        Row(
-          children: [
-            Image.asset('assets/icon_like1.png', height: 24, width: 24),
-            Text('42'),
-            SizedBox(
-              width: 10,
-            ),
-            Image.asset('assets/icon_comment.png', height: 24, width: 24),
-            Text('10'),
-          ],
-        )
-      ],
-    ),
-  );
+    );
+  }
 }

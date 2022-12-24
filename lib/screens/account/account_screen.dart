@@ -557,34 +557,34 @@ class _AccountScreenState extends State<AccountScreen> {
                                         Row(
                                           children: [
                                             Container(
-                                              width: 50,
-                                              height: 10,
-                                              decoration: BoxDecoration(
-                                                color: AppColors.kcDarkestWhite,
-                                                borderRadius: BorderRadius.all(
-                                                  Radius.circular(10),
-                                                ),
-                                              ),
-                                            ),
-                                            Container(
-                                              margin: spacing8Horizontal,
-                                              width: 4,
-                                              height: 4,
-                                              decoration: BoxDecoration(
-                                                color: AppColors.kcDarkestWhite,
-                                                shape: BoxShape.circle,
-                                              ),
-                                            ),
-                                            Container(
-                                              width: 50,
-                                              height: 10,
-                                              decoration: BoxDecoration(
-                                                color: AppColors.kcDarkestWhite,
-                                                borderRadius: BorderRadius.all(
-                                                  Radius.circular(10),
-                                                ),
-                                              ),
-                                            ),
+                                    width: 80,
+                                    height: 10,
+                                    decoration: BoxDecoration(
+                                      color: AppColors.kcDarkestWhite,
+                                      borderRadius: BorderRadius.all(
+                                        Radius.circular(10),
+                                      ),
+                                    ),
+                                  ),
+                                            // Container(
+                                            //   margin: spacing8Horizontal,
+                                            //   width: 4,
+                                            //   height: 4,
+                                            //   decoration: BoxDecoration(
+                                            //     color: AppColors.kcDarkestWhite,
+                                            //     shape: BoxShape.circle,
+                                            //   ),
+                                            // ),
+                                            // Container(
+                                            //   width: 50,
+                                            //   height: 10,
+                                            //   decoration: BoxDecoration(
+                                            //     color: AppColors.kcDarkestWhite,
+                                            //     borderRadius: BorderRadius.all(
+                                            //       Radius.circular(10),
+                                            //     ),
+                                            //   ),
+                                            // ),
                                           ],
                                         ),
                                         SizedBox(
@@ -747,7 +747,7 @@ class _AccountScreenState extends State<AccountScreen> {
     var thread = provider.threads[index];
     showModalBottomSheet(
         context: context,
-        isScrollControlled: true,
+
         shape: RoundedRectangleBorder(
           borderRadius: BorderRadius.only(
             topLeft: Radius.circular(30),
@@ -829,14 +829,19 @@ class _AccountScreenState extends State<AccountScreen> {
             mainAxisAlignment: MainAxisAlignment.start,
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
-              Center(
-                child: Image.asset(
-                  'assets/pony_bottom_sheet.png',
-                  width: 38,
+              Align(
+                alignment: Alignment.center,
+                child: Container(
+                  width: 40,
+                  height: 4,
+                  decoration: const BoxDecoration(
+                    color: Colors.grey,
+                    borderRadius: BorderRadius.all(Radius.circular(15)),
+                  ),
                 ),
               ),
               const SizedBox(
-                height: 30,
+                height: 16,
               ),
               Row(children: [
                 Image.asset('assets/icon_setting.png', height: 24, width: 24),

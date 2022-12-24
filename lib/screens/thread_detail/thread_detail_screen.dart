@@ -28,7 +28,6 @@ class _ThreadDetailScreenState extends State<ThreadDetailScreen> {
 
   @override
   void initState() {
-    // TODO: implement initState
     Provider.of<ThreadDetailViewModel>(context, listen: false)
         .initial(widget.id);
     super.initState();
@@ -61,6 +60,7 @@ class _ThreadDetailScreenState extends State<ThreadDetailScreen> {
                   onTap: () {
                     if (provider.thread.isBookmarked!) {
                       provider.unbookmarkThread(widget.id);
+                      _buildSnackBarRemoveBookmark();
                     } else {
                       provider.bookmarkThread(widget.id);
                       _buildSnackBarAddBookmark();
@@ -237,7 +237,7 @@ class _ThreadDetailScreenState extends State<ThreadDetailScreen> {
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
                 Container(
-                  margin: EdgeInsets.only(bottom: 5),
+                  margin: EdgeInsets.only(top: 8, bottom: 5),
                   decoration: BoxDecoration(
                     color: const Color(0xffececec),
                     borderRadius: BorderRadius.circular(50),
@@ -267,149 +267,345 @@ class _ThreadDetailScreenState extends State<ThreadDetailScreen> {
 
   Widget loadingThread() {
     return Shimmer.fromColors(
+      baseColor: AppColors.kcLightestBlack,
+      highlightColor: AppColors.kcDarkerWhite,
+      child: Container(
+        margin: spacing16Horizontal,
         child: Container(
-          color: Color(0xfff1f3f5),
-          child: SingleChildScrollView(
-            child: Container(
-              color: Colors.white,
-              child: Container(
-                margin: spacing16Horizontal,
+          margin: spacing16Horizontal,
+          child: Column(
+            mainAxisAlignment: MainAxisAlignment.start,
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: [
+              Container(
+                width: 70,
+                height: 25,
+                margin: EdgeInsets.only(bottom: 5),
+                decoration: BoxDecoration(
+                  color: const Color(0xffececec),
+                  borderRadius: BorderRadius.circular(50),
+                ),
+                padding: const EdgeInsets.only(
+                    top: 5, bottom: 5, left: 15, right: 15),
+              ),
+              Container(
+                margin: spacing16Top,
+                padding: EdgeInsets.only(
+                  top: 5,
+                  bottom: 5,
+                  left: 12,
+                  right: 12,
+                ),
+                width: 150,
+                decoration: BoxDecoration(
+                  color: AppColors.kcDarkerWhite,
+                  borderRadius: BorderRadius.all(Radius.circular(50)),
+                ),
+              ),
+              SizedBox(
+                height: 10,
+              ),
+              Row(
+                mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                children: [
+                  Container(
+                    child: Row(
+                      children: [
+                        CircleAvatar(
+                          backgroundColor: AppColors.kcPrimaryColor,
+                        ),
+                        Container(
+                          margin: spacing8Left,
+                          child: Column(
+                            crossAxisAlignment: CrossAxisAlignment.start,
+                            children: [
+                              Row(
+                                children: [
+                                  Container(
+                                    width: 80,
+                                    height: 10,
+                                    decoration: BoxDecoration(
+                                      color: AppColors.kcDarkestWhite,
+                                      borderRadius: BorderRadius.all(
+                                        Radius.circular(10),
+                                      ),
+                                    ),
+                                  ),
+                                  // Container(
+                                  //   margin: spacing8Horizontal,
+                                  //   width: 4,
+                                  //   height: 4,
+                                  //   decoration: BoxDecoration(
+                                  //     color: AppColors.kcDarkestWhite,
+                                  //     shape: BoxShape.circle,
+                                  //   ),
+                                  // ),
+                                  // Container(
+                                  //   width: 50,
+                                  //   height: 10,
+                                  //   decoration: BoxDecoration(
+                                  //     color: AppColors.kcDarkestWhite,
+                                  //     borderRadius: BorderRadius.all(
+                                  //       Radius.circular(10),
+                                  //     ),
+                                  //   ),
+                                  // ),
+                                ],
+                              ),
+                              SizedBox(
+                                height: 10,
+                              ),
+                              Container(
+                                width: 50,
+                                height: 10,
+                                decoration: BoxDecoration(
+                                  color: AppColors.kcDarkestWhite,
+                                  borderRadius: BorderRadius.all(
+                                    Radius.circular(10),
+                                  ),
+                                ),
+                              ),
+                            ],
+                          ),
+                        ),
+                      ],
+                    ),
+                  ),
+                  Container(
+                    child: GestureDetector(
+                      child: ImageIcon(AssetImage('assets/icon_more.png')),
+                    ),
+                  ),
+                ],
+              ),
+              SizedBox(
+                height: 10,
+              ),
+              Container(
+                padding: const EdgeInsets.only(right: 16),
                 child: Column(
-                  mainAxisAlignment: MainAxisAlignment.start,
+                  mainAxisAlignment: MainAxisAlignment.center,
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
                     Container(
-                      margin: EdgeInsets.only(bottom: 5),
+                      width: MediaQuery.of(context).size.width,
+                      height: 200,
                       decoration: BoxDecoration(
-                        color: const Color(0xffececec),
-                        borderRadius: BorderRadius.circular(50),
+                        color: AppColors.kcDarkerWhite,
+                        borderRadius: BorderRadius.all(Radius.circular(10)),
                       ),
-                      padding: const EdgeInsets.only(
-                          top: 5, bottom: 5, left: 15, right: 15),
+                    ),
+                    SizedBox(height: 12),
+                    Container(
+                      width: MediaQuery.of(context).size.width,
+                      height: 10,
                     ),
                     Container(
-                      width: 100,
-                      height: 50,
-                    ),
-                    ListTile(
-                      title: Row(
-                        mainAxisAlignment: MainAxisAlignment.start,
-                        children: [
-                          Container(
-                            width: 100,
-                            height: 30,
-                          ),
-                          const SizedBox(
-                            width: 5,
-                          ),
-                          Container(
-                            margin: const EdgeInsets.only(left: 10, right: 10),
-                            decoration: BoxDecoration(
-                                color: Color(0xffC7C7C7),
-                                shape: BoxShape.circle),
-                            width: 6,
-                            height: 6,
-                            child: const CircleAvatar(
-                              backgroundColor: Color(0xffC7C7C7),
-                            ),
-                          ),
-                          Container(
-                            width: 50,
-                            height: 30,
-                          ),
-                        ],
+                      margin: spacing16Top,
+                      padding: EdgeInsets.only(
+                        top: 5,
+                        bottom: 5,
+                        left: 12,
+                        right: 12,
                       ),
-                      subtitle: Container(
-                        height: 30,
-                        width: 50,
+                      width: 350,
+                      decoration: BoxDecoration(
+                        color: AppColors.kcDarkerWhite,
+                        borderRadius: BorderRadius.all(Radius.circular(50)),
                       ),
-                      leading: Image.asset('assets/Ellipse 42.png'),
                     ),
+                    SizedBox(height: 5),
                     Container(
-                      padding: const EdgeInsets.only(right: 16),
-                      child: Column(
-                        mainAxisAlignment: MainAxisAlignment.center,
-                        crossAxisAlignment: CrossAxisAlignment.start,
-                        children: [
-                          Container(
-                            decoration: BoxDecoration(
-                              borderRadius: BorderRadius.circular(10),
-                            ),
-                            width: MediaQuery.of(context).size.width,
-                            height: 200,
-                          ),
-                          Container(
-                            width: 100,
-                            height: 30,
-                          ),
-                        ],
+                      margin: spacing16Top,
+                      padding: EdgeInsets.only(
+                        top: 5,
+                        bottom: 5,
+                        left: 12,
+                        right: 12,
                       ),
-                    )
+                      width: 330,
+                      decoration: BoxDecoration(
+                        color: AppColors.kcDarkerWhite,
+                        borderRadius: BorderRadius.all(Radius.circular(50)),
+                      ),
+                    ),
+                    SizedBox(height: 5),
+                    Container(
+                      margin: spacing16Top,
+                      padding: EdgeInsets.only(
+                        top: 5,
+                        bottom: 5,
+                        left: 12,
+                        right: 12,
+                      ),
+                      width: 320,
+                      decoration: BoxDecoration(
+                        color: AppColors.kcDarkerWhite,
+                        borderRadius: BorderRadius.all(Radius.circular(50)),
+                      ),
+                    ),
+                    SizedBox(height: 5),
+                    Container(
+                      margin: spacing16Top,
+                      padding: EdgeInsets.only(
+                        top: 5,
+                        bottom: 5,
+                        left: 12,
+                        right: 12,
+                      ),
+                      width: 350,
+                      decoration: BoxDecoration(
+                        color: AppColors.kcDarkerWhite,
+                        borderRadius: BorderRadius.all(Radius.circular(50)),
+                      ),
+                    ),
                   ],
                 ),
               ),
-            ),
+            ],
           ),
         ),
-        baseColor: AppColors.kcLightestBlack,
-        highlightColor: AppColors.kcDarkerWhite);
+      ),
+      // child: Container(
+      //   color: Color(0xfff1f3f5),
+      //   child: SingleChildScrollView(
+      //     child: Container(
+      //       color: Colors.white,
+      //       child: Container(
+      //         margin: spacing16Horizontal,
+      //         child: Column(
+      //           mainAxisAlignment: MainAxisAlignment.start,
+      //           crossAxisAlignment: CrossAxisAlignment.start,
+      //           children: [
+      //             Container(
+      //               margin: EdgeInsets.only(bottom: 5),
+      //               decoration: BoxDecoration(
+      //                 color: const Color(0xffececec),
+      //                 borderRadius: BorderRadius.circular(50),
+      //               ),
+      //               padding: const EdgeInsets.only(
+      //                   top: 5, bottom: 5, left: 15, right: 15),
+      //             ),
+      //             Container(
+      //               width: 100,
+      //               height: 50,
+      //             ),
+      //             ListTile(
+      //               title: Row(
+      //                 mainAxisAlignment: MainAxisAlignment.start,
+      //                 children: [
+      //                   Container(
+      //                     width: 100,
+      //                     height: 30,
+      //                   ),
+      //                   const SizedBox(
+      //                     width: 5,
+      //                   ),
+      //                   Container(
+      //                     margin: const EdgeInsets.only(left: 10, right: 10),
+      //                     decoration: BoxDecoration(
+      //                         color: Color(0xffC7C7C7),
+      //                         shape: BoxShape.circle),
+      //                     width: 6,
+      //                     height: 6,
+      //                     child: const CircleAvatar(
+      //                       backgroundColor: Color(0xffC7C7C7),
+      //                     ),
+      //                   ),
+      //                   Container(
+      //                     width: 50,
+      //                     height: 30,
+      //                   ),
+      //                 ],
+      //               ),
+      //               subtitle: Container(
+      //                 height: 30,
+      //                 width: 50,
+      //               ),
+      //               leading: Image.asset('assets/Ellipse 42.png'),
+      //             ),
+      //             Container(
+      //               padding: const EdgeInsets.only(right: 16),
+      //               child: Column(
+      //                 mainAxisAlignment: MainAxisAlignment.center,
+      //                 crossAxisAlignment: CrossAxisAlignment.start,
+      //                 children: [
+      //                   Container(
+      //                     decoration: BoxDecoration(
+      //                       borderRadius: BorderRadius.circular(10),
+      //                     ),
+      //                     width: MediaQuery.of(context).size.width,
+      //                     height: 200,
+      //                   ),
+      //                   SizedBox(
+      //                     width: 100,
+      //                     height: 30,
+      //                   ),
+      //                 ],
+      //               ),
+      //             )
+      //           ],
+      //         ),
+      //       ),
+      //     ),
+      //   ),
+      // ),
+    );
   }
 
   ListTile _buildProfileThread() {
     var provider = Provider.of<ThreadDetailViewModel>(context, listen: false);
     var thread = provider.thread;
     return ListTile(
-      title: Row(
-        mainAxisAlignment: MainAxisAlignment.start,
-        children: [
-          Text('${provider.thread.creator?.displayName}'),
-          const SizedBox(
-            width: 5,
-          ),
-          Container(
-            margin: const EdgeInsets.only(left: 10, right: 10),
-            decoration:
-                BoxDecoration(color: Color(0xffC7C7C7), shape: BoxShape.circle),
-            width: 6,
-            height: 6,
-            child: const CircleAvatar(
-              backgroundColor: Color(0xffC7C7C7),
+        title: Row(
+          mainAxisAlignment: MainAxisAlignment.start,
+          children: [
+            Text(provider.thread.creator!.displayName ?? ""),
+            const SizedBox(
+              width: 5,
             ),
-          ),
-          GestureDetector(
-              onTap: () {},
-              child: const Text(
-                'Follow',
-                style:
-                    TextStyle(color: Colors.blue, fontWeight: FontWeight.bold),
-              )),
-        ],
-      ),
-      subtitle: Text(
-          between(DateTime.parse(thread.createdAt!).toLocal(), DateTime.now())),
-      leading: CircleAvatar(
+            // Container(
+            //   margin: const EdgeInsets.only(left: 10, right: 10),
+            //   decoration:
+            //       BoxDecoration(color: Color(0xffC7C7C7), shape: BoxShape.circle),
+            //   width: 6,
+            //   height: 6,
+            //   child: const CircleAvatar(
+            //     backgroundColor: Color(0xffC7C7C7),
+            //   ),
+            // ),
+            // GestureDetector(
+            //     onTap: () {},
+            //     child: const Text(
+            //       'Follow',
+            //       style:
+            //           TextStyle(color: Colors.blue, fontWeight: FontWeight.bold),
+            //     )),
+          ],
+        ),
+        subtitle: Text(between(
+            DateTime.parse(thread.createdAt!).toLocal(), DateTime.now())),
+        leading: CircleAvatar(
           backgroundImage:
               NetworkImage('${provider.thread.creator?.profilePictureURL}'),
-        )
-    );
+        ));
   }
 
   Container _buildThreadWithImage() {
     var provider = Provider.of<ThreadDetailViewModel>(context, listen: false);
     var thread = provider.thread;
     return Container(
-      padding: const EdgeInsets.only(right: 16),
+      // padding: const EdgeInsets.only(left: 16, right: 16),
       child: Column(
         mainAxisAlignment: MainAxisAlignment.center,
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
           if (thread.imageURL != "")
             ClipRRect(
-            borderRadius: BorderRadius.all(Radius.circular(10)),
-            child: Container(
-                child: Image.network('${provider.thread.imageURL}')
-              ),
-          ),
+              borderRadius: BorderRadius.all(Radius.circular(10)),
+              child: Container(
+                  child: Image.network('${provider.thread.imageURL}')),
+            ),
           SizedBox(height: 12),
           Text(
             '${provider.thread.description}',
@@ -431,21 +627,26 @@ class _ThreadDetailScreenState extends State<ThreadDetailScreen> {
       context: context,
       builder: (BuildContext context) {
         return Container(
-          alignment: Alignment.topLeft,
-          height: 250,
+          alignment: Alignment.center,
+          height: 220,
           padding: const EdgeInsets.all(20),
           child: Column(
             mainAxisAlignment: MainAxisAlignment.start,
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
-              Center(
-                child: Image.asset(
-                  'assets/pony_bottom_sheet.png',
-                  width: 38,
+              Align(
+                alignment: Alignment.center,
+                child: Container(
+                  width: 40,
+                  height: 4,
+                  decoration: const BoxDecoration(
+                    color: Colors.grey,
+                    borderRadius: BorderRadius.all(Radius.circular(15)),
+                  ),
                 ),
               ),
               const SizedBox(
-                height: 30,
+                height: 16,
               ),
               Container(
                 child: provider.thread.isFollowed!
@@ -519,7 +720,8 @@ class _ThreadDetailScreenState extends State<ThreadDetailScreen> {
                         },
                         child: Row(
                           children: [
-                            ImageIcon(AssetImage('assets/icon_bookmark1.png')),
+                            ImageIcon(AssetImage(
+                                'assets/icon_add_bookmark_bottom_sheet.png')),
                             SizedBox(
                               width: 10,
                             ),
@@ -555,9 +757,6 @@ class _ThreadDetailScreenState extends State<ThreadDetailScreen> {
                 ),
                 Text('Report thread', style: button),
               ]),
-              const SizedBox(
-                height: 10,
-              ),
             ],
           ),
         );
@@ -591,6 +790,37 @@ class _ThreadDetailScreenState extends State<ThreadDetailScreen> {
             ),
             const Text(
               'Thread added to your Bookmarks',
+              style: TextStyle(fontWeight: FontWeight.bold),
+            )
+          ],
+        )));
+  }
+
+  void _buildSnackBarRemoveBookmark() {
+    ScaffoldMessenger.of(context).showSnackBar(SnackBar(
+        duration: const Duration(seconds: 1),
+        backgroundColor: Color(0xfff91516),
+        shape: RoundedRectangleBorder(
+          borderRadius: BorderRadius.circular(10),
+        ),
+        margin: EdgeInsets.only(
+            bottom: MediaQuery.of(context).size.height - 130,
+            right: 20,
+            left: 20),
+        behavior: SnackBarBehavior.floating,
+        content: Row(
+          mainAxisAlignment: MainAxisAlignment.center,
+          children: [
+            Image.asset(
+              'assets/icon_succes_remove_bookmark_circle.png',
+              height: 24,
+              width: 24,
+            ),
+            const SizedBox(
+              width: 10,
+            ),
+            const Text(
+              'Thread removed to your Bookmarks',
               style: TextStyle(fontWeight: FontWeight.bold),
             )
           ],

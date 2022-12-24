@@ -1,0 +1,1 @@
+enum CreateState {iddle, loaded, loading, error}

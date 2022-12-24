@@ -31,10 +31,10 @@ class _TopicBottomModal extends State<TopicBottomModal> {
                   borderRadius: BorderRadius.all(Radius.circular(15)),
                 ),
               ),
-              SizedBox(
+              const SizedBox(
                 height: 16,
               ),
-              Text(
+              const Text(
                 'Choose topic',
                 style: TextStyle(
                   color: Colors.black,
@@ -62,7 +62,7 @@ class _TopicBottomModal extends State<TopicBottomModal> {
                         ),
                         style: ElevatedButton.styleFrom(
                           padding: spacing16All,
-                          side: BorderSide(
+                          side: const BorderSide(
                             color: Colors.grey,
                             width: 1,
                           ),

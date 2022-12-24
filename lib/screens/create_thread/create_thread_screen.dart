@@ -2,12 +2,15 @@ import 'dart:io';
 
 import 'package:fgd_flutter/models/create_thread/create_thread.dart';
 import 'package:fgd_flutter/providers/create_thread_view_model.dart';
+import 'package:fgd_flutter/providers/home_thread_view_model.dart';
 import 'package:fgd_flutter/screens/create_thread/widgets/thread_label_modal.dart';
 import 'package:fgd_flutter/shared/router.dart';
+import 'package:fgd_flutter/state/create_state.dart';
 import 'package:image_picker/image_picker.dart';
 import 'package:fgd_flutter/shared/charum_ui.dart';
 
 import 'package:flutter/material.dart';
+import 'package:lottie/lottie.dart';
 import 'package:provider/provider.dart';
 
 class CreateThread extends StatefulWidget {
@@ -28,7 +31,7 @@ class _CreateThreadState extends State<CreateThread> {
     // TODO: implement initState
     Provider.of<CreateThreadViewModel>(context, listen: false).getTopic();
     super.initState();
-  } 
+  }
 
   final ImagePicker _picker = ImagePicker();
   File? image;
@@ -48,6 +51,7 @@ class _CreateThreadState extends State<CreateThread> {
         return Scaffold(
           resizeToAvoidBottomInset: false,
           appBar: AppBar(
+            elevation: 1.0,
             leading: InkWell(
               onTap: (() => Navigator.pop(context)),
               child: const Icon(
@@ -78,26 +82,85 @@ class _CreateThreadState extends State<CreateThread> {
                     imageURL: image != null ? image!.path : '',
                   );
                   var result = providerThread.createThread(thread);
-                  await result.whenComplete(
-                    () async {
-                      await result.then((value) {
-                        ScaffoldMessenger.of(context).showSnackBar(
-                          const SnackBar(
-                            content: Text('Create Thread Success'),
+                  if (providerThread.state == CreateState.loading) {
+                    showDialog(
+                      context: context,
+                      builder: (BuildContext context) {
+                        return AlertDialog(
+                          elevation: 0.0,
+                          shape: RoundedRectangleBorder(
+                              borderRadius:
+                                  BorderRadius.all(Radius.circular(20))),
+                          backgroundColor: Color(0xffffffff),
+                          content: Container(
+                            height: 250,
+                            child: Column(
+                              mainAxisAlignment: MainAxisAlignment.center,
+                              crossAxisAlignment: CrossAxisAlignment.center,
+                              children: [
+                                Lottie.asset('assets/loading.json'),
+                                Text(
+                                  'Please wait...',
+                                  style: body1.copyWith(
+                                    fontWeight: FontWeight.bold,
+                                    color: Colors.black,
+                                  ),
+                                ),
+                              ],
+                            ),
                           ),
                         );
-                      });
-                    },
-                  );
+                      },
+                    );
+                  }
+                  await result.whenComplete(() async {
+                    await result.then((value) {
+                      if (providerThread.isSuccess) {
+                        Provider.of<HomeThreadViewModel>(context, listen: false)
+                            .init();
+                        Navigator.pushNamedAndRemoveUntil(
+                            context, home, (route) => false);
+                        ScaffoldMessenger.of(context).showSnackBar(SnackBar(
+                          duration: Duration(milliseconds: 500),
+                          backgroundColor: AppColors.kcPrimaryColor,
+                          elevation: 0.0,
+                          content: Row(
+                            children: [
+                              Image.asset(
+                                'assets/icon_succes_add_bookmark_circle.png',
+                                height: 24,
+                                width: 24,
+                              ),
+                              const SizedBox(
+                                width: 10,
+                              ),
+                              const Text('Yay, your thread has been posted'),
+                            ],
+                          ),
+                          behavior: SnackBarBehavior.floating,
+                          shape: RoundedRectangleBorder(
+                            borderRadius: BorderRadius.circular(10),
+                          ),
+                          padding: EdgeInsets.only(
+                              left: 42.5, right: 42.5, top: 16, bottom: 16),
+                          margin: EdgeInsets.only(
+                              bottom: MediaQuery.of(context).size.height - 150,
+                              right: 20,
+                              left: 20),
+                        ));
+                      }
+                    });
+                  });
                 },
                 child: const Padding(
-                  padding: EdgeInsets.only(right: 20, left: 20),
+                  padding: EdgeInsets.only(right: 14.5, left: 14.5),
                   child: Align(
                     alignment: Alignment.center,
                     child: Text(
                       'Post',
                       style: TextStyle(
-                        color: Colors.blue,
+                        fontSize: 18,
+                        color: AppColors.kcPrimaryColor,
                         fontWeight: FontWeight.bold,
                       ),
                     ),

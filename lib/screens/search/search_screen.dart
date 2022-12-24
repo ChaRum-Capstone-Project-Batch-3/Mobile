@@ -48,30 +48,38 @@ class _SearchScreenState extends State<SearchScreen> {
         child: Scaffold(
           backgroundColor: AppColors.kcBaseWhite,
           appBar: AppBar(
-            toolbarHeight: 60,
+            toolbarHeight: 70,
             backgroundColor: AppColors.kcBaseWhite,
             foregroundColor: AppColors.kcBaseBlack,
             elevation: 0,
             title: Container(
-              margin: spacing8Horizontal,
+              width: MediaQuery.of(context).size.width,
+              margin: EdgeInsets.only(top: 8, right: 16),
               padding: spacing16Vertical,
               child: TextFormField(
                 controller: teSearch,
                 onEditingComplete: () {
-                  if (teSearch.text.trim() != '') {
+                  if (teSearch.text.toLowerCase().toUpperCase().trim() != '') {
                     provider.addRecent(teSearch.text);
                     provider.searchThread(teSearch.text);
                   }
                   FocusScope.of(context).unfocus();
                 },
                 decoration: InputDecoration(
+                  filled: true,
+                  fillColor: AppColors.kcDarkWhite,
                   border: OutlineInputBorder(
                     borderRadius: BorderRadius.circular(50),
                   ),
                   hintText: "Search",
-                  prefixIcon: Icon(
-                    Icons.search_outlined,
-                    size: 30,
+                  prefixIcon: Container(
+                    padding: const EdgeInsets.only(
+                        top: 10, bottom: 10, left: 20, right: 10),
+                    child: Image.asset(
+                      height: 24,
+                      width: 24,
+                      'assets/icon_search_normal.png',
+                    ),
                   ),
                   contentPadding:
                       EdgeInsets.symmetric(vertical: 12, horizontal: 12),
@@ -79,17 +87,6 @@ class _SearchScreenState extends State<SearchScreen> {
               ),
             ),
             centerTitle: true,
-            actions: [
-              Padding(
-                padding: spacing16Right,
-                child: GestureDetector(
-                  child: ImageIcon(
-                    AssetImage('assets/icon_filter_search.png'),
-                    color: AppColors.kcLightestBlack,
-                  ),
-                ),
-              )
-            ],
           ),
           body: bodySearch(context),
         ),
@@ -102,53 +99,56 @@ class _SearchScreenState extends State<SearchScreen> {
       children: [
         Expanded(
           child: Container(
-            margin: spacing16Vertical,
-            child: ListView.builder(
-                scrollDirection: Axis.vertical,
-                shrinkWrap: true,
-                itemCount: 20,
-                itemBuilder: (context, index) {
-                  return Container(
-                    color: AppColors.kcBaseWhite,
-                    padding: spacing16All,
-                    child: Row(
-                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                      children: [
-                        Container(
-                          child: Row(
-                            children: [
-                              CircleAvatar(
-                                backgroundColor: AppColors.kcPrimaryColor,
-                              ),
-                              SizedBox(
-                                width: 12,
-                              ),
-                              BoxText.body2Semi("Chris")
-                            ],
-                          ),
-                        ),
-                        Container(
-                          child: OutlinedButton(
-                            child: BoxText.buttonSemi("Followed", TextStyle()),
-                            onPressed: () {},
-                            style: ButtonStyle(
-                              shape: MaterialStateProperty.all<
-                                      RoundedRectangleBorder>(
-                                  RoundedRectangleBorder(
-                                borderRadius: BorderRadius.circular(8.0),
-                              )),
-                              side: MaterialStateProperty.all<BorderSide>(
-                                  BorderSide(
-                                width: 1,
-                                color: AppColors.kcPrimaryColor!.shade500,
-                              )),
+            color: AppColors.kcDarkWhite,
+            child: Container(
+              child: ListView.builder(
+                  scrollDirection: Axis.vertical,
+                  shrinkWrap: true,
+                  itemCount: 20,
+                  itemBuilder: (context, index) {
+                    return Container(
+                      color: AppColors.kcBaseWhite,
+                      padding: spacing16All,
+                      child: Row(
+                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                        children: [
+                          Container(
+                            child: Row(
+                              children: [
+                                CircleAvatar(
+                                  backgroundColor: AppColors.kcPrimaryColor,
+                                ),
+                                SizedBox(
+                                  width: 12,
+                                ),
+                                BoxText.body2Semi("Chris")
+                              ],
                             ),
                           ),
-                        ),
-                      ],
-                    ),
-                  );
-                }),
+                          Container(
+                            child: OutlinedButton(
+                              child:
+                                  BoxText.buttonSemi("Followed", TextStyle()),
+                              onPressed: () {},
+                              style: ButtonStyle(
+                                shape: MaterialStateProperty.all<
+                                        RoundedRectangleBorder>(
+                                    RoundedRectangleBorder(
+                                  borderRadius: BorderRadius.circular(8.0),
+                                )),
+                                side: MaterialStateProperty.all<BorderSide>(
+                                    BorderSide(
+                                  width: 1,
+                                  color: AppColors.kcPrimaryColor!.shade500,
+                                )),
+                              ),
+                            ),
+                          ),
+                        ],
+                      ),
+                    );
+                  }),
+            ),
           ),
         ),
       ],
@@ -199,7 +199,7 @@ class _SearchScreenState extends State<SearchScreen> {
                                         Row(
                                           children: [
                                             Container(
-                                              width: 50,
+                                              width: 80,
                                               height: 10,
                                               decoration: BoxDecoration(
                                                 color: AppColors.kcDarkestWhite,
@@ -208,25 +208,25 @@ class _SearchScreenState extends State<SearchScreen> {
                                                 ),
                                               ),
                                             ),
-                                            Container(
-                                              margin: spacing8Horizontal,
-                                              width: 4,
-                                              height: 4,
-                                              decoration: BoxDecoration(
-                                                color: AppColors.kcDarkestWhite,
-                                                shape: BoxShape.circle,
-                                              ),
-                                            ),
-                                            Container(
-                                              width: 50,
-                                              height: 10,
-                                              decoration: BoxDecoration(
-                                                color: AppColors.kcDarkestWhite,
-                                                borderRadius: BorderRadius.all(
-                                                  Radius.circular(10),
-                                                ),
-                                              ),
-                                            ),
+                                            // Container(
+                                            //   margin: spacing8Horizontal,
+                                            //   width: 4,
+                                            //   height: 4,
+                                            //   decoration: BoxDecoration(
+                                            //     color: AppColors.kcDarkestWhite,
+                                            //     shape: BoxShape.circle,
+                                            //   ),
+                                            // ),
+                                            // Container(
+                                            //   width: 50,
+                                            //   height: 10,
+                                            //   decoration: BoxDecoration(
+                                            //     color: AppColors.kcDarkestWhite,
+                                            //     borderRadius: BorderRadius.all(
+                                            //       Radius.circular(10),
+                                            //     ),
+                                            //   ),
+                                            // ),
                                           ],
                                         ),
                                         SizedBox(
@@ -369,7 +369,7 @@ class _SearchScreenState extends State<SearchScreen> {
             children: [
               Expanded(
                 child: Container(
-                  margin: spacing16All,
+                  color: AppColors.kcDarkWhite,
                   child: ListView.builder(
                     scrollDirection: Axis.vertical,
                     shrinkWrap: true,
@@ -385,7 +385,8 @@ class _SearchScreenState extends State<SearchScreen> {
                               arguments: provider.thread[index].sId);
                         },
                         child: Container(
-                          margin: spacing8Bottom,
+                          margin: EdgeInsets.only(
+                              top: 10, bottom: 10, left: 16, right: 16),
                           padding: spacing16All,
                           decoration: BoxDecoration(
                             borderRadius: BorderRadius.all(
@@ -421,23 +422,23 @@ class _SearchScreenState extends State<SearchScreen> {
                                                       threads[index]
                                                           .creator!
                                                           .displayName!),
-                                                  Container(
-                                                    margin: spacing8Horizontal,
-                                                    width: 4,
-                                                    height: 4,
-                                                    decoration: BoxDecoration(
-                                                      color: AppColors
-                                                          .kcDarkestWhite,
-                                                      shape: BoxShape.circle,
-                                                    ),
-                                                  ),
-                                                  GestureDetector(
-                                                    child: BoxText.captionSemi(
-                                                      "Follow",
-                                                      color:
-                                                          AppColors.kcInfoColor,
-                                                    ),
-                                                  ),
+                                                  // Container(
+                                                  //   margin: spacing8Horizontal,
+                                                  //   width: 4,
+                                                  //   height: 4,
+                                                  //   decoration: BoxDecoration(
+                                                  //     color: AppColors
+                                                  //         .kcDarkestWhite,
+                                                  //     shape: BoxShape.circle,
+                                                  //   ),
+                                                  // ),
+                                                  // GestureDetector(
+                                                  //   child: BoxText.captionSemi(
+                                                  //     "Follow",
+                                                  //     color:
+                                                  //         AppColors.kcInfoColor,
+                                                  //   ),
+                                                  // ),
                                                 ],
                                               ),
                                               BoxText.body3(
@@ -480,16 +481,15 @@ class _SearchScreenState extends State<SearchScreen> {
                                 height: 4,
                               ),
                               BoxText.subtitle2Semi(threads[index].title!),
+                              SizedBox(height: 12),
                               if (threads[index].imageURL != "")
-                                Container(
-                                    margin: spacing8Top,
-                                    decoration: BoxDecoration(
-                                      borderRadius: BorderRadius.circular(10),
-                                    ),
-                                    child: Center(
+                                ClipRRect(
+                                  borderRadius:
+                                      BorderRadius.all(Radius.circular(10)),
+                                  child: Container(
                                       child: Image.network(
-                                          '${threads[index].imageURL}'),
-                                    )),
+                                          '${threads[index].imageURL}')),
+                                ),
                               Container(
                                 margin: spacing8Top,
                                 child: BoxText.caption(
@@ -741,7 +741,7 @@ class _SearchScreenState extends State<SearchScreen> {
             children: [
               Expanded(
                 child: Container(
-                  margin: spacing16All,
+                  color: AppColors.kcDarkWhite,
                   child: ListView.builder(
                     scrollDirection: Axis.vertical,
                     shrinkWrap: true,
@@ -757,7 +757,8 @@ class _SearchScreenState extends State<SearchScreen> {
                               arguments: provider.thread[index].sId);
                         },
                         child: Container(
-                          margin: spacing8Bottom,
+                          margin: EdgeInsets.only(
+                              top: 10, bottom: 10, left: 16, right: 16),
                           padding: spacing16All,
                           decoration: BoxDecoration(
                             borderRadius: BorderRadius.all(
@@ -793,23 +794,23 @@ class _SearchScreenState extends State<SearchScreen> {
                                                       threads[index]
                                                           .creator!
                                                           .displayName!),
-                                                  Container(
-                                                    margin: spacing8Horizontal,
-                                                    width: 4,
-                                                    height: 4,
-                                                    decoration: BoxDecoration(
-                                                      color: AppColors
-                                                          .kcDarkestWhite,
-                                                      shape: BoxShape.circle,
-                                                    ),
-                                                  ),
-                                                  GestureDetector(
-                                                    child: BoxText.captionSemi(
-                                                      "Follow",
-                                                      color:
-                                                          AppColors.kcInfoColor,
-                                                    ),
-                                                  ),
+                                                  // Container(
+                                                  //   margin: spacing8Horizontal,
+                                                  //   width: 4,
+                                                  //   height: 4,
+                                                  //   decoration: BoxDecoration(
+                                                  //     color: AppColors
+                                                  //         .kcDarkestWhite,
+                                                  //     shape: BoxShape.circle,
+                                                  //   ),
+                                                  // ),
+                                                  // GestureDetector(
+                                                  //   child: BoxText.captionSemi(
+                                                  //     "Follow",
+                                                  //     color:
+                                                  //         AppColors.kcInfoColor,
+                                                  //   ),
+                                                  // ),
                                                 ],
                                               ),
                                               BoxText.body3(
@@ -852,14 +853,15 @@ class _SearchScreenState extends State<SearchScreen> {
                                 height: 4,
                               ),
                               BoxText.subtitle2Semi(threads[index].title!),
+                              SizedBox(height: 12),
                               if (threads[index].imageURL != "")
-                                Container(
-                                    margin: spacing8Top,
-                                    decoration: BoxDecoration(
-                                      borderRadius: BorderRadius.circular(10),
-                                    ),
-                                    child: Image.network(
-                                        '${threads[index].imageURL}')),
+                                ClipRRect(
+                                  borderRadius:
+                                      BorderRadius.all(Radius.circular(10)),
+                                  child: Container(
+                                      child: Image.network(
+                                          '${threads[index].imageURL}')),
+                                ),
                               Container(
                                 margin: spacing8Top,
                                 child: BoxText.caption(

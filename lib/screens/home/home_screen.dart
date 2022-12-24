@@ -21,15 +21,6 @@ class HomeScreen extends StatefulWidget {
 }
 
 class _HomeScreenState extends State<HomeScreen> {
-  // @override
-  // void didChangeDependencies() {
-  //   // TODO: implement didChangeDependencies
-  //   Provider.of<HomeThreadViewModel>(context, listen: false).getThread();
-  //   Provider.of<HomeThreadViewModel>(context, listen: false).getPopular();
-  //   Provider.of<HomeThreadViewModel>(context, listen: false).getFollow();
-  //   super.didChangeDependencies();
-  // }
-
   @override
   void initState() {
     Provider.of<HomeThreadViewModel>(context, listen: false).init();
@@ -54,11 +45,10 @@ class _HomeScreenState extends State<HomeScreen> {
                   Row(
                     children: [
                       InkWell(
-                        onTap: () {
-                          Navigator.pushNamed(context, notif);
-                        },
-                        child: Image.asset("assets/notification.png")
-                      ),
+                          onTap: () {
+                            Navigator.pushNamed(context, notif);
+                          },
+                          child: Image.asset("assets/notification.png")),
                       SizedBox(width: 15),
                       InkWell(
                         onTap: () {
@@ -204,7 +194,7 @@ class _HomeScreenState extends State<HomeScreen> {
             children: [
               Expanded(
                 child: Container(
-                  margin: spacing16All,
+                  color: AppColors.kcDarkWhite,
                   child: ListView.builder(
                     scrollDirection: Axis.vertical,
                     shrinkWrap: true,
@@ -220,7 +210,8 @@ class _HomeScreenState extends State<HomeScreen> {
                               arguments: threads[index].sId);
                         },
                         child: Container(
-                          margin: spacing8Bottom,
+                          margin: EdgeInsets.only(
+                              top: 10, bottom: 10, left: 16, right: 16),
                           padding: spacing16All,
                           decoration: BoxDecoration(
                             borderRadius: BorderRadius.all(
@@ -232,7 +223,8 @@ class _HomeScreenState extends State<HomeScreen> {
                             crossAxisAlignment: CrossAxisAlignment.start,
                             children: [
                               Row(
-                                mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                                mainAxisAlignment:
+                                    MainAxisAlignment.spaceBetween,
                                 children: [
                                   Container(
                                     child: Row(
@@ -255,28 +247,29 @@ class _HomeScreenState extends State<HomeScreen> {
                                                       threads[index]
                                                           .creator!
                                                           .displayName!),
-                                                  Container(
-                                                    margin: spacing8Horizontal,
-                                                    width: 4,
-                                                    height: 4,
-                                                    decoration: BoxDecoration(
-                                                      color: AppColors
-                                                          .kcDarkestWhite,
-                                                      shape: BoxShape.circle,
-                                                    ),
-                                                  ),
-                                                  GestureDetector(
-                                                    child: BoxText.captionSemi(
-                                                      "Follow",
-                                                      color:
-                                                          AppColors.kcInfoColor,
-                                                    ),
-                                                  ),
+                                                  // Container(
+                                                  //   margin: spacing8Horizontal,
+                                                  //   width: 4,
+                                                  //   height: 4,
+                                                  //   decoration: BoxDecoration(
+                                                  //     color: AppColors
+                                                  //         .kcDarkestWhite,
+                                                  //     shape: BoxShape.circle,
+                                                  //   ),
+                                                  // ),
+                                                  // GestureDetector(
+                                                  //   child: BoxText.captionSemi(
+                                                  //     "Follow",
+                                                  //     color:
+                                                  //         AppColors.kcInfoColor,
+                                                  //   ),
+                                                  // ),
                                                 ],
                                               ),
                                               BoxText.body3(
                                                 diff.toString(),
-                                                color: AppColors.kcLightestBlack,
+                                                color:
+                                                    AppColors.kcLightestBlack,
                                               )
                                             ],
                                           ),
@@ -313,18 +306,21 @@ class _HomeScreenState extends State<HomeScreen> {
                                 height: 4,
                               ),
                               BoxText.subtitle2Semi(threads[index].title!),
-                              SizedBox(height: 8,),
+                              SizedBox(
+                                height: 8,
+                              ),
                               if (threads[index].imageURL != "")
                                 ClipRRect(
-                                  borderRadius: BorderRadius.all(Radius.circular(10)),
+                                  borderRadius:
+                                      BorderRadius.all(Radius.circular(10)),
                                   child: Container(
-                                      child: Image.network('${threads[index].imageURL}')
-                                    ),
+                                      child: Image.network(
+                                          '${threads[index].imageURL}')),
                                 ),
                               Container(
                                 margin: spacing8Top,
-                                child:
-                                    BoxText.caption(threads[index].description!),
+                                child: BoxText.caption(
+                                    threads[index].description!),
                               ),
                               SizedBox(
                                 height: 10,
@@ -366,7 +362,8 @@ class _HomeScreenState extends State<HomeScreen> {
                                               ImageIcon(
                                                 AssetImage(
                                                     'assets/icon_like1.png'),
-                                                color: AppColors.kcLightestBlack,
+                                                color:
+                                                    AppColors.kcLightestBlack,
                                               ),
                                               SizedBox(
                                                 width: 8,
@@ -375,7 +372,8 @@ class _HomeScreenState extends State<HomeScreen> {
                                                 threads[index]
                                                     .totalLike
                                                     .toString(),
-                                                color: AppColors.kcLightestBlack,
+                                                color:
+                                                    AppColors.kcLightestBlack,
                                               )
                                             ]),
                                           ),
@@ -406,7 +404,8 @@ class _HomeScreenState extends State<HomeScreen> {
                                       child: Row(
                                         children: [
                                           ImageIcon(
-                                            AssetImage('assets/icon_comment.png'),
+                                            AssetImage(
+                                                'assets/icon_comment.png'),
                                             color: AppColors.kcLightestBlack,
                                           ),
                                           SizedBox(
@@ -445,235 +444,238 @@ class _HomeScreenState extends State<HomeScreen> {
         ? Column(
             children: [
               Expanded(
-                child: Container(
-                  margin: spacing16All,
-                  child: ListView.builder(
-                    scrollDirection: Axis.vertical,
-                    shrinkWrap: true,
-                    itemCount: threads.length,
-                    itemBuilder: (context, index) {
-                      final date =
-                          DateTime.parse(threads[index].createdAt!).toLocal();
-                      final now = DateTime.now();
-                      final diff = between(date, now);
-                      return GestureDetector(
-                        onTap: () {
-                          Navigator.pushNamed(context, detailThread,
-                              arguments: threads[index].sId);
-                        },
-                        child: Container(
-                          margin: spacing8Bottom,
-                          padding: spacing16All,
-                          decoration: BoxDecoration(
-                            borderRadius: BorderRadius.all(
-                              Radius.circular(10),
-                            ),
-                            color: AppColors.kcBaseWhite,
+                  child: Container(
+                color: AppColors.kcDarkWhite,
+                child: ListView.builder(
+                  scrollDirection: Axis.vertical,
+                  shrinkWrap: true,
+                  itemCount: threads.length,
+                  itemBuilder: (context, index) {
+                    final date =
+                        DateTime.parse(threads[index].createdAt!).toLocal();
+                    final now = DateTime.now();
+                    final diff = between(date, now);
+                    return GestureDetector(
+                      onTap: () {
+                        Navigator.pushNamed(context, detailThread,
+                            arguments: threads[index].sId);
+                      },
+                      child: Container(
+                        margin: EdgeInsets.only(
+                            top: 10, bottom: 10, left: 16, right: 16),
+                        padding: spacing16All,
+                        decoration: BoxDecoration(
+                          borderRadius: BorderRadius.all(
+                            Radius.circular(10),
                           ),
-                          child: Column(
-                            crossAxisAlignment: CrossAxisAlignment.start,
-                            children: [
-                              Row(
-                                mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                                children: [
-                                  Container(
+                          color: AppColors.kcBaseWhite,
+                        ),
+                        child: Column(
+                          crossAxisAlignment: CrossAxisAlignment.start,
+                          children: [
+                            Row(
+                              mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                              children: [
+                                Container(
+                                  child: Row(
+                                    children: [
+                                      CircleAvatar(
+                                        backgroundImage: NetworkImage(
+                                            threads[index]
+                                                .creator!
+                                                .profilePictureURL!),
+                                      ),
+                                      Container(
+                                        margin: spacing8Left,
+                                        child: Column(
+                                          crossAxisAlignment:
+                                              CrossAxisAlignment.start,
+                                          children: [
+                                            Row(
+                                              children: [
+                                                BoxText.captionSemi(
+                                                    threads[index]
+                                                        .creator!
+                                                        .displayName!),
+                                                // Container(
+                                                //   margin: spacing8Horizontal,
+                                                //   width: 4,
+                                                //   height: 4,
+                                                //   decoration: BoxDecoration(
+                                                //     color: AppColors
+                                                //         .kcDarkestWhite,
+                                                //     shape: BoxShape.circle,
+                                                //   ),
+                                                // ),
+                                                // GestureDetector(
+                                                //   child: BoxText.captionSemi(
+                                                //     "Follow",
+                                                //     color:
+                                                //         AppColors.kcInfoColor,
+                                                //   ),
+                                                // ),
+                                              ],
+                                            ),
+                                            BoxText.body3(
+                                              diff.toString(),
+                                              color: AppColors.kcLightestBlack,
+                                            )
+                                          ],
+                                        ),
+                                      ),
+                                    ],
+                                  ),
+                                ),
+                                Container(
+                                  child: GestureDetector(
+                                    onTap: () {
+                                      other(provider.popularThread[index]);
+                                    },
+                                    child: ImageIcon(
+                                        AssetImage('assets/icon_more.png')),
+                                  ),
+                                ),
+                              ],
+                            ),
+                            Container(
+                              margin: spacing16Top,
+                              padding: EdgeInsets.only(
+                                  top: 5, bottom: 5, left: 12, right: 12),
+                              decoration: BoxDecoration(
+                                color: AppColors.kcDarkerWhite,
+                                borderRadius:
+                                    BorderRadius.all(Radius.circular(50)),
+                              ),
+                              child: BoxText.caption(
+                                threads[index].topic!.topic!,
+                                color: AppColors.kcLighterBlack,
+                              ),
+                            ),
+                            SizedBox(
+                              height: 4,
+                            ),
+                            BoxText.subtitle2Semi(threads[index].title!),
+                            SizedBox(
+                              height: 8,
+                            ),
+                            if (threads[index].imageURL != "")
+                              ClipRRect(
+                                borderRadius:
+                                    BorderRadius.all(Radius.circular(10)),
+                                child: Container(
+                                    child: Image.network(
+                                        '${threads[index].imageURL}')),
+                              ),
+                            Container(
+                              margin: spacing8Top,
+                              child:
+                                  BoxText.caption(threads[index].description!),
+                            ),
+                            SizedBox(
+                              height: 10,
+                            ),
+                            Row(
+                              children: [
+                                Container(
+                                  child: threads[index].isLiked!
+                                      ? GestureDetector(
+                                          onTap: () {
+                                            provider.unlikeThread(
+                                                index, "thread");
+                                            // provider.getBookmark();
+                                          },
+                                          child: Row(children: [
+                                            ImageIcon(
+                                              AssetImage(
+                                                  'assets/icon_like2.png'),
+                                              color: AppColors.kcInfoColor,
+                                            ),
+                                            SizedBox(
+                                              width: 8,
+                                            ),
+                                            BoxText.captionSemi(
+                                              threads[index]
+                                                  .totalLike
+                                                  .toString(),
+                                              color: AppColors.kcInfoColor,
+                                            )
+                                          ]),
+                                        )
+                                      : GestureDetector(
+                                          onTap: () {
+                                            provider.likeThread(
+                                                index, "thread");
+                                            // provider.getBookmark();
+                                          },
+                                          child: Row(children: [
+                                            ImageIcon(
+                                              AssetImage(
+                                                  'assets/icon_like1.png'),
+                                              color: AppColors.kcLightestBlack,
+                                            ),
+                                            SizedBox(
+                                              width: 8,
+                                            ),
+                                            BoxText.captionSemi(
+                                              threads[index]
+                                                  .totalLike
+                                                  .toString(),
+                                              color: AppColors.kcLightestBlack,
+                                            )
+                                          ]),
+                                        ),
+                                ),
+                                SizedBox(
+                                  width: 12,
+                                ),
+                                Container(
+                                  child: GestureDetector(
+                                    onTap: () {
+                                      showModalBottomSheet(
+                                          isScrollControlled: true,
+                                          context: context,
+                                          backgroundColor: Colors.transparent,
+                                          shape: RoundedRectangleBorder(
+                                            borderRadius: BorderRadius.only(
+                                              topLeft: Radius.circular(30),
+                                              topRight: Radius.circular(30),
+                                            ),
+                                          ),
+                                          builder: (context) {
+                                            return CommentScreen(
+                                              threadId:
+                                                  threads[index].sId ?? "",
+                                            );
+                                          });
+                                    },
                                     child: Row(
                                       children: [
-                                        CircleAvatar(
-                                          backgroundImage: NetworkImage(
-                                              threads[index]
-                                                  .creator!
-                                                  .profilePictureURL!),
+                                        ImageIcon(
+                                          AssetImage('assets/icon_comment.png'),
+                                          color: AppColors.kcLightestBlack,
                                         ),
-                                        Container(
-                                          margin: spacing8Left,
-                                          child: Column(
-                                            crossAxisAlignment:
-                                                CrossAxisAlignment.start,
-                                            children: [
-                                              Row(
-                                                children: [
-                                                  BoxText.captionSemi(
-                                                      threads[index]
-                                                          .creator!
-                                                          .displayName!),
-                                                  Container(
-                                                    margin: spacing8Horizontal,
-                                                    width: 4,
-                                                    height: 4,
-                                                    decoration: BoxDecoration(
-                                                      color: AppColors
-                                                          .kcDarkestWhite,
-                                                      shape: BoxShape.circle,
-                                                    ),
-                                                  ),
-                                                  GestureDetector(
-                                                    child: BoxText.captionSemi(
-                                                      "Follow",
-                                                      color:
-                                                          AppColors.kcInfoColor,
-                                                    ),
-                                                  ),
-                                                ],
-                                              ),
-                                              BoxText.body3(
-                                                diff.toString(),
-                                                color: AppColors.kcLightestBlack,
-                                              )
-                                            ],
-                                          ),
+                                        SizedBox(
+                                          width: 8,
                                         ),
+                                        BoxText.captionSemi(
+                                          threads[index]
+                                              .totalComment
+                                              .toString(),
+                                          color: AppColors.kcLightestBlack,
+                                        )
                                       ],
                                     ),
                                   ),
-                                  Container(
-                                    child: GestureDetector(
-                                      onTap: () {
-                                        other(provider.popularThread[index]);
-                                      },
-                                      child: ImageIcon(
-                                          AssetImage('assets/icon_more.png')),
-                                    ),
-                                  ),
-                                ],
-                              ),
-                              Container(
-                                margin: spacing16Top,
-                                padding: EdgeInsets.only(
-                                    top: 5, bottom: 5, left: 12, right: 12),
-                                decoration: BoxDecoration(
-                                  color: AppColors.kcDarkerWhite,
-                                  borderRadius:
-                                      BorderRadius.all(Radius.circular(50)),
                                 ),
-                                child: BoxText.caption(
-                                  threads[index].topic!.topic!,
-                                  color: AppColors.kcLighterBlack,
-                                ),
-                              ),
-                              SizedBox(
-                                height: 4,
-                              ),
-                              BoxText.subtitle2Semi(threads[index].title!),
-                              SizedBox(height: 8,),
-                              if (threads[index].imageURL != "")
-                                ClipRRect(
-                                  borderRadius: BorderRadius.all(Radius.circular(10)),
-                                  child: Container(
-                                      child: Image.network('${threads[index].imageURL}')
-                                    ),
-                                ),
-                              Container(
-                                margin: spacing8Top,
-                                child:
-                                    BoxText.caption(threads[index].description!),
-                              ),
-                              SizedBox(
-                                height: 10,
-                              ),
-                              Row(
-                                children: [
-                                  Container(
-                                    child: threads[index].isLiked!
-                                        ? GestureDetector(
-                                            onTap: () {
-                                              provider.unlikeThread(
-                                                  index, "thread");
-                                              // provider.getBookmark();
-                                            },
-                                            child: Row(children: [
-                                              ImageIcon(
-                                                AssetImage(
-                                                    'assets/icon_like2.png'),
-                                                color: AppColors.kcInfoColor,
-                                              ),
-                                              SizedBox(
-                                                width: 8,
-                                              ),
-                                              BoxText.captionSemi(
-                                                threads[index]
-                                                    .totalLike
-                                                    .toString(),
-                                                color: AppColors.kcInfoColor,
-                                              )
-                                            ]),
-                                          )
-                                        : GestureDetector(
-                                            onTap: () {
-                                              provider.likeThread(
-                                                  index, "thread");
-                                              // provider.getBookmark();
-                                            },
-                                            child: Row(children: [
-                                              ImageIcon(
-                                                AssetImage(
-                                                    'assets/icon_like1.png'),
-                                                color: AppColors.kcLightestBlack,
-                                              ),
-                                              SizedBox(
-                                                width: 8,
-                                              ),
-                                              BoxText.captionSemi(
-                                                threads[index]
-                                                    .totalLike
-                                                    .toString(),
-                                                color: AppColors.kcLightestBlack,
-                                              )
-                                            ]),
-                                          ),
-                                  ),
-                                  SizedBox(
-                                    width: 12,
-                                  ),
-                                  Container(
-                                    child: GestureDetector(
-                                      onTap: () {
-                                        showModalBottomSheet(
-                                            isScrollControlled: true,
-                                            context: context,
-                                            backgroundColor: Colors.transparent,
-                                            shape: RoundedRectangleBorder(
-                                              borderRadius: BorderRadius.only(
-                                                topLeft: Radius.circular(30),
-                                                topRight: Radius.circular(30),
-                                              ),
-                                            ),
-                                            builder: (context) {
-                                              return CommentScreen(
-                                                threadId:
-                                                    threads[index].sId ?? "",
-                                              );
-                                            });
-                                      },
-                                      child: Row(
-                                        children: [
-                                          ImageIcon(
-                                            AssetImage('assets/icon_comment.png'),
-                                            color: AppColors.kcLightestBlack,
-                                          ),
-                                          SizedBox(
-                                            width: 8,
-                                          ),
-                                          BoxText.captionSemi(
-                                            threads[index]
-                                                .totalComment
-                                                .toString(),
-                                            color: AppColors.kcLightestBlack,
-                                          )
-                                        ],
-                                      ),
-                                    ),
-                                  ),
-                                ],
-                              ),
-                            ],
-                          ),
+                              ],
+                            ),
+                          ],
                         ),
-                      );
-                    },
-                  ),
+                      ),
+                    );
+                  },
                 ),
-              ),
+              )),
             ],
           )
         : noContent();
@@ -687,7 +689,7 @@ class _HomeScreenState extends State<HomeScreen> {
             children: [
               Expanded(
                 child: Container(
-                  margin: spacing16All,
+                  color: AppColors.kcDarkWhite,
                   child: ListView.builder(
                     scrollDirection: Axis.vertical,
                     shrinkWrap: true,
@@ -703,7 +705,8 @@ class _HomeScreenState extends State<HomeScreen> {
                               arguments: threads[index].thread!.sId);
                         },
                         child: Container(
-                          margin: spacing8Bottom,
+                          margin: EdgeInsets.only(
+                              top: 10, bottom: 10, left: 16, right: 16),
                           padding: spacing16All,
                           decoration: BoxDecoration(
                             borderRadius: BorderRadius.all(
@@ -715,7 +718,8 @@ class _HomeScreenState extends State<HomeScreen> {
                             crossAxisAlignment: CrossAxisAlignment.start,
                             children: [
                               Row(
-                                mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                                mainAxisAlignment:
+                                    MainAxisAlignment.spaceBetween,
                                 children: [
                                   Container(
                                     child: Row(
@@ -740,28 +744,29 @@ class _HomeScreenState extends State<HomeScreen> {
                                                           .thread!
                                                           .creator!
                                                           .displayName!),
-                                                  Container(
-                                                    margin: spacing8Horizontal,
-                                                    width: 4,
-                                                    height: 4,
-                                                    decoration: BoxDecoration(
-                                                      color: AppColors
-                                                          .kcDarkestWhite,
-                                                      shape: BoxShape.circle,
-                                                    ),
-                                                  ),
-                                                  GestureDetector(
-                                                    child: BoxText.captionSemi(
-                                                      "Follow",
-                                                      color:
-                                                          AppColors.kcInfoColor,
-                                                    ),
-                                                  ),
+                                                  // Container(
+                                                  //   margin: spacing8Horizontal,
+                                                  //   width: 4,
+                                                  //   height: 4,
+                                                  //   decoration: BoxDecoration(
+                                                  //     color: AppColors
+                                                  //         .kcDarkestWhite,
+                                                  //     shape: BoxShape.circle,
+                                                  //   ),
+                                                  // ),
+                                                  // GestureDetector(
+                                                  //   child: BoxText.captionSemi(
+                                                  //     "Follow",
+                                                  //     color:
+                                                  //         AppColors.kcInfoColor,
+                                                  //   ),
+                                                  // ),
                                                 ],
                                               ),
                                               BoxText.body3(
                                                 diff.toString(),
-                                                color: AppColors.kcLightestBlack,
+                                                color:
+                                                    AppColors.kcLightestBlack,
                                               )
                                             ],
                                           ),
@@ -800,14 +805,17 @@ class _HomeScreenState extends State<HomeScreen> {
                               ),
                               BoxText.subtitle2Semi(
                                   threads[index].thread!.title!),
-                                  SizedBox(height: 8,),
-                                  if (threads[index].thread!.imageURL != "")
-                                    ClipRRect(
-                                      borderRadius: BorderRadius.all(Radius.circular(10)),
-                                      child: Container(
-                                          child: Image.network('${threads[index].thread!.imageURL}')
-                                        ),
-                                    ),
+                              SizedBox(
+                                height: 8,
+                              ),
+                              if (threads[index].thread!.imageURL != "")
+                                ClipRRect(
+                                  borderRadius:
+                                      BorderRadius.all(Radius.circular(10)),
+                                  child: Container(
+                                      child: Image.network(
+                                          '${threads[index].thread!.imageURL}')),
+                                ),
                               Container(
                                 margin: spacing8Top,
                                 child: BoxText.caption(
@@ -854,7 +862,8 @@ class _HomeScreenState extends State<HomeScreen> {
                                               ImageIcon(
                                                 AssetImage(
                                                     'assets/icon_like1.png'),
-                                                color: AppColors.kcLightestBlack,
+                                                color:
+                                                    AppColors.kcLightestBlack,
                                               ),
                                               SizedBox(
                                                 width: 8,
@@ -864,7 +873,8 @@ class _HomeScreenState extends State<HomeScreen> {
                                                     .thread!
                                                     .totalLike
                                                     .toString(),
-                                                color: AppColors.kcLightestBlack,
+                                                color:
+                                                    AppColors.kcLightestBlack,
                                               )
                                             ]),
                                           ),
@@ -887,16 +897,18 @@ class _HomeScreenState extends State<HomeScreen> {
                                             ),
                                             builder: (context) {
                                               return CommentScreen(
-                                                threadId:
-                                                    threads[index].thread!.sId ??
-                                                        "",
+                                                threadId: threads[index]
+                                                        .thread!
+                                                        .sId ??
+                                                    "",
                                               );
                                             });
                                       },
                                       child: Row(
                                         children: [
                                           ImageIcon(
-                                            AssetImage('assets/icon_comment.png'),
+                                            AssetImage(
+                                                'assets/icon_comment.png'),
                                             color: AppColors.kcLightestBlack,
                                           ),
                                           SizedBox(
@@ -961,18 +973,20 @@ class _HomeScreenState extends State<HomeScreen> {
         backgroundColor: AppColors.kcBaseWhite,
         builder: (BuildContext context) {
           return Container(
-            height: 300,
+            height: 220,
             padding: spacing20All,
             child: Column(
               children: [
-                Center(
-                  child: Image.asset(
-                    'assets/pony_bottom_sheet.png',
-                    width: 38,
+                Container(
+                  width: 40,
+                  height: 4,
+                  decoration: const BoxDecoration(
+                    color: Colors.grey,
+                    borderRadius: BorderRadius.all(Radius.circular(15)),
                   ),
                 ),
-                SizedBox(
-                  height: 30,
+                const SizedBox(
+                  height: 16,
                 ),
                 Container(
                   child: thread.isFollowed!
@@ -1015,8 +1029,9 @@ class _HomeScreenState extends State<HomeScreen> {
                           ),
                         ),
                 ),
-                SizedBox(
+                Divider(
                   height: 20,
+                  color: Color(0xffDFDFDF),
                 ),
                 Container(
                   child: thread.isBookmarked!
@@ -1046,8 +1061,8 @@ class _HomeScreenState extends State<HomeScreen> {
                           },
                           child: Row(
                             children: [
-                              ImageIcon(
-                                  AssetImage('assets/icon_bookmark1.png')),
+                              ImageIcon(AssetImage(
+                                  'assets/icon_add_bookmark_bottom_sheet.png')),
                               SizedBox(
                                 width: 10,
                               ),
@@ -1059,8 +1074,9 @@ class _HomeScreenState extends State<HomeScreen> {
                           ),
                         ),
                 ),
-                SizedBox(
+                Divider(
                   height: 20,
+                  color: Color(0xffDFDFDF),
                 ),
                 GestureDetector(
                   child: Row(
@@ -1077,8 +1093,9 @@ class _HomeScreenState extends State<HomeScreen> {
                     ],
                   ),
                 ),
-                SizedBox(
+                Divider(
                   height: 20,
+                  color: Color(0xffDFDFDF),
                 ),
                 GestureDetector(
                   child: Row(
@@ -1107,14 +1124,15 @@ Widget loadingThread() {
     children: [
       Expanded(
         child: Container(
-          margin: spacing16All,
+          color: AppColors.kcDarkWhite,
           child: ListView.builder(
             scrollDirection: Axis.vertical,
             shrinkWrap: true,
             itemCount: 5,
             itemBuilder: (context, index) {
               return Container(
-                margin: spacing8Bottom,
+                margin:
+                    EdgeInsets.only(top: 10, bottom: 10, left: 16, right: 16),
                 padding: spacing16All,
                 decoration: BoxDecoration(
                   borderRadius: BorderRadius.all(
@@ -1146,7 +1164,7 @@ Widget loadingThread() {
                                       Row(
                                         children: [
                                           Container(
-                                            width: 50,
+                                            width: 80,
                                             height: 10,
                                             decoration: BoxDecoration(
                                               color: AppColors.kcDarkestWhite,
@@ -1155,25 +1173,25 @@ Widget loadingThread() {
                                               ),
                                             ),
                                           ),
-                                          Container(
-                                            margin: spacing8Horizontal,
-                                            width: 4,
-                                            height: 4,
-                                            decoration: BoxDecoration(
-                                              color: AppColors.kcDarkestWhite,
-                                              shape: BoxShape.circle,
-                                            ),
-                                          ),
-                                          Container(
-                                            width: 50,
-                                            height: 10,
-                                            decoration: BoxDecoration(
-                                              color: AppColors.kcDarkestWhite,
-                                              borderRadius: BorderRadius.all(
-                                                Radius.circular(10),
-                                              ),
-                                            ),
-                                          ),
+                                          // Container(
+                                          //   margin: spacing8Horizontal,
+                                          //   width: 4,
+                                          //   height: 4,
+                                          //   decoration: BoxDecoration(
+                                          //     color: AppColors.kcDarkestWhite,
+                                          //     shape: BoxShape.circle,
+                                          //   ),
+                                          // ),
+                                          // Container(
+                                          //   width: 50,
+                                          //   height: 10,
+                                          //   decoration: BoxDecoration(
+                                          //     color: AppColors.kcDarkestWhite,
+                                          //     borderRadius: BorderRadius.all(
+                                          //       Radius.circular(10),
+                                          //     ),
+                                          //   ),
+                                          // ),
                                         ],
                                       ),
                                       SizedBox(

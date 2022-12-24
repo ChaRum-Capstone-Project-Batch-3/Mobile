@@ -1,4 +1,3 @@
-import 'package:fgd_flutter/models/space/space.dart';
 import 'package:fgd_flutter/providers/get_alltopics_view_model.dart';
 
 import 'package:fgd_flutter/shared/router.dart';
@@ -6,6 +5,7 @@ import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 
 import '../../shared/app_colors.dart';
+import '../../shared/charum_ui.dart';
 import '../../shared/styles.dart';
 
 class SpaceScreen extends StatefulWidget {
@@ -27,6 +27,14 @@ class _SpaceScreenState extends State<SpaceScreen> {
     );
     // TODO: implement initState
     super.initState();
+  }
+
+  TextEditingController searchSp = TextEditingController();
+  @override
+  void dispose() {
+    searchSp.dispose();
+    // TODO: implement dispose
+    super.dispose();
   }
 
   bool actionSort = true;
@@ -52,14 +60,6 @@ class _SpaceScreenState extends State<SpaceScreen> {
     false,
     false
   ];
-
-  TextEditingController searchSp = TextEditingController();
-  @override
-  void dispose() {
-    searchSp.dispose();
-    // TODO: implement dispose
-    super.dispose();
-  }
 
   @override
   Widget build(BuildContext context) {
@@ -119,7 +119,7 @@ class _SpaceScreenState extends State<SpaceScreen> {
                     ),
                     GestureDetector(
                       onTap: () {
-                        buildeFilterSpace();
+                        buildFilterSpace();
                       },
                       child: Container(
                         margin: EdgeInsets.only(left: 8, right: 8),
@@ -196,7 +196,7 @@ class _SpaceScreenState extends State<SpaceScreen> {
     );
   }
 
-  void buildeFilterSpace() {
+  void buildFilterSpace() {
     showModalBottomSheet(
       isScrollControlled: true,
       shape: RoundedRectangleBorder(
@@ -207,60 +207,69 @@ class _SpaceScreenState extends State<SpaceScreen> {
       context: context,
       builder: (BuildContext context) {
         return Container(
-          height: 300,
-          padding: EdgeInsets.all(20),
+          height: 280,
+          // padding: EdgeInsets.all(20),
           child: Column(
-            crossAxisAlignment: CrossAxisAlignment.stretch,
             children: [
-              Center(
-                child: Image.asset(
-                  'assets/pony_bottom_sheet.png',
-                  width: 38,
+              SizedBox(
+                height: 20,
+              ),
+              Container(
+                width: 40,
+                height: 4,
+                decoration: const BoxDecoration(
+                  color: Colors.grey,
+                  borderRadius: BorderRadius.all(Radius.circular(15)),
                 ),
+              ),
+              const SizedBox(
+                height: 16,
+              ),
+              const Text(
+                'Sort',
+                style: TextStyle(
+                  color: Colors.black,
+                  fontSize: 16,
+                  fontWeight: FontWeight.bold,
+                ),
+                textAlign: TextAlign.start,
               ),
               SizedBox(
                 height: 30,
               ),
-              Align(
-                alignment: Alignment.center,
-                child: Text(
-                  'Sort',
-                  style: body1Semi,
-                ),
-              ),
-              SizedBox(
-                height: 30,
-              ),
-              Row(
-                children: [
-                  ChipButton('A - Z', 1),
-                  SizedBox(
-                    width: 8,
+              Wrap(
+                  // clipBehavior: Clip.hardEdge,
+                  // runSpacing: 3.0,
+                  // spacing: 2.0,
+                  alignment: WrapAlignment.start,
+                  children: [
+                    ChipButton('A - Z', 1),
+                    SizedBox(
+                      width: 5,
+                    ),
+                    ChipButton('Z - A', 2),
+                    SizedBox(
+                      width: 5,
+                    ),
+                    ChipButton('Last Updated', 3),
+                    SizedBox(
+                      width: 5,
+                    ),
+                    ChipButton('Most Threads', 3),
+                    SizedBox(
+                      width: 5,
+                    ),
+                    ChipButton('Latest Thread', 4)
+                  ]),
+              Container(
+                padding: EdgeInsets.all(20),
+                width: MediaQuery.of(context).size.width,
+                child: ElevatedButton(
+                  onPressed: () {},
+                  child: Text(
+                    'Confirm',
+                    style: body2Semi,
                   ),
-                  ChipButton('Z - A', 2),
-                  SizedBox(
-                    width: 8,
-                  ),
-                  ChipButton('Last Updated', 3),
-                ],
-              ),
-              SizedBox(
-                height: 5,
-              ),
-              Row(
-                children: [
-                  ChipButton('Most Threads', 3),
-                  SizedBox(
-                    width: 8,
-                  ),
-                  ChipButton('Latest Thread', 4),
-                ],
-              ),
-              ElevatedButton(
-                onPressed: () {},
-                child: Text(
-                  'Confirm',
-                  style: body2Semi,
                 ),
               ),
             ],
@@ -289,10 +298,10 @@ class _SpaceScreenState extends State<SpaceScreen> {
           borderRadius: BorderRadius.circular(12.0),
         ),
       ),
-      onPressed: () => {
+      onPressed: () {
         setState(() {
           _topicStatus[iter] = !_topicStatus[iter];
-        })
+        });
       },
     );
   }

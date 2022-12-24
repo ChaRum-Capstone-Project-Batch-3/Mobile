@@ -73,32 +73,38 @@ class AllTopicsViewModel with ChangeNotifier {
   }
 
   topicDetail(String Id) async {
-    var token = mPreferences.getString("token");
-    await token.whenComplete(() async {
-      await token.then((value) async {
-        var result = GetTopicsApi().detailTopics(Id, value);
-        await result.whenComplete(() async {
-          await result.then((value) {
-            print("DetailTopic" + value!.message!);
-            this._topic = value!.data!.topic ?? Topic();
+    changeState(SpaceState.loading);
+    try {
+      var token = mPreferences.getString("token");
+      await token.whenComplete(() async {
+        await token.then((value) async {
+          var result = GetTopicsApi().detailTopics(Id, value);
+          await result.whenComplete(() async {
+            await result.then((value) {
+              print("DetailTopic" + value!.message!);
+              this._topic = value!.data!.topic ?? Topic();
+            });
           });
-        });
-        var resultThreads = ThreadApi()
-            .search("createdAt", "desc", Id, this._teSearch.text, value);
-        await resultThreads.whenComplete(() async {
-          await resultThreads.then((val) {
-            this._threads = val!.data!.threads ?? [];
+          var resultThreads = ThreadApi()
+              .search("createdAt", "desc", Id, this._teSearch.text, value);
+          await resultThreads.whenComplete(() async {
+            await resultThreads.then((val) {
+              this._threads = val!.data!.threads ?? [];
+            });
           });
-        });
-        var threadPopular =
-            ThreadApi().search("likes", "desc", Id, this._teSearch.text, value);
-        await threadPopular.whenComplete(() async {
-          await threadPopular.then((val) {
-            this._popular = val!.data!.threads ?? [];
+          var threadPopular = ThreadApi()
+              .search("likes", "desc", Id, this._teSearch.text, value);
+          await threadPopular.whenComplete(() async {
+            await threadPopular.then((val) {
+              this._popular = val!.data!.threads ?? [];
+            });
           });
         });
       });
-    });
+    } catch (e) {
+      print(e);
+      notifyListeners();
+    }
     notifyListeners();
   }
 

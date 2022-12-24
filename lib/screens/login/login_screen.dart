@@ -176,19 +176,19 @@ class _LoginScreenState extends State<LoginScreen> {
                               content: Container(
                                 height: 250,
                                 child: Column(
-                                  mainAxisAlignment: MainAxisAlignment.center,
-                                  crossAxisAlignment: CrossAxisAlignment.center,
-                                  children: [
-                                    Lottie.asset('assets/loading.json'),
-                                    Text(
-                                      'Please wait...',
-                                      style: body1.copyWith(
-                                        fontWeight: FontWeight.bold,
-                                        color: Colors.black,
+                                    mainAxisAlignment: MainAxisAlignment.center,
+                                    crossAxisAlignment:
+                                        CrossAxisAlignment.center,
+                                    children: [
+                                      Lottie.asset('assets/loading.json'),
+                                      Text(
+                                        'Please wait...',
+                                        style: body1.copyWith(
+                                          fontWeight: FontWeight.bold,
+                                          color: Colors.black,
+                                        ),
                                       ),
-                                    ),
-                                  ],
-                                ),
+                                    ]),
                               ),
                             );
                           },
@@ -213,14 +213,6 @@ class _LoginScreenState extends State<LoginScreen> {
                         });
                       });
                     },
-                    // style: ElevatedButton.styleFrom(
-                    //   primary: const Color(0xFF178066),
-                    //   padding: const EdgeInsets.symmetric(
-                    //       horizontal: 20, vertical: 10),
-                    //   shape: RoundedRectangleBorder(
-                    //     borderRadius: BorderRadius.circular(10),
-                    //   ),
-                    // ),
                     child: Text(
                       'Sign In',
                     ),
@@ -257,7 +249,7 @@ class _LoginScreenState extends State<LoginScreen> {
                     ],
                   ),
                   const SizedBox(
-                    height: 100,
+                    height: 195,
                   ),
                   Align(
                     alignment: Alignment.center,
@@ -284,9 +276,6 @@ class _LoginScreenState extends State<LoginScreen> {
                         ],
                       ),
                     ),
-                  ),
-                  const SizedBox(
-                    height: 60,
                   ),
                 ],
               ),

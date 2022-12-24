@@ -82,12 +82,6 @@ Future<HomeThreadResponse?> show(String sort, String order, String topic,
     return result;
   }
 
-  Future<HomeThreadResponse> detailThread(String id, String token) async {
-    var response = await dio.get('/thread/$id',
-        options: Options(headers: {"Authorization": token}));
-    HomeThreadResponse result = HomeThreadResponse.fromJson(response.data);
-    return result;
-  }
 
   Future<GetThreadDetailResponse> getThreadDetail(String id, String token) async {
     var response = await dio.get('/thread/$id',

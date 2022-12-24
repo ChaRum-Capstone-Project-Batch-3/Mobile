@@ -232,7 +232,8 @@ class _BookmarkScreenState extends State<BookmarkScreen> {
           child: Row(
             children: [
               CircleAvatar(
-                backgroundColor: AppColors.kcPrimaryColor,
+                backgroundImage:
+                    NetworkImage(thread.creator!.profilePictureURL!),
               ),
               Container(
                 margin: spacing8Left,
@@ -304,14 +305,12 @@ class _BookmarkScreenState extends State<BookmarkScreen> {
             height: 4,
           ),
           BoxText.subtitle2Semi(thread!.title!),
-          SizedBox(height: 12,),
+          SizedBox(height: 12),
           if (thread.imageURL != "")
             ClipRRect(
-            borderRadius: BorderRadius.all(Radius.circular(10)),
-            child: Container(
-                child: Image.network('${thread.imageURL}')
-              ),
-          ),
+              borderRadius: BorderRadius.all(Radius.circular(10)),
+              child: Container(child: Image.network('${thread.imageURL}')),
+            ),
           Container(
             margin: spacing8Top,
             child: BoxText.caption(thread.description!),
@@ -940,7 +939,7 @@ class _BookmarkScreenState extends State<BookmarkScreen> {
                                         Row(
                                           children: [
                                             Container(
-                                              width: 50,
+                                              width: 80,
                                               height: 10,
                                               decoration: BoxDecoration(
                                                 color: AppColors.kcDarkestWhite,
@@ -949,25 +948,25 @@ class _BookmarkScreenState extends State<BookmarkScreen> {
                                                 ),
                                               ),
                                             ),
-                                            Container(
-                                              margin: spacing8Horizontal,
-                                              width: 4,
-                                              height: 4,
-                                              decoration: BoxDecoration(
-                                                color: AppColors.kcDarkestWhite,
-                                                shape: BoxShape.circle,
-                                              ),
-                                            ),
-                                            Container(
-                                              width: 50,
-                                              height: 10,
-                                              decoration: BoxDecoration(
-                                                color: AppColors.kcDarkestWhite,
-                                                borderRadius: BorderRadius.all(
-                                                  Radius.circular(10),
-                                                ),
-                                              ),
-                                            ),
+                                            // Container(
+                                            //   margin: spacing8Horizontal,
+                                            //   width: 4,
+                                            //   height: 4,
+                                            //   decoration: BoxDecoration(
+                                            //     color: AppColors.kcDarkestWhite,
+                                            //     shape: BoxShape.circle,
+                                            //   ),
+                                            // ),
+                                            // Container(
+                                            //   width: 50,
+                                            //   height: 10,
+                                            //   decoration: BoxDecoration(
+                                            //     color: AppColors.kcDarkestWhite,
+                                            //     borderRadius: BorderRadius.all(
+                                            //       Radius.circular(10),
+                                            //     ),
+                                            //   ),
+                                            // ),
                                           ],
                                         ),
                                         SizedBox(
